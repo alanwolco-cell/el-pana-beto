@@ -62,8 +62,8 @@ export default function RootLayout({
           <div className="mx-auto flex max-w-5xl flex-col gap-2 px-6 py-8 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
             <p>© 2026 El Pana Beto. Todos los derechos reservados.</p>
             <p>
-              Tus chats se procesan una sola vez y no se usan para entrenar
-              ningún modelo.
+              Tu chat no se guarda: se procesa una vez, se descarta y nunca
+              entrena ningún modelo. Ley 81 de 2019 (Panamá).
             </p>
           </div>
         </footer>

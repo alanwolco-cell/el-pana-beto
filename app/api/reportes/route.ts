@@ -35,7 +35,15 @@ function contarMensajes(chat: string): number {
 }
 
 export async function POST(req: Request) {
-  let cuerpo: { grupo?: string; tipo?: string; chat?: string };
+  let cuerpo: {
+    grupo?: string;
+    tipo?: string;
+    chat?: string;
+    idioma?: string;
+    contexto?: string;
+    nota?: string;
+    nombreUsuario?: string;
+  };
   try {
     cuerpo = await req.json();
   } catch {
@@ -59,7 +67,13 @@ export async function POST(req: Request) {
     const { output } = await generateText({
       model: "anthropic/claude-sonnet-5",
       output: Output.object({ schema: reporteSchema }),
-      system: promptSistema(tipo),
+      system: promptSistema({
+        tipo,
+        idioma: (cuerpo.idioma ?? "").slice(0, 40),
+        contexto: (cuerpo.contexto ?? "").slice(0, 60),
+        nota: (cuerpo.nota ?? "").slice(0, 1000),
+        nombreUsuario: (cuerpo.nombreUsuario ?? "").slice(0, 40),
+      }),
       prompt: `Nombre del grupo: ${grupo || "(sin nombre)"}\n\nChat exportado:\n\n${texto}`,
       maxOutputTokens: 16_000,
     });
