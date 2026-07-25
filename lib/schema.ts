@@ -67,5 +67,6 @@ export type ReporteGuardado = {
   grupo: string;
   tipo: "clasico" | "profundo";
   creado: string;
+  mensajes?: number;
   reporte: Reporte;
 };

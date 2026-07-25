@@ -9,6 +9,31 @@ export const maxDuration = 300;
 
 const MAX_CHARS = 400_000;
 
+function alSalto(texto: string, idx: number): number {
+  const salto = texto.indexOf("\n", idx);
+  return salto === -1 ? idx : salto + 1;
+}
+
+// Anti recency-bias: si el chat no cabe completo, se muestrea el inicio,
+// el medio y el final en vez de quedarse solo con lo más reciente.
+function muestrearChat(chat: string): string {
+  if (chat.length <= MAX_CHARS) return chat;
+  const tercio = Math.floor(MAX_CHARS / 3);
+  const inicio = chat.slice(0, alSalto(chat, tercio));
+  const desdeMedio = alSalto(chat, Math.floor(chat.length / 2));
+  const medio = chat.slice(desdeMedio, alSalto(chat, desdeMedio + tercio));
+  const fin = chat.slice(alSalto(chat, chat.length - tercio));
+  const corte =
+    "\n\n[NOTA: aquí se omitió un tramo del chat por longitud — considera igual las tres épocas]\n\n";
+  return inicio + corte + medio + corte + fin;
+}
+
+function contarMensajes(chat: string): number {
+  const patron = /^\[?‎?\d{1,2}[\/.-]\d{1,2}[\/.-]\d{2,4}/gm;
+  const conteo = chat.match(patron)?.length ?? 0;
+  return conteo > 10 ? conteo : chat.split("\n").filter(Boolean).length;
+}
+
 export async function POST(req: Request) {
   let cuerpo: { grupo?: string; tipo?: string; chat?: string };
   try {
@@ -28,9 +53,7 @@ export async function POST(req: Request) {
     );
   }
 
-  // Si el chat es enorme, Beto se queda con la parte más reciente.
-  const texto =
-    chat.length > MAX_CHARS ? chat.slice(chat.length - MAX_CHARS) : chat;
+  const texto = muestrearChat(chat);
 
   try {
     const { output } = await generateText({
@@ -46,6 +69,7 @@ export async function POST(req: Request) {
       grupo,
       tipo,
       creado: new Date().toISOString(),
+      mensajes: contarMensajes(chat),
       reporte: output,
     };
     await guardarReporte(guardado);

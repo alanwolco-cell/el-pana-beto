@@ -21,9 +21,14 @@ export function pagosConfigurados(): boolean {
   return !!process.env.PF_CCLW;
 }
 
-export function precioReporte(): number {
-  const p = Number(process.env.PRECIO_REPORTE);
-  return Number.isFinite(p) && p >= 1 ? p : 4.99;
+export function precioReporte(tipo?: "clasico" | "profundo"): number {
+  const env =
+    tipo === "profundo"
+      ? process.env.PRECIO_PROFUNDO
+      : process.env.PRECIO_CLASICO;
+  const p = Number(env);
+  if (Number.isFinite(p) && p >= 1) return p;
+  return tipo === "profundo" ? 14.99 : 9.99;
 }
 
 export function hostPagueloFacil(): string {
@@ -79,10 +84,11 @@ async function guardarPagos(estado: EstadoPagos): Promise<void> {
 export async function registrarPago(
   reporteId: string,
   pago: Pago,
+  precio: number,
 ): Promise<EstadoPagos> {
   const estado = (await leerPagos(reporteId)) ?? {
     reporteId,
-    precio: precioReporte(),
+    precio,
     pagos: [],
   };
   if (!estado.pagos.some((p) => p.oper === pago.oper)) {

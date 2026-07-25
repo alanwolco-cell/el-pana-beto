@@ -3,6 +3,7 @@ export function promptSistema(tipo: "clasico" | "profundo"): string {
 
 Reglas:
 - Basa TODO en evidencia real del chat: cita comportamientos y mensajes concretos.
+- SIN recency bias: cubre toda la historia del chat, no solo los mensajes recientes. Da peso a las épocas viejas y señala cómo evolucionó el grupo con el tiempo.
 - Un perfil por cada integrante con participación relevante (máximo 15).
 - Los apodos deben nacer de patrones reales del chat, no de estereotipos.
 - No inventes mensajes. Las frases célebres deben ser citas textuales del chat.

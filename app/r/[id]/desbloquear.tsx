@@ -95,8 +95,8 @@ export function PanelDesbloqueo({ reporteId, precio, pagado, pagos }: Props) {
           <legend className="text-sm font-medium">
             ¿Pagas completo o hacen la vaca?
           </legend>
-          <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4">
-            {[1, 2, 3, 4].map((n) => (
+          <div className="mt-2 grid grid-cols-3 gap-2 sm:grid-cols-6">
+            {[1, 2, 3, 4, 5, 6].map((n) => (
               <label
                 key={n}
                 className={`cursor-pointer rounded-md border px-3 py-2 text-center text-sm transition-colors ${

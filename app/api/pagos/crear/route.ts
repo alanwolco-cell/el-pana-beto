@@ -31,8 +31,8 @@ export async function POST(req: Request) {
   }
 
   const nombre = (cuerpo.nombre ?? "").trim().slice(0, 40) || "Alguien del grupo";
-  const partes = Math.min(Math.max(Math.trunc(cuerpo.partes ?? 1), 1), 4);
-  const precio = precioReporte();
+  const partes = Math.min(Math.max(Math.trunc(cuerpo.partes ?? 1), 1), 6);
+  const precio = precioReporte(guardado.tipo);
   // PagueloFacil no acepta cobros menores a $1.00
   const monto = Math.max(1, Math.round((precio / partes) * 100) / 100);
 

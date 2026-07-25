@@ -54,25 +54,106 @@ export default async function PaginaReporte({ params }: Props) {
     year: "numeric",
   });
 
+  const etiquetaTipo =
+    guardado.tipo === "profundo" ? "Reporte profundo" : "Reporte clásico";
+  const statMensajes = guardado.mensajes
+    ? ` · Beto leyó ${guardado.mensajes.toLocaleString("es-PA")} mensajes`
+    : "";
+
   const pagos = await leerPagos(id);
   if (!estaDesbloqueado(pagos)) {
-    const precio = pagos?.precio ?? precioReporte();
+    const precio = pagos?.precio ?? precioReporte(guardado.tipo);
     const pagado = pagos ? totalPagado(pagos) : 0;
+    const primerPerfil = r.perfiles[0];
+    const bloqueado = [
+      { icono: "🔥", texto: `${r.temas.length} temas que dominan el grupo` },
+      {
+        icono: "👤",
+        texto: `${r.perfiles.length} perfiles con apodo — incluido el tuyo`,
+      },
+      { icono: "🏆", texto: `${r.premios.length} premios y reconocimientos` },
+      {
+        icono: "🗣️",
+        texto: `Diccionario del grupo (${r.vocabulario.length} términos)`,
+      },
+      {
+        icono: "🚩",
+        texto: `${r.banderasVerdes.length} banderas verdes y ${r.banderasRojas.length} rojas`,
+      },
+      { icono: "🤯", texto: `${r.frases.length} frases célebres, con contexto` },
+      {
+        icono: "🔮",
+        texto: `Cómo va a reaccionar cada uno al leer esto`,
+      },
+    ];
     return (
       <article className="mx-auto max-w-2xl px-6 py-16">
         <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
-          {guardado.tipo === "profundo" ? "Reporte profundo" : "Reporte clásico"}{" "}
-          · {fecha}
+          {etiquetaTipo} · {fecha}
+          {statMensajes}
         </p>
         <h1 className="font-display mt-4 text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
           {r.titulo}
         </h1>
-        <p className="mt-8 text-lg leading-relaxed">
-          {r.veredicto.slice(0, 180)}…
-        </p>
-        <p className="mt-2 text-sm italic text-muted">
-          — Beto, que se leyó todo y tiene mucho más que decir.
-        </p>
+        <div className="mt-6 flex items-center gap-3 border-y border-line py-4">
+          <Image
+            src="/beto.jpg"
+            alt="Beto"
+            width={40}
+            height={40}
+            className="rounded-full border border-line object-cover"
+          />
+          <p className="text-sm text-muted">
+            Por <span className="font-medium text-ink">Beto</span>, que se leyó
+            todo el bochinche
+          </p>
+        </div>
+
+        <p className="mt-8 text-lg leading-relaxed">{r.veredicto}</p>
+
+        {primerPerfil && (
+          <div className="mt-10">
+            <h2 className="font-display border-b border-line pb-3 text-2xl font-semibold">
+              👤 Una muestra gratis, cortesía de Beto
+            </h2>
+            <div className="mt-6 rounded-lg border border-line bg-card p-5">
+              <div className="flex flex-wrap items-baseline gap-x-3">
+                <h3 className="font-display text-lg font-semibold">
+                  {primerPerfil.nombre}
+                </h3>
+                <span className="text-sm italic text-accent">
+                  «{primerPerfil.apodo}»
+                </span>
+              </div>
+              <p className="mt-2 leading-relaxed text-muted">
+                {primerPerfil.descripcion}
+              </p>
+            </div>
+            {r.perfiles.length > 1 && (
+              <p className="mt-3 text-sm text-muted">
+                …y {r.perfiles.length - 1} perfiles más esperando bajo llave.
+              </p>
+            )}
+          </div>
+        )}
+
+        <div className="mt-10">
+          <h2 className="font-display border-b border-line pb-3 text-2xl font-semibold">
+            🔒 Lo que falta por desbloquear
+          </h2>
+          <ul className="mt-6 space-y-3">
+            {bloqueado.map((b) => (
+              <li
+                key={b.texto}
+                className="flex items-center gap-3 rounded-lg border border-line bg-card px-4 py-3"
+              >
+                <span>{b.icono}</span>
+                <span className="select-none blur-[1px]">{b.texto}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
         <PanelDesbloqueo
           reporteId={id}
           precio={precio}
@@ -89,8 +170,8 @@ export default async function PaginaReporte({ params }: Props) {
   return (
     <article className="mx-auto max-w-2xl px-6 py-16">
       <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
-        {guardado.tipo === "profundo" ? "Reporte profundo" : "Reporte clásico"}{" "}
-        · {fecha}
+        {etiquetaTipo} · {fecha}
+        {statMensajes}
       </p>
       <h1 className="font-display mt-4 text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
         {r.titulo}
@@ -114,7 +195,7 @@ export default async function PaginaReporte({ params }: Props) {
 
       <p className="mt-10 text-lg leading-relaxed">{r.veredicto}</p>
 
-      <Seccion titulo="Los temas del grupo">
+      <Seccion titulo="🔥 Los temas del grupo">
         <div className="space-y-6">
           {r.temas.map((t) => (
             <div key={t.titulo}>
@@ -125,7 +206,7 @@ export default async function PaginaReporte({ params }: Props) {
         </div>
       </Seccion>
 
-      <Seccion titulo="Los integrantes, según Beto">
+      <Seccion titulo="👤 Los integrantes, según Beto">
         <div className="space-y-6">
           {r.perfiles.map((p) => (
             <div
@@ -144,7 +225,7 @@ export default async function PaginaReporte({ params }: Props) {
         </div>
       </Seccion>
 
-      <Seccion titulo="Premios y reconocimientos">
+      <Seccion titulo="🏆 Premios y reconocimientos">
         <ul className="space-y-4">
           {r.premios.map((p) => (
             <li key={p.premio} className="border-b border-line pb-4">
@@ -158,7 +239,7 @@ export default async function PaginaReporte({ params }: Props) {
       </Seccion>
 
       {r.vocabulario.length > 0 && (
-        <Seccion titulo="Diccionario del grupo">
+        <Seccion titulo="🗣️ Diccionario del grupo">
           <dl className="space-y-4">
             {r.vocabulario.map((v) => (
               <div key={v.termino} className="flex flex-col gap-1">
@@ -170,7 +251,7 @@ export default async function PaginaReporte({ params }: Props) {
         </Seccion>
       )}
 
-      <Seccion titulo="Banderas">
+      <Seccion titulo="🚩 Banderas">
         <div className="grid gap-6 sm:grid-cols-2">
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-widest text-green-700">
@@ -201,7 +282,7 @@ export default async function PaginaReporte({ params }: Props) {
         </div>
       </Seccion>
 
-      <Seccion titulo="Frases célebres">
+      <Seccion titulo="🤯 Frases célebres">
         <div className="space-y-6">
           {r.frases.map((f) => (
             <blockquote
@@ -217,7 +298,7 @@ export default async function PaginaReporte({ params }: Props) {
         </div>
       </Seccion>
 
-      <Seccion titulo="Cómo van a reaccionar a este reporte">
+      <Seccion titulo="🔮 Cómo van a reaccionar a este reporte">
         <ul className="space-y-3">
           {r.predicciones.map((p) => (
             <li key={p.nombre} className="flex gap-3 leading-relaxed">
@@ -235,12 +316,15 @@ export default async function PaginaReporte({ params }: Props) {
         <p className="mt-2 text-muted">
           El de la familia, el de la ex, el del trabajo… Beto los lee todos.
         </p>
-        <Link
-          href="/nuevo"
-          className="mt-6 inline-block rounded-full bg-accent px-6 py-3 font-medium text-paper transition-transform hover:-translate-y-0.5"
-        >
-          Pedir otro reporte
-        </Link>
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+          <Link
+            href="/nuevo"
+            className="inline-block rounded-full bg-accent px-6 py-3 font-medium text-paper transition-transform hover:-translate-y-0.5"
+          >
+            Pedir otro reporte
+          </Link>
+          <BotonCompartir />
+        </div>
       </div>
     </article>
   );

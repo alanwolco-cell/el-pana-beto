@@ -26,3 +26,77 @@ body {
   background: var(--color-accent);
   color: var(--color-paper);
 }
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 8%,
+    black 92%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 8%,
+    black 92%,
+    transparent
+  );
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 1.25rem;
+  animation: marquee 45s linear infinite;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes flotar {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(-1deg);
+  }
+}
+
+@keyframes flotar-b {
+  0%,
+  100% {
+    transform: translateY(-6px) rotate(1deg);
+  }
+  50% {
+    transform: translateY(2px) rotate(1deg);
+  }
+}
+
+.flotar-a {
+  animation: flotar 7s ease-in-out infinite;
+}
+
+.flotar-b {
+  animation: flotar-b 8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track,
+  .flotar-a,
+  .flotar-b {
+    animation: none;
+  }
+}

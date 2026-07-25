@@ -1,10 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import {
-  ChatIMessage,
-  ChatWhatsApp,
-  VeredictoBeto,
-} from "./chat-demo";
+import { ChatIMessage, ChatWhatsApp, VeredictoBeto } from "./chat-demo";
 
 const pasos = [
   {
@@ -17,13 +13,13 @@ const pasos = [
     numero: "02",
     titulo: "Pásaselo a Beto",
     texto:
-      "Sube el archivo o pega la conversación. Beto se lee todo el bochinche, desde el primer «xopá» hasta la última pelea.",
+      "Sube el archivo o pega la conversación. Beto se lee todo el bochinche, desde el primer «xopá» hasta la última pelea — sin recency bias: las épocas viejas también cuentan.",
   },
   {
     numero: "03",
     titulo: "Recibe el veredicto",
     texto:
-      "En unos minutos tienes el reporte completo: perfiles con apodo, premios, banderas rojas y las frases que nadie quiere recordar.",
+      "En unos minutos tienes el reporte: perfiles con apodo, premios, banderas rojas y las frases que nadie quiere recordar. El adelanto es gratis.",
   },
 ];
 
@@ -52,32 +48,54 @@ const reacciones = [
   {
     emoji: "👨‍👩‍👧",
     grupo: "La familia",
-    burbujas: ["JAJAJA lo del carro 'en el taller' me mató 💀", "mi mamá lo leyó dos veces y lo reenvió"],
+    burbujas: [
+      "JAJAJA lo del «gym» de Papo 💀💀",
+      "la tía ya lo reenvió a otros 4 grupos",
+    ],
   },
   {
     emoji: "🍻",
     grupo: "Los frenes",
-    burbujas: ["¿QUIÉN LE DIO EL CHAT A ESTE SEÑOR?", "el apodo que me puso... no lo supero"],
+    burbujas: [
+      "¿QUIÉN LE DIO EL CHAT A ESTE SEÑOR?",
+      "el apodo que me puso no lo supero",
+    ],
   },
   {
     emoji: "💼",
     grupo: "El trabajo",
-    burbujas: ["esto NO puede llegar al jefe 😭", "muy tarde, ya lo leyó"],
+    burbujas: ["esto NO puede llegar al jefe 😭", "muy tarde. ya lo leyó"],
   },
   {
     emoji: "🎓",
     grupo: "El grupo de la U",
-    burbujas: ["me siento atacada pero todo es verdad", "Beto no falla"],
+    burbujas: ["me siento atacada pero es verdad", "Beto no falla"],
   },
   {
     emoji: "💔",
     grupo: "La ex",
-    burbujas: ["ok esto dolió más que la ruptura", "te lo dije desde el principio jaja"],
+    burbujas: ["ok esto dolió más que la ruptura", "te lo dije desde el principio"],
   },
   {
     emoji: "🤝",
     grupo: "El casi algo",
-    burbujas: ["'situación sin título desde 2024' JAJAJA", "hasta Beto sabe que no somos nada"],
+    burbujas: [
+      "«situación sin título desde 2024» JAJAJA",
+      "hasta Beto sabe que no somos nada",
+    ],
+  },
+  {
+    emoji: "🏢",
+    grupo: "El building",
+    burbujas: [
+      "la junta directiva nos tiene miedo",
+      "reunión extraordinaria YA",
+    ],
+  },
+  {
+    emoji: "🙏",
+    grupo: "El de la iglesia",
+    burbujas: ["hermanos esto es del enemigo", "pero es verdad 🙈"],
   },
 ];
 
@@ -89,6 +107,10 @@ const preguntas = [
   {
     p: "¿Qué chats sirven?",
     r: "Todos: la familia, los frenes, el trabajo, la U, la ex, el casi algo. Mientras más bochinche, mejor sale el reporte.",
+  },
+  {
+    p: "¿Cuánto cuesta?",
+    r: "Probar es gratis: Beto lee tu chat y te muestra el adelanto del reporte sin pagar nada. El reporte completo se desbloquea con un solo pago por grupo — y pueden hacer la vaca entre todos.",
   },
   {
     p: "¿Qué apps soporta?",
@@ -124,14 +146,14 @@ export default function Home() {
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">
               Sube cualquier conversación de WhatsApp o iMessage. Beto se lee
               cada mensaje y escribe un reporte con su opinión sincera de todos
-              ustedes.
+              ustedes. El adelanto es gratis.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-4">
               <Link
                 href="/nuevo"
                 className="rounded-full bg-accent px-6 py-3 font-medium text-paper transition-transform hover:-translate-y-0.5"
               >
-                Pedir mi reporte
+                Probar gratis
               </Link>
               <p className="text-sm text-muted">
                 5 min para exportar · 5 min pa&rsquo;l reporte
@@ -150,78 +172,91 @@ export default function Home() {
       </section>
 
       <section className="border-y border-line bg-card">
-        <div className="mx-auto max-w-5xl px-6 py-16">
+        <div className="mx-auto max-w-5xl px-6 py-20">
           <h2 className="font-display text-3xl font-semibold sm:text-4xl">
             Así se ve cuando Beto opina
           </h2>
-          <div className="mt-10 grid gap-10 sm:grid-cols-2">
-            <div>
+          <div className="mt-12 grid gap-x-10 gap-y-14 sm:grid-cols-2">
+            <div className="flotar-a">
               <ChatWhatsApp
                 titulo="Familia Quintero 🇵🇦"
-                subtitulo="Mamá, Tía Mirna, Papo, tú y 9 más"
+                estado="Tía Mirna está escribiendo…"
                 mensajes={[
+                  { fecha: "Hoy" },
                   {
                     de: "Tía Mirna",
                     colorDe: "text-[#c2618c]",
                     texto:
-                      "Buenos días familia bella 🌹 Dios les bendiga este martes hermoso 🙏",
+                      "Buenos días familia 🌹🙏 El que no reenvíe esta oración no quiere a su madre",
                     hora: "6:02 a.m.",
                   },
                   {
                     de: "Mamá",
                     colorDe: "text-[#7a67ce]",
-                    texto: "El domingo sancocho en casa. Confirmen.",
+                    texto:
+                      "¿QUIÉN se comió el arroz con pollo que era PARA EL DOMINGO?",
                     hora: "9:14 a.m.",
                   },
                   {
                     de: "Papo",
                     colorDe: "text-[#4c9ce0]",
-                    texto: "confirmo si alguien me da ride desde Arraiján",
+                    texto: "yo no fui, yo estaba en el gym",
                     hora: "9:20 a.m.",
                   },
                   {
                     de: "Mamá",
                     colorDe: "text-[#7a67ce]",
-                    texto: "Papo tú tienes carro",
+                    texto: "Papo tú no tienes gym",
                     hora: "9:21 a.m.",
                   },
                   {
                     de: "Papo",
                     colorDe: "text-[#4c9ce0]",
-                    texto: "está en el taller desde marzo mami",
+                    texto: "por eso mismo, estaba averiguando precios",
                     hora: "9:21 a.m.",
                   },
-                  { texto: "yo llevo el pan 🙋", hora: "9:30 a.m.", propia: true },
+                  {
+                    texto: "yo vi a Papo con un plato a las 2 a.m. 👀",
+                    hora: "9:30 a.m.",
+                    propia: true,
+                  },
+                  {
+                    de: "Papo",
+                    colorDe: "text-[#4c9ce0]",
+                    texto: "sapo",
+                    hora: "9:31 a.m.",
+                  },
                 ]}
               />
               <VeredictoBeto>
-                La tía Mirna manda bendiciones a las 6 a.m. con una disciplina
-                que ya quisiera el Metro. Y ojo: el carro de Papo lleva cuatro
-                meses «en el taller». Ese carro no existe, familia.
+                El «gym» de Papo abre solo de madrugada y queda en la cocina. Y
+                la cadena de la tía Mirna tiene más alcance que TVN. Aquí todo
+                el mundo sabe todo — están esperando a ver quién lo dice
+                primero.
               </VeredictoBeto>
             </div>
-            <div>
+            <div className="flotar-b">
               <ChatIMessage
                 titulo="Los Frenes 🍻"
                 mensajes={[
-                  { de: "Kike", texto: "fren la playa este sábado o qué" },
+                  { fecha: "Miércoles 8:03 p. m." },
+                  { de: "Kike", texto: "fren SERIO este sábado playa sí o sí" },
+                  { de: "Nando", texto: "confirmo 🔥" },
+                  { de: "Chino", texto: "confirmadísimo" },
+                  { texto: "ok, yo alquilo el carro", propia: true },
+                  { fecha: "Sábado 7:14 a. m." },
+                  { de: "Kike", texto: "fren amanecí malito 🤧" },
                   {
                     de: "Nando",
-                    texto: "me apunto pero ando limpio hasta la quincena",
+                    texto: "me salió un cumple que se me había olvidado",
                   },
-                  { de: "Kike", texto: "Nando tú SIEMPRE andas limpio" },
-                  { texto: "hagamos la vaca y ya", propia: true },
-                  { de: "Nando", texto: "ofi 🤝" },
-                  {
-                    de: "Kike",
-                    texto: "eso mismo dijeron pa' Semana Santa y nadie fue",
-                  },
+                  { texto: "ya pagué el carro.", propia: true },
                 ]}
               />
               <VeredictoBeto>
-                Este grupo planea más viajes que Copa y ejecuta menos que Nando
-                en quincena. La «vaca» es el único plan que sobrevive aquí — y
-                eso porque la organiza otra gente.
+                Tres confirmaciones, cero asistencia: este grupo confirma con
+                el corazón y cancela con el alma. Y tú sigues alquilando carros
+                como si no los conocieras desde el colegio.
               </VeredictoBeto>
             </div>
           </div>
@@ -242,32 +277,34 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="border-y border-line bg-card">
-        <div className="mx-auto max-w-5xl px-6 py-16">
+      <section className="border-y border-line bg-card py-16">
+        <div className="mx-auto max-w-5xl px-6">
           <h2 className="font-display text-3xl font-semibold sm:text-4xl">
             La gente reaccionando a su reporte
           </h2>
           <p className="mt-3 text-muted">
             Lo que pasa en el grupo cuando alguien suelta el link.
           </p>
-          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {reacciones.map((r) => (
+        </div>
+        <div className="marquee mt-10">
+          <div className="marquee-track">
+            {[...reacciones, ...reacciones].map((r, i) => (
               <article
-                key={r.grupo}
-                className="rounded-lg border border-line bg-paper p-5"
+                key={`${r.grupo}-${i}`}
+                className="w-64 shrink-0 rounded-lg border border-line bg-paper p-5"
               >
                 <p className="text-sm font-semibold">
                   <span className="mr-2">{r.emoji}</span>
                   {r.grupo}
                 </p>
                 <div className="mt-4 space-y-2">
-                  {r.burbujas.map((b, i) => (
+                  {r.burbujas.map((b, j) => (
                     <p
                       key={b}
                       className={`w-fit max-w-full rounded-2xl px-3.5 py-2 text-sm leading-snug ${
-                        i % 2
-                          ? "ml-auto bg-[#d9fdd3] text-[#111b21]"
-                          : "bg-white text-[#111b21] shadow-sm"
+                        j % 2
+                          ? "ml-auto rounded-br-sm bg-[#d9fdd3] text-[#111b21]"
+                          : "rounded-bl-sm bg-white text-[#111b21] shadow-sm"
                       }`}
                     >
                       {b}
@@ -360,7 +397,7 @@ export default function Home() {
             href="/nuevo"
             className="mt-10 inline-block rounded-full bg-accent px-8 py-4 font-medium text-paper transition-transform hover:-translate-y-0.5"
           >
-            Pedir mi reporte
+            Probar gratis
           </Link>
         </div>
       </section>

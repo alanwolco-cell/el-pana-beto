@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { registrarPago } from "@/lib/pagos";
+import { precioReporte, registrarPago } from "@/lib/pagos";
+import { leerReporte } from "@/lib/storage";
 
 // RETURN_URL de PagueloFacil: llega por GET con los datos de la transacción.
 // Los nombres de parámetros varían entre versiones del gateway, así que
@@ -38,11 +39,16 @@ export async function GET(req: Request) {
     return destino("fallo");
   }
 
-  await registrarPago(reporteId, {
-    oper,
-    monto: total,
-    nombre,
-    fecha: new Date().toISOString(),
-  });
+  const guardado = await leerReporte(reporteId);
+  await registrarPago(
+    reporteId,
+    {
+      oper,
+      monto: total,
+      nombre,
+      fecha: new Date().toISOString(),
+    },
+    precioReporte(guardado?.tipo),
+  );
   return destino("ok");
 }
