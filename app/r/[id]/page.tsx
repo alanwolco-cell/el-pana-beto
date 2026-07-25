@@ -19,6 +19,7 @@ import {
 import { leerReporte } from "@/lib/storage";
 import { CancionDelGrupo } from "./cancion";
 import { BotonCompartir } from "./compartir";
+import { BotonCompartirImagen } from "./compartir-imagen";
 import { PanelDesbloqueo } from "./desbloquear";
 import { Predicciones } from "./predicciones";
 
@@ -245,7 +246,10 @@ export default async function PaginaReporte({ params }: Props) {
             todo el bochinche
           </p>
         </div>
-        <BotonCompartir />
+        <div className="flex items-center gap-2">
+          <BotonCompartir />
+          <BotonCompartirImagen reporteId={id} />
+        </div>
       </div>
 
       {guardado.fotoUrl && (
@@ -488,6 +492,7 @@ export default async function PaginaReporte({ params }: Props) {
             Pedir otro reporte
           </Link>
           <BotonCompartir />
+          <BotonCompartirImagen reporteId={id} />
         </div>
       </div>
     </article>
