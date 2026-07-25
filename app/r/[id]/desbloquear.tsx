@@ -13,21 +13,21 @@ type Props = {
 const planes = [
   {
     id: "basico" as const,
-    nombre: "El Reporte",
-    tag: "El que todos piden",
-    desc: "Este chat, completo: todos los perfiles, los premios, las banderas y las frases. Y pueden hacer la vaca entre 4.",
+    nombre: "1 Reporte",
+    tag: "Este chat",
+    desc: "El reporte completo de este grupo. Pueden hacer la vaca entre 4.",
   },
   {
     id: "doblete" as const,
-    nombre: "El Doblete",
-    tag: "Pa' repetir",
-    desc: "Este reporte + un código para leerle el chat a otro grupo. Porque después de este, alguien va a decir «hazle uno al de la familia».",
+    nombre: "2 Reportes",
+    tag: "Ahorra un poco",
+    desc: "Este reporte + un código para leerle el chat a otro grupo. El de la familia ya está pidiendo turno.",
   },
   {
     id: "expediente" as const,
-    nombre: "El Expediente",
-    tag: "Modo fiscal",
-    desc: "Este reporte + 4 códigos más. La familia, los frenes, el trabajo y la ex: aquí no se salva nadie.",
+    nombre: "3 Reportes",
+    tag: "El mejor precio",
+    desc: "Este reporte + 2 códigos más. La familia, los frenes, la ex: nadie se salva.",
   },
 ];
 

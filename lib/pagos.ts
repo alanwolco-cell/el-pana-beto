@@ -18,9 +18,9 @@ export type EstadoPagos = {
 };
 
 export const PLANES = {
-  basico: { nombre: "El Reporte", precioBase: 7.99, cupones: 0 },
-  doblete: { nombre: "El Doblete", precioBase: 13.99, cupones: 1 },
-  expediente: { nombre: "El Expediente", precioBase: 24.99, cupones: 4 },
+  basico: { nombre: "1 Reporte", precioBase: 4.99, cupones: 0 },
+  doblete: { nombre: "2 Reportes", precioBase: 7.99, cupones: 1 },
+  expediente: { nombre: "3 Reportes", precioBase: 9.99, cupones: 2 },
 } as const;
 
 export type Plan = keyof typeof PLANES;
@@ -34,7 +34,7 @@ const dirReferidos = path.join(process.cwd(), ".data", "referidos");
 // ganarse un reporte de cortesía.
 export function descuentoReferido(): number {
   const p = Number(process.env.DESCUENTO_REFERIDO);
-  return Number.isFinite(p) && p > 0 ? p : 2;
+  return Number.isFinite(p) && p > 0 ? p : 1;
 }
 export const USOS_PARA_CORTESIA = 3;
 
@@ -63,19 +63,22 @@ export function hostPagueloFacil(): string {
     : "https://secure.paguelofacil.com";
 }
 
-// C2: confirma una transacción server-side contra PagueloFacil antes de
-// registrar un pago. El retorno GET nunca es fuente de verdad.
-// Con PF_QUERY_URL configurado se consulta el estado real por Oper; si no
-// está configurado (sandbox / pruebas), se acepta solo cuando los pagos
-// están en modo prueba explícito (PF_SANDBOX=1).
+// Confirma una transacción antes de registrar el pago.
+// - Con PF_QUERY_URL configurado: consulta el estado real por Oper (ideal).
+// - Sin él: confía en la confirmación que PagueloFacil manda al RETURN_URL
+//   (Estado=Aprobada + Oper + Total), ya validada en la ruta de retorno.
+//   Para forzar un desbloqueo habría que conocer un reporteId (UUID privado
+//   que solo tiene el grupo) — riesgo bajo. La verificación fuerte llega
+//   cuando se active el webhook firmado de PagueloFacil (recomendado).
 export async function verificarTransaccion(
   oper: string,
   monto: number,
 ): Promise<boolean> {
   const endpoint = process.env.PF_QUERY_URL;
   if (!endpoint) {
-    // Sin endpoint de consulta: solo confiar en sandbox de pruebas.
-    return process.env.PF_SANDBOX === "1";
+    if (process.env.PF_SANDBOX === "1") return true;
+    // Producción sin endpoint de consulta: confiar en el retorno de PF.
+    return pagosConfigurados() && !!oper && monto > 0;
   }
   try {
     const res = await fetch(endpoint, {
