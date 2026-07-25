@@ -51,10 +51,7 @@ export async function POST(req: Request) {
   const texto = muestrearChat(chat);
 
   try {
-    const { output } = await generateText({
-      // Opus para el mejor humor. Requiere créditos pagados en el Gateway.
-      // Si se agotan, poner MODELO_REPORTE=anthropic/claude-sonnet-5 en Vercel.
-      model: process.env.MODELO_REPORTE ?? "anthropic/claude-opus-5",
+    const opciones = {
       output: Output.object({ schema: reporteSchema }),
       temperature: 1,
       system: promptSistema({
@@ -66,7 +63,26 @@ export async function POST(req: Request) {
       }),
       prompt: `Nombre del grupo: ${grupo || "(sin nombre)"}\n\nChat exportado:\n\n${texto}`,
       maxOutputTokens: 16_000,
-    });
+    };
+
+    // Opus para el mejor humor; si no hay créditos en el Gateway (tier gratis),
+    // cae automáticamente a Sonnet para que el sitio nunca se caiga.
+    const preferido = process.env.MODELO_REPORTE ?? "anthropic/claude-opus-5";
+    let output;
+    try {
+      ({ output } = await generateText({ model: preferido, ...opciones }));
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      if (/opus/.test(preferido) && /free tier|no_providers|access|credit/i.test(msg)) {
+        console.warn("Opus sin créditos; usando Sonnet.");
+        ({ output } = await generateText({
+          model: "anthropic/claude-sonnet-5",
+          ...opciones,
+        }));
+      } else {
+        throw e;
+      }
+    }
 
     const id = randomUUID();
     let fotoUrl: string | undefined;
