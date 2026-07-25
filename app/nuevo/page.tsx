@@ -139,6 +139,9 @@ export default function NuevoReporte() {
   const [telefono, setTelefono] = useState("");
   const [tono, setTono] = useState<"clasico" | "yeye" | "profundo">("clasico");
   const [pais, setPais] = useState("");
+  const [intensidad, setIntensidad] = useState<"suave" | "normal" | "salvaje">(
+    "normal",
+  );
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(false);
   const [mensajeIdx, setMensajeIdx] = useState(0);
@@ -221,6 +224,7 @@ export default function NuevoReporte() {
           foto,
           telefono,
           pais,
+          intensidad,
           participantes: participantes.slice(0, 15),
         }),
       });
@@ -649,6 +653,36 @@ export default function NuevoReporte() {
               >
                 <span className="block font-medium">{nombre}</span>
                 <span className="block text-sm text-muted">{desc}</span>
+              </button>
+            ))}
+          </div>
+
+          <h2 className="font-display mt-10 text-2xl font-semibold">
+            ¿Qué tan duro te da Beto?
+          </h2>
+          <p className="mt-2 text-muted">
+            Pa&rsquo;l que no quiere sufrir tanto… o pa&rsquo;l que sí.
+          </p>
+          <div className="mt-4 grid grid-cols-3 gap-2">
+            {(
+              [
+                ["suave", "😇", "Suave", "Liviano, sin dolor"],
+                ["normal", "😏", "Normal", "El filo justo"],
+                ["salvaje", "💀", "Sin piedad", "A todo dar"],
+              ] as const
+            ).map(([valor, emoji, nombre, desc]) => (
+              <button
+                key={valor}
+                onClick={() => setIntensidad(valor)}
+                className={`rounded-lg border p-3 text-center transition-colors ${
+                  intensidad === valor
+                    ? "border-accent bg-card"
+                    : "border-line hover:border-muted"
+                }`}
+              >
+                <span className="block text-2xl">{emoji}</span>
+                <span className="mt-1 block text-sm font-medium">{nombre}</span>
+                <span className="mt-0.5 block text-xs text-muted">{desc}</span>
               </button>
             ))}
           </div>

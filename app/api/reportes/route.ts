@@ -30,6 +30,7 @@ export async function POST(req: Request) {
     mensajes?: number;
     pais?: string;
     participantes?: { nombre: string; mensajes: number }[];
+    intensidad?: string;
   };
   try {
     cuerpo = await req.json();
@@ -68,6 +69,10 @@ export async function POST(req: Request) {
         nota: (cuerpo.nota ?? "").slice(0, 1000),
         nombreUsuario: (cuerpo.nombreUsuario ?? "").slice(0, 40),
         pais: (cuerpo.pais ?? "").slice(0, 40),
+        intensidad:
+          cuerpo.intensidad === "suave" || cuerpo.intensidad === "salvaje"
+            ? cuerpo.intensidad
+            : "normal",
       }),
       prompt: `Nombre del grupo: ${grupo || "(sin nombre)"}\n\nChat exportado:\n\n${texto}`,
       maxOutputTokens: 12_000,

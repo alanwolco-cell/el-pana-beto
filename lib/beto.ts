@@ -5,6 +5,7 @@ export type OpcionesPrompt = {
   nota?: string;
   nombreUsuario?: string;
   pais?: string;
+  intensidad?: "suave" | "normal" | "salvaje";
 };
 
 export function promptSistema(o: OpcionesPrompt): string {
@@ -77,6 +78,16 @@ REGLAS DURAS:
 - Ranking de aura: ordénalos por el aura que emanan, con puntos estilo internet (+4,500 / −200) y un motivo real. El último lugar debe ser más humillante que glorioso el primero.
 - Ranking "quién ganaría una pelea": ordena del más peligroso al que cae de primero, puro humor, con motivos absurdos pero anclados al chat (el que se cree rudo, el que manda audios de 5 min pero no aguanta un round).
 - Listas que crean intriga: 2-3 rankings tipo "los que nunca leen el chat", "quién es el más tóxico", "el que siempre desaparece cuando toca pagar". Que den ganas de pelear en el grupo por el puesto. Originales, según lo que de verdad pasa en el chat.`);
+
+  if (o.intensidad === "suave") {
+    partes.push(
+      `NIVEL DE INTENSIDAD: SUAVE. Este grupo NO quiere sufrir. Mantén todo tu ingenio y especificidad, pero baja el filo: cero groserías fuertes, roast liviano y cariñoso, más "nos reímos con ustedes" que "nos reímos de ustedes". Sigue siendo gracioso y observador, pero que nadie termine dolido. Ignora la cuota de groserías; aquí no aplica.`,
+    );
+  } else if (o.intensidad === "salvaje") {
+    partes.push(
+      `NIVEL DE INTENSIDAD: SIN PIEDAD. Este grupo PIDIÓ que le des durísimo. Súbelo al máximo: el roast más filoso, más atrevido, más incómodo (dentro de las líneas rojas de seguridad de siempre). Si el chat lo aguanta, no te guardes nada. Que después de leerlo alguien diga "diablo, se pasó" — y se estén riendo igual.`,
+    );
+  }
 
   if (o.tipo === "yeye") {
     partes.push(
