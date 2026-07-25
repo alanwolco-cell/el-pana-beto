@@ -5,6 +5,12 @@ export const reporteSchema = z.object({
     .string()
     .max(160)
     .describe("Título del reporte, con gancho, mencionando el nombre del grupo"),
+  gancho: z
+    .string()
+    .max(200)
+    .describe(
+      "UNA sola frase, la MÁS intrigante y jugosa de todo el reporte — la que daría más ganas de abrir el link si sale en el preview de WhatsApp. Un teaser irresistible, sin spoilear del todo. Ej: 'Alguien lleva 11 meses debiendo $40 y todavía pide fiado' o 'El ranking de aura tiene un ganador que nadie esperaba'. Que dé morbo de leer el resto.",
+    ),
   veredicto: z
     .string()
     .max(900)

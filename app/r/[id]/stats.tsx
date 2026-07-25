@@ -65,7 +65,7 @@ export function EstadisticasGrupo({ stats }: { stats: Stats }) {
         <p className="text-sm font-medium text-muted">
           A qué horas cobra vida el grupo
         </p>
-        <div className="mt-3 flex items-end gap-[3px]" style={{ height: 90 }}>
+        <div className="mt-3 flex items-end gap-[2px] sm:gap-[3px]" style={{ height: 90 }}>
           {stats.porHora.map((n, h) => (
             <div
               key={h}
@@ -74,7 +74,7 @@ export function EstadisticasGrupo({ stats }: { stats: Stats }) {
             >
               <div className="flex h-full items-end">
                 <div
-                  className={`w-full rounded-t ${h === stats.horaPico ? "bg-accent" : "bg-ink/25"}`}
+                  className={`w-full rounded-t-sm sm:rounded-t ${h === stats.horaPico ? "bg-accent" : "bg-ink/25"}`}
                   style={{ height: `${Math.max(3, (n / maxHora) * 100)}%` }}
                   title={`${horaLabel(h)}: ${n}`}
                 />

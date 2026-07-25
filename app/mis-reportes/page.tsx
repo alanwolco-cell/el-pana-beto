@@ -65,7 +65,7 @@ export default function MisReportes() {
               </Link>
               <button
                 onClick={() => borrar(r.id)}
-                className="shrink-0 text-sm text-muted underline transition-colors hover:text-accent"
+                className="-m-2 shrink-0 p-2 text-sm text-muted underline transition-colors hover:text-accent"
                 aria-label={`Quitar ${r.grupo} de la lista`}
               >
                 Quitar

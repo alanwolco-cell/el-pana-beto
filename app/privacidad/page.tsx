@@ -53,9 +53,8 @@ export default function Privacidad() {
         </h2>
         <p className="mt-3 leading-relaxed text-muted">
           El responsable del tratamiento es{" "}
-          <span className="font-medium text-ink">Inversiones 7770 S.A.</span>,
-          sociedad constituida en la República de Panamá. Para cualquier tema de
-          privacidad, escríbenos a{" "}
+          <span className="font-medium text-ink">El Pana Beto</span>. Para
+          cualquier tema de privacidad, escríbenos a{" "}
           <a
             href="mailto:elpanabeto.com@gmail.com"
             className="underline transition-colors hover:text-accent"

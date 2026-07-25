@@ -275,13 +275,13 @@ export function PanelDesbloqueo({
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setMostrarCodigo((v) => !v)}
-            className="rounded-full border border-line px-4 py-2 text-xs font-medium text-muted transition-colors duration-200 hover:border-muted hover:text-ink"
+            className="rounded-full border border-line px-4 py-2.5 text-xs font-medium text-muted transition-colors duration-200 hover:border-muted hover:text-ink"
           >
             ¿Tienes un código de Beto?
           </button>
           <button
             onClick={copiarLink}
-            className="rounded-full border border-ink px-4 py-2 text-xs font-medium transition-colors duration-200 hover:bg-ink hover:text-paper"
+            className="rounded-full border border-ink px-4 py-2.5 text-xs font-medium transition-colors duration-200 hover:bg-ink hover:text-paper"
           >
             {copiado ? "¡Copiado!" : "Mandar el link al grupo"}
           </button>

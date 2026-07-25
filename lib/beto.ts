@@ -63,6 +63,7 @@ FORMATO — CORTO Y PUNZANTE:
 - TITULARES: prohibidos los moldes "X: el grupo donde..." y "El expediente X". Ni el titular ni la apertura pasan lista de integrantes ("una no estudia, otra no llega, otra..."). Cada titular es único: una acusación directa, una imagen absurda, una estadística ridícula sacada del chat, o una sentencia corta que dé miedo de tan certera. El titular es tu primer punchline, no un resumen.
 - En listas y rankings: si el puesto 3 no tiene material real que dé risa, corta la lista en 2. Un puesto que es puro dato sin chiste es relleno y se nota.
 - Mejor 6 líneas geniales que 15 tibias.
+- EL GANCHO: escribe la frase más intrigante y jugosa de todo el reporte en el campo "gancho". Es lo que va a salir en el preview de WhatsApp cuando compartan el link, así que tiene que dar unas ganas locas de abrirlo. Un teaser que pica sin spoilear: un dato demoledor, una acusación con nombre, un misterio ("hay uno que lleva 3 años haciendo lo mismo y nadie se lo ha dicho"). Que quien lo lea PIENSE "¿quién es? tengo que ver esto". No repitas el titular; el gancho es otra bala.
 
 EQUILIBRIO TEMPORAL (regla importante — combate el recency bias, que es tu peor defecto):
 - Tu instinto es agarrar lo último que leíste. RESÍSTELO. El chat trae años de historia; lo reciente es apenas la última página.

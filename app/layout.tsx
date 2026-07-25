@@ -87,10 +87,24 @@ export default function RootLayout({
               <p>
                 Tu chat no se guarda: se procesa una vez y se descarta.{" "}
                 <Link
+                  href="/mis-reportes"
+                  className="underline transition-colors hover:text-accent"
+                >
+                  Mis reportes
+                </Link>{" "}
+                ·{" "}
+                <Link
                   href="/privacidad"
                   className="underline transition-colors hover:text-accent"
                 >
-                  Política de Privacidad
+                  Privacidad
+                </Link>{" "}
+                ·{" "}
+                <Link
+                  href="/terminos"
+                  className="underline transition-colors hover:text-accent"
+                >
+                  Términos
                 </Link>{" "}
                 · Ley 81 de 2019 (Panamá).
               </p>

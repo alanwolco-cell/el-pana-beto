@@ -143,6 +143,7 @@ export default function NuevoReporte() {
   const [intensidad, setIntensidad] = useState<"suave" | "normal" | "salvaje">(
     "normal",
   );
+  const [aceptaTerminos, setAceptaTerminos] = useState(false);
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(false);
   const [mensajeIdx, setMensajeIdx] = useState(0);
@@ -280,7 +281,7 @@ export default function NuevoReporte() {
           <button
             onClick={retroceder}
             aria-label="Volver"
-            className="-ml-3 flex h-10 w-10 items-center justify-center rounded-full text-xl transition-colors hover:bg-card"
+            className="-ml-3 flex h-11 w-11 items-center justify-center rounded-full text-xl transition-colors hover:bg-card"
           >
             ←
           </button>
@@ -453,7 +454,7 @@ export default function NuevoReporte() {
                   setParticipantes([]);
                   setTotalMensajes(0);
                 }}
-                className="text-sm text-muted underline transition-colors hover:text-accent"
+                className="-m-2 inline-block p-2 text-sm text-muted underline transition-colors hover:text-accent"
               >
                 ✕ Quitar archivo
               </button>
@@ -616,22 +617,31 @@ export default function NuevoReporte() {
             Así Beto se pone en tu tono y usa la jerga de tu país. Si lo dejas
             vacío, tira panameño.
           </p>
-          <select
-            value={pais}
-            onChange={(e) => setPais(e.target.value)}
-            className="mt-3 w-full appearance-none rounded-md border border-line bg-card px-4 py-3 text-base outline-none transition-colors focus:border-accent"
-          >
-            <option value="">Elige el país…</option>
-            {paises.map((p) => {
-              // El emoji es solo visual; a Beto le llega el nombre limpio.
-              const nombre = p.replace(/^[^\p{L}]+/u, "").trim();
-              return (
-                <option key={p} value={nombre}>
-                  {p}
-                </option>
-              );
-            })}
-          </select>
+          <div className="relative mt-3">
+            <select
+              value={pais}
+              onChange={(e) => setPais(e.target.value)}
+              className="w-full appearance-none rounded-md border border-line bg-card py-3 pl-4 pr-10 text-base outline-none transition-colors focus:border-accent"
+            >
+              <option value="">Elige el país…</option>
+              {paises.map((p) => {
+                // El emoji es solo visual; a Beto le llega el nombre limpio.
+                const nombre = p.replace(/^[^\p{L}]+/u, "").trim();
+                return (
+                  <option key={p} value={nombre}>
+                    {p}
+                  </option>
+                );
+              })}
+            </select>
+            <svg
+              aria-hidden
+              viewBox="0 0 12 8"
+              className="pointer-events-none absolute right-4 top-1/2 h-2 w-3 -translate-y-1/2 fill-none stroke-muted stroke-2"
+            >
+              <path d="M1 1.5 6 6.5 11 1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
 
           <h2 className="font-display mt-10 text-2xl font-semibold">
             ¿En qué tono lo quieres?
@@ -676,15 +686,15 @@ export default function NuevoReporte() {
               <button
                 key={valor}
                 onClick={() => setIntensidad(valor)}
-                className={`rounded-lg border p-3 text-center transition-colors ${
+                className={`rounded-lg border px-2 py-3 text-center transition-colors sm:px-3 ${
                   intensidad === valor
                     ? "border-accent bg-card"
                     : "border-line hover:border-muted"
                 }`}
               >
                 <span className="block text-2xl">{emoji}</span>
-                <span className="mt-1 block text-sm font-medium">{nombre}</span>
-                <span className="mt-0.5 block text-xs text-muted">{desc}</span>
+                <span className="mt-1 block text-sm font-medium leading-tight">{nombre}</span>
+                <span className="mt-1 block text-xs leading-snug text-muted">{desc}</span>
               </button>
             ))}
           </div>
@@ -730,7 +740,7 @@ export default function NuevoReporte() {
             <button
               type="button"
               onClick={() => setFoto("")}
-              className="mt-3 text-sm text-muted underline transition-colors hover:text-accent"
+              className="-mx-2 -mb-2 mt-1 inline-block p-2 text-sm text-muted underline transition-colors hover:text-accent"
             >
               ✕ Quitar foto
             </button>
@@ -768,9 +778,42 @@ export default function NuevoReporte() {
               {error}
             </p>
           )}
+          <label className="mt-8 flex cursor-pointer items-start gap-3 text-sm text-muted">
+            <input
+              type="checkbox"
+              checked={aceptaTerminos}
+              onChange={(e) => setAceptaTerminos(e.target.checked)}
+              className="mt-0.5 h-5 w-5 shrink-0 accent-accent"
+            />
+            <span>
+              Confirmo que puedo compartir este chat y acepto los{" "}
+              <a
+                href="/terminos"
+                target="_blank"
+                className="underline transition-colors hover:text-accent"
+              >
+                Términos
+              </a>{" "}
+              y la{" "}
+              <a
+                href="/privacidad"
+                target="_blank"
+                className="underline transition-colors hover:text-accent"
+              >
+                Política de Privacidad
+              </a>
+              .
+            </span>
+          </label>
           <button
-            onClick={enviar}
-            className="mt-8 w-full rounded-full bg-accent px-6 py-4 text-center font-medium text-paper transition-colors hover:bg-ink disabled:opacity-40"
+            onClick={() => {
+              if (!aceptaTerminos) {
+                setError("Acepta los términos para que Beto pueda leer el chat.");
+                return;
+              }
+              enviar();
+            }}
+            className="mt-5 w-full rounded-full bg-accent px-6 py-4 text-center font-medium text-paper transition-colors hover:bg-ink disabled:opacity-40"
           >
             Que Beto lo lea →
           </button>

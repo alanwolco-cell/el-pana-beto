@@ -52,7 +52,7 @@ export function BotonCompartirImagen({ reporteId, variante = "claro" }: Props) {
     <button
       onClick={compartir}
       disabled={estado === "generando"}
-      className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors duration-200 disabled:opacity-60 ${
+      className={`rounded-full border px-4 py-2.5 text-sm font-medium transition-colors duration-200 disabled:opacity-60 ${
         variante === "oscuro"
           ? "border-paper/30 text-paper hover:bg-paper hover:text-ink"
           : "border-ink hover:bg-ink hover:text-paper"

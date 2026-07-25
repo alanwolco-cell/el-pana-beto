@@ -32,9 +32,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const guardado = await leerReporte(id);
   if (!guardado) return { title: "Reporte no encontrado — El Pana Beto" };
+  // El gancho es la frase más intrigante; si no existe (reportes viejos),
+  // cae al veredicto. Es lo que sale en el preview de WhatsApp.
+  const preview = (
+    guardado.reporte.gancho || guardado.reporte.veredicto
+  ).slice(0, 180);
   return {
     title: `${guardado.reporte.titulo} — El Pana Beto`,
-    description: guardado.reporte.veredicto.slice(0, 160),
+    description: preview,
+    openGraph: { title: guardado.reporte.titulo, description: preview },
     // Fuera de Google (privacidad), pero los previews sociales siguen vivos.
     robots: { index: false, follow: false },
   };
@@ -257,6 +263,12 @@ export default async function PaginaReporte({ params }: Props) {
         {r.titulo}
       </h1>
 
+      {r.gancho && (
+        <p className="aparecer aparecer-1 mt-4 font-display text-lg italic leading-snug text-accent sm:text-xl">
+          {r.gancho}
+        </p>
+      )}
+
       {guardado.mensajes && (
         <div className="aparecer aparecer-1 mt-6 flex flex-wrap gap-x-8 gap-y-3">
           <div>
@@ -294,7 +306,7 @@ export default async function PaginaReporte({ params }: Props) {
             todo el bochinche
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <BotonCompartir />
           <BotonCompartirImagen reporteId={id} />
         </div>
