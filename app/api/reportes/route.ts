@@ -35,7 +35,10 @@ export async function POST(req: Request) {
   }
 
   const grupo = (cuerpo.grupo ?? "").trim().slice(0, 100);
-  const tipo = cuerpo.tipo === "profundo" ? "profundo" : "clasico";
+  const tipo =
+    cuerpo.tipo === "profundo" || cuerpo.tipo === "yeye"
+      ? cuerpo.tipo
+      : "clasico";
   const chat = (cuerpo.chat ?? "").trim();
 
   if (chat.length < 500) {

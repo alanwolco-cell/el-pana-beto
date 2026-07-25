@@ -1,5 +1,5 @@
 export type OpcionesPrompt = {
-  tipo: "clasico" | "profundo";
+  tipo: "clasico" | "profundo" | "yeye";
   idioma?: string;
   contexto?: string;
   nota?: string;
@@ -41,7 +41,11 @@ REGLAS DURAS:
 - Ranking "quién ganaría una pelea": ordena del más peligroso al que cae de primero, puro humor, con motivos absurdos pero anclados al chat (el que se cree rudo, el que manda audios de 5 min pero no aguanta un round).
 - Listas que crean intriga: 2-3 rankings tipo "los que nunca leen el chat", "quién es el más tóxico", "el que siempre desaparece cuando toca pagar". Que den ganas de pelear en el grupo por el puesto. Originales, según lo que de verdad pasa en el chat.`);
 
-  if (o.tipo === "profundo") {
+  if (o.tipo === "yeye") {
+    partes.push(
+      `Este es un REPORTE YEYE: el mismo filo de Beto pero con el sabor del yeyesito panameño — el fresa de Costa del Este, Punta Pacífica, el que estudió en el Metropolitano o el ISP, veranea en Coronado o Buenaventura y va a Ocean's o Bloom los sábados. Sube el spanglish natural (random, lowkey, literally, un mood, "no puede ser", "me muero", el vibe, el groupchat, "es que no", cero, ghosteo), tíralo suave con el "type" de mensajes de voz eternos, el brunch, el gym con trainer, el finde en la finca, el rooftop, y el que "está en Europa otra vez". Nada de grosería fuerte de calle acá: el roast del yeye es más pasivo-agresivo, irónico y con clase, pero igual de letal. Que se sientan vistos y se rían de su propio mundo.`,
+    );
+  } else if (o.tipo === "profundo") {
     partes.push(
       `Este es un REPORTE PROFUNDO: sin bajar el filo, sube la verdad. Además del roast, mete el dedo en la llaga: quién sostiene el grupo, quién se fue apagando, qué tensión nadie nombra, en qué etapa de vida está cada uno. Que se rían y a la vez sientan algo real. Como esa conversación honesta de 2 a.m. donde por fin se dicen las cosas. Si el chat es de una pareja, léelo como terapeuta bocón: patrones sanos y tóxicos, quién persigue y quién huye, qué se repite en las peleas — con humor pero apuntando a algo verdadero que les sirva.`,
     );

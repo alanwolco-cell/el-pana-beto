@@ -112,6 +112,7 @@ export default function NuevoReporte() {
   const [grupo, setGrupo] = useState("");
   const [foto, setFoto] = useState("");
   const [telefono, setTelefono] = useState("");
+  const [tono, setTono] = useState<"clasico" | "yeye" | "profundo">("clasico");
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(false);
   const [mensajeIdx, setMensajeIdx] = useState(0);
@@ -182,6 +183,7 @@ export default function NuevoReporte() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           grupo,
+          tipo: tono,
           // El recorte inteligente pasa aquí: el envío nunca supera ~1 MB
           // aunque el chat tenga años de historia.
           chat: muestrearChat(chat),
@@ -569,8 +571,34 @@ export default function NuevoReporte() {
       {paso === 8 && (
         <section className="mt-10">
           <h1 className="font-display text-3xl font-semibold">
-            Ponle una foto al reporte
+            ¿En qué tono lo quieres?
           </h1>
+          <div className="mt-4 space-y-2">
+            {(
+              [
+                ["clasico", "Clásico", "Humor al frente, sabor panameño, sin filtro."],
+                ["yeye", "Yeye", "Con el vibe del yeyesito: spanglish, irónico y fresa."],
+                ["profundo", "Profundo", "Menos chiste, más verdad. Para parejas y valientes."],
+              ] as const
+            ).map(([valor, nombre, desc]) => (
+              <button
+                key={valor}
+                onClick={() => setTono(valor)}
+                className={`w-full rounded-lg border p-4 text-left transition-colors ${
+                  tono === valor
+                    ? "border-accent bg-card"
+                    : "border-line hover:border-muted"
+                }`}
+              >
+                <span className="block font-medium">{nombre}</span>
+                <span className="block text-sm text-muted">{desc}</span>
+              </button>
+            ))}
+          </div>
+
+          <h2 className="font-display mt-10 text-2xl font-semibold">
+            Ponle una foto al reporte
+          </h2>
           <p className="mt-2 text-muted">
             Una foto del grupo lo hace sentir de colección. Es opcional — Beto
             no juzga… bueno, sí juzga, pero no por esto.

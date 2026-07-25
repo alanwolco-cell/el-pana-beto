@@ -90,7 +90,7 @@ export type Reporte = z.infer<typeof reporteSchema>;
 export type ReporteGuardado = {
   id: string;
   grupo: string;
-  tipo: "clasico" | "profundo";
+  tipo: "clasico" | "profundo" | "yeye";
   creado: string;
   mensajes?: number;
   fotoUrl?: string;
