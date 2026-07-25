@@ -17,6 +17,7 @@ export type BurbujaDark = {
   hora?: string;
   propia?: boolean;
   fecha?: string;
+  reenviado?: boolean;
   linkCard?: boolean;
   tarjeta?: string;
   citando?: { de: string; texto: string };
@@ -91,6 +92,11 @@ export function ChatWhatsAppDark({
                       className={`text-[12px] font-semibold leading-tight ${m.colorDe ?? "text-[#e77f51]"}`}
                     >
                       {m.de}
+                    </p>
+                  )}
+                  {m.reenviado && (
+                    <p className="mt-0.5 text-[11px] italic text-[#8696a0]">
+                      ↪ Reenviado
                     </p>
                   )}
                   {m.citando && (

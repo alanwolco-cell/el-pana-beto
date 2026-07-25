@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 const PASOS_TUTORIAL = [
   "1. Abre el chat y toca el nombre del grupo",
-  "2. Baja hasta «Exportar chat»",
+  "2. Toca los tres puntitos (⋯) → «Exportar chat»",
   "3. Elige «Sin archivos»",
   "4. Guárdalo y súbelo aquí abajo",
 ];
@@ -65,7 +65,17 @@ export function TutorialExportar() {
 
         {(escena === 1 || escena === 2) && (
           <div className="relative">
-            <div className="flex flex-col items-center bg-[#0b141a] px-3 pb-2 pt-5">
+            <div className="flex items-center justify-between px-4 pt-3">
+              <span className="text-lg leading-none text-[#4fa3ff]">‹</span>
+              <div className="flex items-center gap-3 text-[#aebac1]">
+                <span className="text-[15px]">▣</span>
+                <span className="relative px-1 text-lg font-bold leading-none">
+                  ⋯
+                  {escena === 1 && <Pulso />}
+                </span>
+              </div>
+            </div>
+            <div className="flex flex-col items-center bg-[#0b141a] px-3 pb-2 pt-2">
               <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-b from-[#0d6e5f] to-[#00a884] text-2xl">
                 🍻
               </div>
@@ -75,27 +85,37 @@ export function TutorialExportar() {
               <p className="text-[11px] text-[#25d366]">Grupo · 12 miembros</p>
             </div>
             <div className="space-y-px px-3 py-3">
-              {[
-                "Archivos, enlaces y docs",
-                "Destacados",
-                "Tema del chat",
-                "Exportar chat",
-                "Vaciar chat",
-              ].map((fila) => (
-                <div
-                  key={fila}
-                  className={`relative flex items-center justify-between rounded-md px-3 py-2.5 text-[13px] ${
-                    fila === "Exportar chat"
-                      ? "bg-[#202c33] text-white"
-                      : "bg-[#111b21] text-[#c6cdd1]"
-                  }`}
-                >
-                  {fila}
-                  <span className="text-[#8696a0]">›</span>
-                  {fila === "Exportar chat" && escena === 1 && <Pulso />}
-                </div>
-              ))}
+              {["Archivos, enlaces y docs", "Destacados", "Tema del chat"].map(
+                (fila) => (
+                  <div
+                    key={fila}
+                    className="flex items-center justify-between rounded-md bg-[#111b21] px-3 py-2.5 text-[13px] text-[#c6cdd1]"
+                  >
+                    {fila}
+                    <span className="text-[#8696a0]">›</span>
+                  </div>
+                ),
+              )}
             </div>
+            {escena === 1 && (
+              <div className="absolute right-3 top-9 w-44 overflow-hidden rounded-xl bg-[#233138] shadow-2xl">
+                {["Buscar", "Silenciar", "Exportar chat", "Vaciar chat"].map(
+                  (item) => (
+                    <div
+                      key={item}
+                      className={`relative px-4 py-2.5 text-[13px] ${
+                        item === "Exportar chat"
+                          ? "bg-[#2f3d45] font-semibold text-white"
+                          : "text-[#c6cdd1]"
+                      }`}
+                    >
+                      {item}
+                      {item === "Exportar chat" && <Pulso />}
+                    </div>
+                  ),
+                )}
+              </div>
+            )}
             {escena === 2 && (
               <div className="absolute inset-0 flex items-end bg-black/60 p-3">
                 <div className="w-full overflow-hidden rounded-xl bg-[#1f2c34]">
