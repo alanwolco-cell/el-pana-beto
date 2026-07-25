@@ -115,13 +115,13 @@ const paises = [
 
 const mensajesEspera = [
   "Beto está abriendo el chat…",
-  "Leyendo el bochinche completo…",
-  "Beto encontró algo interesante…",
-  "Tomando nota de los apodos…",
-  "Beto se está riendo solo…",
-  "Beto fue por un raspao, ya vuelve…",
-  "Redactando el veredicto…",
-  "Puliendo los flags rojos…",
+  "Leyendo el bochinche completo, no skip…",
+  "Uy, Beto encontró un chisme…",
+  "Anotando los apodos y el aura de cada uno…",
+  "Beto se está riendo solo, real…",
+  "Sacando los red flags, brace yourself…",
+  "Beto fue por un raspao, ya viene…",
+  "Escribiendo el veredicto, esto va a estar heavy…",
 ];
 
 export default function NuevoReporte() {
@@ -181,6 +181,70 @@ export default function NuevoReporte() {
     );
     return () => clearInterval(t);
   }, [cargando]);
+
+  // Borrador automático: guarda lo que llevas para que NUNCA pierdas el
+  // progreso si se corta, cambias de app o se recarga la página.
+  const CLAVE_BORRADOR = "elpanabeto:borrador";
+  const restaurado = useRef(false);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(CLAVE_BORRADOR);
+      if (raw) {
+        const d = JSON.parse(raw);
+        if (d.chat) setChat(d.chat);
+        if (d.grupo) setGrupo(d.grupo);
+        if (d.nota) setNota(d.nota);
+        if (d.contexto) setContexto(d.contexto);
+        if (d.pais) setPais(d.pais);
+        if (d.nombreUsuario) setNombreUsuario(d.nombreUsuario);
+        if (d.tono) setTono(d.tono);
+        if (d.intensidad) setIntensidad(d.intensidad);
+        if (d.archivo) setArchivo(d.archivo);
+        if (Array.isArray(d.participantes)) setParticipantes(d.participantes);
+        if (d.totalMensajes) setTotalMensajes(d.totalMensajes);
+        if (typeof d.paso === "number" && d.chat) setPaso(d.paso);
+      }
+    } catch {}
+    restaurado.current = true;
+  }, []);
+
+  useEffect(() => {
+    if (!restaurado.current) return;
+    if (!chat) return; // solo guardamos cuando ya hay un chat cargado
+    try {
+      localStorage.setItem(
+        CLAVE_BORRADOR,
+        JSON.stringify({
+          chat,
+          grupo,
+          nota,
+          contexto,
+          pais,
+          nombreUsuario,
+          tono,
+          intensidad,
+          archivo,
+          participantes,
+          totalMensajes,
+          paso,
+        }),
+      );
+    } catch {}
+  }, [
+    chat,
+    grupo,
+    nota,
+    contexto,
+    pais,
+    nombreUsuario,
+    tono,
+    intensidad,
+    archivo,
+    participantes,
+    totalMensajes,
+    paso,
+  ]);
 
   function avanzar() {
     setError("");
@@ -244,6 +308,9 @@ export default function NuevoReporte() {
       }
       if (!res.ok) throw new Error(data.error || "Error inesperado");
       if (data.id) guardarReporteLocal(data.id, grupo);
+      try {
+        localStorage.removeItem(CLAVE_BORRADOR);
+      } catch {}
       router.push(`/r/${data.id}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error inesperado");
@@ -253,7 +320,7 @@ export default function NuevoReporte() {
 
   if (cargando) {
     return (
-      <div className="mx-auto flex max-w-xl flex-col items-center px-6 py-24 text-center sm:py-32">
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-paper px-6 text-center">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/beto.jpg"
@@ -265,7 +332,11 @@ export default function NuevoReporte() {
           {mensajesEspera[mensajeIdx]}
         </h1>
         <p className="mt-4 text-muted">
-          Esto toma menos de un minuto. No cierres esta página.
+          Dale un ratito, Beto está en eso.
+        </p>
+        <p className="mt-3 rounded-lg border border-accent/30 bg-accent/[0.06] px-4 py-3 text-sm text-ink-soft">
+          📱 No cierres ni cambies de app: quédate aquí hasta que Beto termine,
+          o se corta y hay que empezar de nuevo.
         </p>
       </div>
     );

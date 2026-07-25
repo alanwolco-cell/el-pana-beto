@@ -66,7 +66,7 @@ export default function RootLayout({
             <div className="flex shrink-0 items-center gap-3">
               <Link
                 href="/mis-reportes"
-                className="hidden whitespace-nowrap text-sm font-medium text-muted transition-colors hover:text-accent sm:block"
+                className="whitespace-nowrap text-sm font-medium text-muted transition-colors hover:text-accent"
               >
                 Mis reportes
               </Link>
