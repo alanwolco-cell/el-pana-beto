@@ -1,8 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import {
+  estaDesbloqueado,
+  leerPagos,
+  precioReporte,
+  totalPagado,
+} from "@/lib/pagos";
 import { leerReporte } from "@/lib/storage";
 import { BotonCompartir } from "./compartir";
+import { PanelDesbloqueo } from "./desbloquear";
+
+export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -43,6 +52,38 @@ export default async function PaginaReporte({ params }: Props) {
     month: "long",
     year: "numeric",
   });
+
+  const pagos = await leerPagos(id);
+  if (!estaDesbloqueado(pagos)) {
+    const precio = pagos?.precio ?? precioReporte();
+    const pagado = pagos ? totalPagado(pagos) : 0;
+    return (
+      <article className="mx-auto max-w-2xl px-6 py-16">
+        <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
+          {guardado.tipo === "profundo" ? "Reporte profundo" : "Reporte clásico"}{" "}
+          · {fecha}
+        </p>
+        <h1 className="font-display mt-4 text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
+          {r.titulo}
+        </h1>
+        <p className="mt-8 text-lg leading-relaxed">
+          {r.veredicto.slice(0, 180)}…
+        </p>
+        <p className="mt-2 text-sm italic text-muted">
+          — Beto, que se leyó todo y tiene mucho más que decir.
+        </p>
+        <PanelDesbloqueo
+          reporteId={id}
+          precio={precio}
+          pagado={pagado}
+          pagos={(pagos?.pagos ?? []).map((p) => ({
+            nombre: p.nombre,
+            monto: p.monto,
+          }))}
+        />
+      </article>
+    );
+  }
 
   return (
     <article className="mx-auto max-w-2xl px-6 py-16">
