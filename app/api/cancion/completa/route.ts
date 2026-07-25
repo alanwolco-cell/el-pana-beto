@@ -41,7 +41,7 @@ export async function POST(req: Request) {
   const pagos = await leerPagos(reporteId);
   if (!cancionComprada(pagos)) {
     return NextResponse.json(
-      { error: "La canción completa se desbloquea pagando. Beto no canta gratis." },
+      { error: "Beto guarda la completa para el que la desbloquea." },
       { status: 402 },
     );
   }

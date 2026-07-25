@@ -73,16 +73,18 @@ export async function POST(req: Request) {
     try {
       ({ output } = await generateText({ model: preferido, ...opciones }));
     } catch (e) {
-      const msg = e instanceof Error ? e.message : String(e);
-      if (/opus/.test(preferido) && /free tier|no_providers|access|credit/i.test(msg)) {
-        console.warn("Opus sin créditos; usando Sonnet.");
-        ({ output } = await generateText({
-          model: "anthropic/claude-sonnet-5",
-          ...opciones,
-        }));
-      } else {
-        throw e;
-      }
+      // Cualquier fallo de Opus (créditos, rate limit, timeout, 5xx) cae a
+      // Sonnet para que el sitio nunca se caiga. Solo se reintenta si el
+      // preferido NO era ya Sonnet.
+      if (/sonnet/.test(preferido)) throw e;
+      console.warn(
+        "Falló el modelo preferido; usando Sonnet:",
+        e instanceof Error ? e.message : String(e),
+      );
+      ({ output } = await generateText({
+        model: "anthropic/claude-sonnet-5",
+        ...opciones,
+      }));
     }
 
     const id = randomUUID();
