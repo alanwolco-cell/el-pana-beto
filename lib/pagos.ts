@@ -63,6 +63,45 @@ export function hostPagueloFacil(): string {
     : "https://secure.paguelofacil.com";
 }
 
+// C2: confirma una transacción server-side contra PagueloFacil antes de
+// registrar un pago. El retorno GET nunca es fuente de verdad.
+// Con PF_QUERY_URL configurado se consulta el estado real por Oper; si no
+// está configurado (sandbox / pruebas), se acepta solo cuando los pagos
+// están en modo prueba explícito (PF_SANDBOX=1).
+export async function verificarTransaccion(
+  oper: string,
+  monto: number,
+): Promise<boolean> {
+  const endpoint = process.env.PF_QUERY_URL;
+  if (!endpoint) {
+    // Sin endpoint de consulta: solo confiar en sandbox de pruebas.
+    return process.env.PF_SANDBOX === "1";
+  }
+  try {
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        CCLW: process.env.PF_CCLW ?? "",
+        oper,
+      }).toString(),
+    });
+    if (!res.ok) return false;
+    const data = await res.json();
+    const estado = String(
+      data?.data?.status ?? data?.status ?? "",
+    ).toLowerCase();
+    const totalReal = Number(data?.data?.total ?? data?.total ?? 0);
+    const aprobado =
+      estado === "1" || estado.includes("aprob") || estado.includes("approv");
+    // El monto confirmado por el gateway debe cubrir lo registrado.
+    return aprobado && totalReal >= monto - 0.05;
+  } catch (e) {
+    console.error("Error verificando transacción PagueloFacil:", e);
+    return false;
+  }
+}
+
 // La canción se paga aparte: sus pagos no cuentan para la vaca del reporte.
 export function totalPagado(estado: EstadoPagos): number {
   return estado.pagos

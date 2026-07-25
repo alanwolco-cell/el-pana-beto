@@ -6,6 +6,7 @@ import {
   precioDesbloqueo,
   registrarPago,
   registrarUsoReferido,
+  verificarTransaccion,
   type Plan,
 } from "@/lib/pagos";
 
@@ -20,11 +21,14 @@ function param(sp: URLSearchParams, ...nombres: string[]): string {
   return "";
 }
 
+const RE_UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+const RE_PANA = /^PANA-[A-Z0-9]{8}$/;
+
 export async function GET(req: Request) {
   const sp = new URL(req.url).searchParams;
 
   const reporteId = param(sp, "PARM_1", "parm_1");
-  const nombre = decodeURIComponent(param(sp, "PARM_2", "parm_2")) || "Alguien";
+  const nombre = decodeURIComponent(param(sp, "PARM_2", "parm_2")).slice(0, 40) || "Alguien";
   const planRaw = param(sp, "PARM_3", "parm_3");
   const plan: Plan =
     planRaw === "doblete" || planRaw === "expediente" ? planRaw : "basico";
@@ -34,18 +38,26 @@ export async function GET(req: Request) {
 
   const destino = (ok: string) =>
     NextResponse.redirect(
-      new URL(`/r/${reporteId}?pago=${ok}`, req.url).toString(),
+      new URL(`/r/${RE_UUID.test(reporteId) ? reporteId : ""}?pago=${ok}`, req.url).toString(),
       303,
     );
 
-  if (!reporteId) {
+  // Path-traversal guard: el id del reporte debe ser un UUID válido.
+  if (!RE_UUID.test(reporteId)) {
     return NextResponse.redirect(new URL("/", req.url).toString(), 303);
   }
 
   const aprobado =
     estado.includes("aprob") || estado === "1" || estado === "approved";
 
-  if (!aprobado || !oper || !Number.isFinite(total) || total <= 0) {
+  if (!aprobado || !oper || !/^[\w-]{1,64}$/.test(oper) || !Number.isFinite(total) || total <= 0) {
+    return destino("fallo");
+  }
+
+  // C2: el retorno GET NO es fuente de verdad — se confirma la transacción
+  // server-side contra PagueloFacil antes de registrar nada.
+  const verificado = await verificarTransaccion(oper, total);
+  if (!verificado) {
     return destino("fallo");
   }
 
@@ -66,7 +78,8 @@ export async function GET(req: Request) {
     return destino("cancion");
   }
 
-  const codigoDescuento = param(sp, "PARM_4", "parm_4");
+  const codigoDescuentoRaw = param(sp, "PARM_4", "parm_4");
+  const codigoDescuento = RE_PANA.test(codigoDescuentoRaw) ? codigoDescuentoRaw : "";
   const umbral = codigoDescuento
     ? Math.max(1, precioDesbloqueo() - descuentoReferido())
     : precioDesbloqueo();

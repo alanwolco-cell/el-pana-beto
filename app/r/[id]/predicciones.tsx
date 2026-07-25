@@ -28,11 +28,11 @@ export function Predicciones({ items }: { items: Prediccion[] }) {
   }
 
   return (
-    <ul className="space-y-3">
+    <ul className="space-y-4">
       {items.map((p) => (
-        <li key={p.nombre} className="flex gap-3 leading-relaxed">
-          <span className="font-medium">{p.nombre}:</span>
-          <span className="text-muted">{p.reaccion}</span>
+        <li key={p.nombre} className="border-b border-line pb-4 last:border-0">
+          <p className="font-medium">{p.nombre}</p>
+          <p className="mt-0.5 leading-relaxed text-muted">{p.reaccion}</p>
         </li>
       ))}
     </ul>

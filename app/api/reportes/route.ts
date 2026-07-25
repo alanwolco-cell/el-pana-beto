@@ -49,8 +49,9 @@ export async function POST(req: Request) {
 
   try {
     const { output } = await generateText({
-      model: "anthropic/claude-sonnet-5",
+      model: process.env.MODELO_REPORTE ?? "anthropic/claude-opus-5",
       output: Output.object({ schema: reporteSchema }),
+      temperature: 1,
       system: promptSistema({
         tipo,
         idioma: (cuerpo.idioma ?? "").slice(0, 40),
