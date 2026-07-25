@@ -220,6 +220,7 @@ export default function NuevoReporte() {
           foto,
           telefono,
           pais,
+          participantes: participantes.slice(0, 15),
         }),
       });
       const texto = await res.text();

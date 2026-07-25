@@ -29,6 +29,7 @@ export async function POST(req: Request) {
     telefono?: string;
     mensajes?: number;
     pais?: string;
+    participantes?: { nombre: string; mensajes: number }[];
   };
   try {
     cuerpo = await req.json();
@@ -112,6 +113,18 @@ export async function POST(req: Request) {
         Number.isFinite(cuerpo.mensajes) && cuerpo.mensajes! > 0
           ? Math.trunc(cuerpo.mensajes!)
           : contarMensajes(chat),
+      participantes: Array.isArray(cuerpo.participantes)
+        ? cuerpo.participantes
+            .filter(
+              (p) =>
+                p && typeof p.nombre === "string" && Number.isFinite(p.mensajes),
+            )
+            .slice(0, 15)
+            .map((p) => ({
+              nombre: p.nombre.slice(0, 40),
+              mensajes: Math.trunc(p.mensajes),
+            }))
+        : undefined,
       fotoUrl,
       reporte: output,
     };

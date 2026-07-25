@@ -248,31 +248,46 @@ export default function Home() {
       </section>
 
       {/* Diferenciador 1: la canción */}
-      <section>
-        <div className="mx-auto grid max-w-5xl gap-8 px-6 py-14 sm:grid-cols-[2fr_3fr] sm:items-center sm:gap-10 sm:py-20">
+      <section className="border-y border-line bg-ink text-paper">
+        <div className="mx-auto grid max-w-5xl gap-8 px-6 py-16 sm:grid-cols-[2fr_3fr] sm:items-center sm:gap-10 sm:py-24">
           <div className="flex justify-center">
-            <div className="flex h-32 w-32 items-center justify-center rounded-full border border-line bg-card text-5xl shadow-sm sm:h-40 sm:w-40 sm:text-6xl">
-              🎵
+            <div className="flotar-a flex h-36 w-36 items-center justify-center rounded-full bg-accent text-6xl shadow-2xl sm:h-44 sm:w-44 sm:text-7xl">
+              🎤
             </div>
           </div>
           <div>
             <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
-              Nuevo
+              Esto no lo tiene nadie más
             </p>
             <h2 className="font-display mt-3 text-3xl font-semibold sm:text-4xl">
-              Beto también le hace una canción a tu grupo.
+              Beto le compone una canción a tu grupo. De verdad.
             </h2>
-            <p className="mt-4 leading-relaxed text-muted">
-              Plena, reggaetón, salsa, típico o balada de despecho. Tú eliges
-              el género y Beto le compone un himno al grupo con los apodos y
-              las vergüenzas de cada quien. Ese audio va a terminar reenviado
-              en todos lados.
+            <p className="mt-4 leading-relaxed text-paper/70">
+              No es un chiste: es una canción completa, cantada, con los apodos
+              y las vergüenzas de cada quien metidos en la letra. Eliges el
+              género y Beto la escribe.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {["🪘 Plena", "🔥 Reggaetón", "💃 Salsa", "🎻 Típico", "💔 Balada de despecho"].map(
+                (g) => (
+                  <span
+                    key={g}
+                    className="rounded-full border border-paper/25 px-3.5 py-1.5 text-sm text-paper/90"
+                  >
+                    {g}
+                  </span>
+                ),
+              )}
+            </div>
+            <p className="mt-5 text-sm text-paper/60">
+              El audio que el grupo va a poner en el próximo party, gritar en el
+              carro y reenviar hasta el cansancio.
             </p>
             <Link
               href="/nuevo"
               className="mt-6 inline-block w-full rounded-full bg-accent px-6 py-3.5 text-center font-medium text-paper transition-transform hover:-translate-y-0.5 sm:w-auto sm:py-3"
             >
-              Que Beto nos componga
+              🎧 Que Beto nos componga
             </Link>
           </div>
         </div>

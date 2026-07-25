@@ -255,6 +255,30 @@ export default async function PaginaReporte({ params }: Props) {
       <h1 className="aparecer aparecer-1 font-display mt-4 text-[2.1rem] font-semibold leading-[1.08] tracking-tight sm:text-[2.75rem] md:text-[3.25rem]">
         {r.titulo}
       </h1>
+
+      {guardado.mensajes && (
+        <div className="aparecer aparecer-1 mt-6 flex flex-wrap gap-x-8 gap-y-3">
+          <div>
+            <p className="font-display text-3xl font-semibold text-accent sm:text-4xl">
+              {guardado.mensajes.toLocaleString("es-PA")}
+            </p>
+            <p className="text-xs uppercase tracking-widest text-muted">
+              mensajes leídos
+            </p>
+          </div>
+          {guardado.participantes && guardado.participantes.length > 0 && (
+            <div>
+              <p className="font-display text-3xl font-semibold sm:text-4xl">
+                {guardado.participantes.length}
+              </p>
+              <p className="text-xs uppercase tracking-widest text-muted">
+                bajo la lupa
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+
       <div className="aparecer aparecer-2 mt-7 flex flex-wrap items-center justify-between gap-3 border-y border-line py-4">
         <div className="flex items-center gap-3">
           <Image
@@ -289,6 +313,45 @@ export default async function PaginaReporte({ params }: Props) {
       <p className="capitular mt-10 text-lg leading-8 text-ink-soft sm:text-[1.19rem] sm:leading-9">
         {r.veredicto}
       </p>
+
+      {guardado.participantes && guardado.participantes.length >= 2 && (
+        <Seccion titulo="💬 Quién carga el chat">
+          {(() => {
+            const maxN = guardado.participantes![0].mensajes || 1;
+            const total =
+              guardado.participantes!.reduce((s, p) => s + p.mensajes, 0) || 1;
+            return (
+              <ul className="space-y-3.5">
+                {guardado.participantes!.map((p, i) => {
+                  const pct = Math.round((p.mensajes / total) * 100);
+                  return (
+                    <li key={p.nombre}>
+                      <div className="flex items-baseline justify-between gap-3 text-sm">
+                        <span
+                          className={`truncate font-medium ${i === 0 ? "text-accent" : ""}`}
+                        >
+                          {i + 1}. {p.nombre}
+                        </span>
+                        <span className="shrink-0 tabular-nums text-muted">
+                          {p.mensajes.toLocaleString("es-PA")} · {pct}%
+                        </span>
+                      </div>
+                      <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-line">
+                        <div
+                          className={`h-full rounded-full ${i === 0 ? "bg-accent" : "bg-ink/70"}`}
+                          style={{
+                            width: `${Math.max(3, Math.round((p.mensajes / maxN) * 100))}%`,
+                          }}
+                        />
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            );
+          })()}
+        </Seccion>
+      )}
 
       {pagos?.cupones && pagos.cupones.length > 0 && (
         <div className="mt-9 rounded-xl border border-dashed border-accent/40 bg-card p-5 shadow-card">

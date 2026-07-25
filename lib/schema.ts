@@ -106,6 +106,7 @@ export type ReporteGuardado = {
   tipo: "clasico" | "profundo" | "yeye";
   creado: string;
   mensajes?: number;
+  participantes?: { nombre: string; mensajes: number }[];
   fotoUrl?: string;
   reporte: Reporte;
 };
