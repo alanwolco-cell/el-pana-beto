@@ -68,5 +68,6 @@ export type ReporteGuardado = {
   tipo: "clasico" | "profundo";
   creado: string;
   mensajes?: number;
+  fotoUrl?: string;
   reporte: Reporte;
 };

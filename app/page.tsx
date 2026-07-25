@@ -1,6 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ChatIMessage, ChatWhatsApp, VeredictoBeto } from "./chat-demo";
+import {
+  ChatIMessage,
+  ChatWhatsAppDark,
+  VeredictoBeto,
+} from "./chat-demo";
 
 const pasos = [
   {
@@ -13,90 +17,24 @@ const pasos = [
     numero: "02",
     titulo: "Pásaselo a Beto",
     texto:
-      "Sube el archivo o pega la conversación. Beto se lee todo el bochinche, desde el primer «xopá» hasta la última pelea — sin recency bias: las épocas viejas también cuentan.",
+      "Sube el archivo o pega la conversación. Beto se lee todo el bochinche, desde el primer «xopá» hasta la última pelea — las épocas viejas también cuentan.",
   },
   {
     numero: "03",
     titulo: "Recibe el veredicto",
     texto:
-      "En unos minutos tienes el reporte: perfiles con apodo, premios, banderas rojas y las frases que nadie quiere recordar. El adelanto es gratis.",
+      "En unos minutos Beto te entrega su opinión: perfiles con apodo, premios, banderas rojas y las frases que nadie quiere recordar.",
   },
 ];
 
-const tipos = [
-  {
-    nombre: "Reporte Clásico",
-    texto:
-      "Humor al frente y verdades bien puestas. El favorito para el grupo de los frenes, la familia y el chat del trabajo.",
-    etiqueta: "El más pedido",
-  },
-  {
-    nombre: "Reporte Profundo",
-    texto:
-      "Menos chiste, más verdad. Quién carga el grupo, quién se desapareció, qué no se está diciendo. Como conversación seria de 2 a.m.",
-    etiqueta: "Para valientes",
-  },
-  {
-    nombre: "El Espejo",
-    texto:
-      "No es sobre un chat: es sobre ti. Beto compara varias conversaciones tuyas y encuentra cómo cambias según con quién hablas.",
-    etiqueta: "Próximamente",
-  },
-];
-
-const reacciones = [
-  {
-    emoji: "👨‍👩‍👧",
-    grupo: "La familia",
-    burbujas: [
-      "JAJAJA lo del «gym» de Papo 💀💀",
-      "la tía ya lo reenvió a otros 4 grupos",
-    ],
-  },
-  {
-    emoji: "🍻",
-    grupo: "Los frenes",
-    burbujas: [
-      "¿QUIÉN LE DIO EL CHAT A ESTE SEÑOR?",
-      "el apodo que me puso no lo supero",
-    ],
-  },
-  {
-    emoji: "💼",
-    grupo: "El trabajo",
-    burbujas: ["esto NO puede llegar al jefe 😭", "muy tarde. ya lo leyó"],
-  },
-  {
-    emoji: "🎓",
-    grupo: "El grupo de la U",
-    burbujas: ["me siento atacada pero es verdad", "Beto no falla"],
-  },
-  {
-    emoji: "💔",
-    grupo: "La ex",
-    burbujas: ["ok esto dolió más que la ruptura", "te lo dije desde el principio"],
-  },
-  {
-    emoji: "🤝",
-    grupo: "El casi algo",
-    burbujas: [
-      "«situación sin título desde 2024» JAJAJA",
-      "hasta Beto sabe que no somos nada",
-    ],
-  },
-  {
-    emoji: "🏢",
-    grupo: "El building",
-    burbujas: [
-      "la junta directiva nos tiene miedo",
-      "reunión extraordinaria YA",
-    ],
-  },
-  {
-    emoji: "🙏",
-    grupo: "El de la iglesia",
-    burbujas: ["hermanos esto es del enemigo", "pero es verdad 🙈"],
-  },
+const contenido = [
+  { emoji: "🔥", titulo: "Los temas del grupo", desc: "Las obsesiones que ustedes creen normales." },
+  { emoji: "👤", titulo: "Un perfil por cabeza", desc: "Con el apodo que cada uno se ganó a pulso." },
+  { emoji: "🏆", titulo: "Los premios", desc: "Al que más habla, al que solo aparece en los cumpleaños." },
+  { emoji: "🗣️", titulo: "El diccionario", desc: "Su jerga interna, traducida al español." },
+  { emoji: "🚩", titulo: "Las banderas", desc: "Verdes y rojas, con evidencia citada." },
+  { emoji: "🤯", titulo: "Frases célebres", desc: "Textuales, con contexto y sin piedad." },
+  { emoji: "🔮", titulo: "Predicciones", desc: "Cómo va a reaccionar cada uno al leer esto." },
 ];
 
 const preguntas = [
@@ -109,24 +47,119 @@ const preguntas = [
     r: "Todos: la familia, los frenes, el trabajo, la U, la ex, el casi algo. Mientras más bochinche, mejor sale el reporte.",
   },
   {
-    p: "¿Cuánto cuesta?",
-    r: "Probar es gratis: Beto lee tu chat y te muestra el adelanto del reporte sin pagar nada. El reporte completo se desbloquea con un solo pago por grupo — y pueden hacer la vaca entre todos.",
-  },
-  {
     p: "¿Qué apps soporta?",
     r: "WhatsApp y iMessage. En WhatsApp exportas el chat con la opción «Sin archivos» y te genera un .txt listo para subir.",
   },
   {
     p: "¿Cuánto tarda?",
-    r: "Buco rápido: unos 5 minutos exportando de tu lado, y otros 5 mientras Beto lee todo y escribe el reporte.",
+    r: "Buco rápido: unos 5 minutos exportando de tu lado, y otros 5 mientras Beto lee todo y escribe.",
   },
   {
     p: "¿Es seguro compartir mi chat?",
-    r: "El chat se procesa una sola vez para generar el reporte y no se guarda ni se usa para entrenar ningún modelo. El reporte vive en un link privado con código imposible de adivinar, que solo tiene tu grupo.",
+    r: "El chat se procesa una sola vez para escribir el reporte, se descarta y nunca se usa para entrenar ningún modelo. El reporte vive en un link privado con código imposible de adivinar, que solo tiene tu grupo. Tratamos tus datos conforme a la Ley 81 de 2019 de Panamá.",
   },
   {
     p: "¿Cómo comparto el reporte?",
     r: "Cada reporte tiene su link único. Lo mandas al grupo y que empiece el bochinche.",
+  },
+];
+
+const telefonos = [
+  {
+    titulo: "Los Panas del Kilo",
+    miembros: "Kike, Nando, Chino, Tavo y 8 más",
+    mensajes: [
+      { linkCard: true, texto: "Reporte completo señores", hora: "5:38 p.m.", propia: true },
+      { texto: "Vale la pena leerlo", hora: "5:38 p.m.", propia: true },
+      {
+        de: "Kike",
+        colorDe: "text-[#53bdeb]",
+        texto: "¿QUIÉN LE DIO NUESTRO CHAT A ESE SEÑOR?",
+        hora: "5:39 p.m.",
+        reaccion: "😂 3",
+      },
+      {
+        de: "Nando",
+        colorDe: "text-[#e77f51]",
+        citando: { de: "Tú", texto: "Reporte completo señores" },
+        texto: "el apodo que me puso no me lo merezco",
+        hora: "5:40 p.m.",
+      },
+      {
+        de: "Chino",
+        colorDe: "text-[#25d366]",
+        texto: "sí te lo mereces",
+        hora: "5:40 p.m.",
+        reaccion: "❤️ 5",
+      },
+      { texto: "JAJAJAJAJAJA", hora: "5:41 p.m.", propia: true },
+    ],
+  },
+  {
+    titulo: "Familia Unida 🙏",
+    miembros: "Mamá, Tía Mirna, Papo y 9 más",
+    mensajes: [
+      {
+        de: "Papo",
+        colorDe: "text-[#53bdeb]",
+        tarjeta:
+          "Banderas verdes: aquí hay amor del bueno. Cuando Papo por fin consiguió trabajo, el grupo celebró como si Panamá hubiera clasificado al Mundial.",
+        hora: "8:12 p.m.",
+      },
+      {
+        de: "Mamá",
+        colorDe: "text-[#a78bfa]",
+        texto: "JAJAJAJAJAJA",
+        hora: "8:13 p.m.",
+      },
+      {
+        de: "Tía Mirna",
+        colorDe: "text-[#f472b6]",
+        texto: "¿Quién es este señor Beto y por qué sabe todo? 🙏",
+        hora: "8:14 p.m.",
+        reaccion: "😂 4",
+      },
+      { texto: "mamá lo leyó dos veces", hora: "8:15 p.m.", propia: true },
+      {
+        de: "Mamá",
+        colorDe: "text-[#a78bfa]",
+        texto: "Tres veces. Y lo reenvié.",
+        hora: "8:15 p.m.",
+      },
+    ],
+  },
+  {
+    titulo: "La Junta 🍻",
+    miembros: "Moncho, Yeyo, Lalo y 5 más",
+    mensajes: [
+      {
+        de: "Yeyo",
+        colorDe: "text-[#25d366]",
+        tarjeta:
+          "Predicción: Moncho va a decir que él no es así. Moncho es exactamente así.",
+        hora: "10:02 p.m.",
+      },
+      {
+        de: "Moncho",
+        colorDe: "text-[#e77f51]",
+        texto: "yo no soy así",
+        hora: "10:03 p.m.",
+        reaccion: "💀 6",
+      },
+      {
+        de: "Lalo",
+        colorDe: "text-[#53bdeb]",
+        texto: "JAJAJAJA lo clavó",
+        hora: "10:03 p.m.",
+      },
+      { texto: "¿metemos a Beto al grupo?", hora: "10:04 p.m.", propia: true },
+      {
+        de: "Yeyo",
+        colorDe: "text-[#25d366]",
+        texto: "Beto ya sabe más de nosotros que nosotros",
+        hora: "10:05 p.m.",
+      },
+    ],
   },
 ];
 
@@ -146,17 +179,17 @@ export default function Home() {
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">
               Sube cualquier conversación de WhatsApp o iMessage. Beto se lee
               cada mensaje y escribe un reporte con su opinión sincera de todos
-              ustedes. El adelanto es gratis.
+              ustedes.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-4">
               <Link
                 href="/nuevo"
                 className="rounded-full bg-accent px-6 py-3 font-medium text-paper transition-transform hover:-translate-y-0.5"
               >
-                Probar gratis
+                Pedir mi reporte
               </Link>
               <p className="text-sm text-muted">
-                5 min para exportar · 5 min pa&rsquo;l reporte
+                Sin cuenta y sin tarjeta · 5 min pa&rsquo;l reporte
               </p>
             </div>
             <p className="mt-6 max-w-xl rounded-lg border border-line bg-card px-4 py-3 text-sm text-muted">
@@ -185,41 +218,34 @@ export default function Home() {
           </h2>
           <div className="mt-12 grid gap-x-10 gap-y-14 sm:grid-cols-2">
             <div className="flotar-a">
-              <ChatWhatsApp
+              <ChatWhatsAppDark
                 titulo="Familia Quintero 🇵🇦"
-                estado="Tía Mirna está escribiendo…"
+                miembros="Mamá, Tía Mirna, Papo y tú"
                 mensajes={[
-                  { fecha: "Hoy" },
                   {
                     de: "Tía Mirna",
-                    colorDe: "text-[#c2618c]",
+                    colorDe: "text-[#f472b6]",
                     texto:
                       "Buenos días familia 🌹🙏 El que no reenvíe esta oración no quiere a su madre",
                     hora: "6:02 a.m.",
                   },
                   {
                     de: "Mamá",
-                    colorDe: "text-[#7a67ce]",
+                    colorDe: "text-[#a78bfa]",
                     texto:
                       "¿QUIÉN se comió el arroz con pollo que era PARA EL DOMINGO?",
                     hora: "9:14 a.m.",
                   },
                   {
                     de: "Papo",
-                    colorDe: "text-[#4c9ce0]",
+                    colorDe: "text-[#53bdeb]",
                     texto: "yo no fui, yo estaba en el gym",
                     hora: "9:20 a.m.",
                   },
                   {
                     de: "Mamá",
-                    colorDe: "text-[#7a67ce]",
+                    colorDe: "text-[#a78bfa]",
                     texto: "Papo tú no tienes gym",
-                    hora: "9:21 a.m.",
-                  },
-                  {
-                    de: "Papo",
-                    colorDe: "text-[#4c9ce0]",
-                    texto: "por eso mismo, estaba averiguando precios",
                     hora: "9:21 a.m.",
                   },
                   {
@@ -229,9 +255,10 @@ export default function Home() {
                   },
                   {
                     de: "Papo",
-                    colorDe: "text-[#4c9ce0]",
+                    colorDe: "text-[#53bdeb]",
                     texto: "sapo",
                     hora: "9:31 a.m.",
+                    reaccion: "😂 8",
                   },
                 ]}
               />
@@ -287,38 +314,22 @@ export default function Home() {
       <section className="border-y border-line bg-card py-16">
         <div className="mx-auto max-w-5xl px-6">
           <h2 className="font-display text-3xl font-semibold sm:text-4xl">
-            La gente reaccionando a su reporte
+            Los grupos reaccionando a su reporte
           </h2>
           <p className="mt-3 text-muted">
-            Lo que pasa en el grupo cuando alguien suelta el link.
+            Lo que pasa en el chat cuando alguien suelta el link.
           </p>
         </div>
         <div className="marquee mt-10">
-          <div className="marquee-track">
-            {[...reacciones, ...reacciones].map((r, i) => (
-              <article
-                key={`${r.grupo}-${i}`}
-                className="w-64 shrink-0 rounded-lg border border-line bg-paper p-5"
-              >
-                <p className="text-sm font-semibold">
-                  <span className="mr-2">{r.emoji}</span>
-                  {r.grupo}
-                </p>
-                <div className="mt-4 space-y-2">
-                  {r.burbujas.map((b, j) => (
-                    <p
-                      key={b}
-                      className={`w-fit max-w-full rounded-2xl px-3.5 py-2 text-sm leading-snug ${
-                        j % 2
-                          ? "ml-auto rounded-br-sm bg-[#d9fdd3] text-[#111b21]"
-                          : "rounded-bl-sm bg-white text-[#111b21] shadow-sm"
-                      }`}
-                    >
-                      {b}
-                    </p>
-                  ))}
-                </div>
-              </article>
+          <div className="marquee-track items-start">
+            {[...telefonos, ...telefonos].map((t, i) => (
+              <div key={`${t.titulo}-${i}`} className="w-80 shrink-0">
+                <ChatWhatsAppDark
+                  titulo={t.titulo}
+                  miembros={t.miembros}
+                  mensajes={t.mensajes}
+                />
+              </div>
             ))}
           </div>
         </div>
@@ -326,32 +337,23 @@ export default function Home() {
 
       <section className="mx-auto max-w-5xl px-6 py-20">
         <h2 className="font-display text-3xl font-semibold sm:text-4xl">
-          Tres formas de conocer la verdad
+          Qué trae el reporte
         </h2>
-        <div className="mt-10 grid gap-6 sm:grid-cols-3">
-          {tipos.map((t) => (
+        <p className="mt-3 text-muted">
+          No es un resumen. Es la opinión de un pana que se leyó todo y tiene
+          mucho que decir.
+        </p>
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {contenido.map((c) => (
             <article
-              key={t.nombre}
-              className="flex flex-col rounded-lg border border-line bg-card p-6"
+              key={c.titulo}
+              className="rounded-lg border border-line bg-card p-5"
             >
-              <div className="flex items-center justify-between">
-                <p className="text-xs font-medium uppercase tracking-widest text-accent">
-                  {t.etiqueta}
-                </p>
-                <Image
-                  src="/beto.jpg"
-                  alt=""
-                  width={32}
-                  height={32}
-                  className="rounded-full border border-line object-cover"
-                />
-              </div>
-              <h3 className="font-display mt-3 text-xl font-semibold">
-                {t.nombre}
+              <p className="text-2xl">{c.emoji}</p>
+              <h3 className="font-display mt-2 text-lg font-semibold">
+                {c.titulo}
               </h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted">
-                {t.texto}
-              </p>
+              <p className="mt-1 text-sm leading-relaxed text-muted">{c.desc}</p>
             </article>
           ))}
         </div>
@@ -391,20 +393,22 @@ export default function Home() {
             ¿Cuál chat va primero?
           </h2>
           <div className="mx-auto mt-6 flex max-w-xl flex-wrap justify-center gap-2">
-            {reacciones.map((r) => (
-              <span
-                key={r.grupo}
-                className="rounded-full border border-line bg-paper px-4 py-1.5 text-sm"
-              >
-                {r.emoji} {r.grupo}
-              </span>
-            ))}
+            {["👨‍👩‍👧 La familia", "🍻 Los frenes", "💼 El trabajo", "🎓 La U", "💔 La ex", "🤝 El casi algo"].map(
+              (c) => (
+                <span
+                  key={c}
+                  className="rounded-full border border-line bg-paper px-4 py-1.5 text-sm"
+                >
+                  {c}
+                </span>
+              ),
+            )}
           </div>
           <Link
             href="/nuevo"
             className="mt-10 inline-block rounded-full bg-accent px-8 py-4 font-medium text-paper transition-transform hover:-translate-y-0.5"
           >
-            Probar gratis
+            Pedir mi reporte
           </Link>
         </div>
       </section>

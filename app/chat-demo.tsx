@@ -158,6 +158,129 @@ export function ChatIMessage({
   );
 }
 
+export type BurbujaDark = {
+  de?: string;
+  colorDe?: string;
+  texto?: string;
+  hora?: string;
+  propia?: boolean;
+  linkCard?: boolean;
+  tarjeta?: string;
+  citando?: { de: string; texto: string };
+  reaccion?: string;
+};
+
+export function ChatWhatsAppDark({
+  titulo,
+  miembros,
+  mensajes,
+}: {
+  titulo: string;
+  miembros: string;
+  mensajes: BurbujaDark[];
+}) {
+  return (
+    <div className="overflow-hidden rounded-[1.5rem] border border-black/50 bg-[#0b141a] text-left shadow-xl">
+      <div className="flex items-center gap-2.5 bg-[#1f2c34] px-3 py-2.5">
+        <span className="text-lg leading-none text-[#4fa3ff]">‹</span>
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#00a884] text-sm font-semibold text-white">
+          {titulo.replace(/[^\p{L}\p{N}]/gu, "").slice(0, 1) || "G"}
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-[14px] font-semibold leading-tight text-white">
+            {titulo}
+          </p>
+          <p className="truncate text-[11px] leading-tight text-[#8696a0]">
+            {miembros}
+          </p>
+        </div>
+        <svg viewBox="0 0 24 24" className="h-5 w-5 fill-[#aebac1]">
+          <path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z" />
+        </svg>
+      </div>
+      <div className="space-y-2 px-3 py-4">
+        {mensajes.map((m, i) => (
+          <div key={i}>
+            <div className={`flex ${m.propia ? "justify-end" : "justify-start"}`}>
+              <div
+                className={`max-w-[88%] rounded-lg px-2.5 py-1.5 ${
+                  m.propia ? "bg-[#005c4b]" : "bg-[#202c33]"
+                }`}
+              >
+                {m.de && !m.propia && (
+                  <p
+                    className={`text-[12px] font-semibold leading-tight ${m.colorDe ?? "text-[#e77f51]"}`}
+                  >
+                    {m.de}
+                  </p>
+                )}
+                {m.citando && (
+                  <div className="mt-1 rounded-md border-l-2 border-[#53bdeb] bg-black/25 px-2 py-1">
+                    <p className="text-[11px] font-semibold text-[#53bdeb]">
+                      {m.citando.de}
+                    </p>
+                    <p className="truncate text-[11px] text-[#8696a0]">
+                      {m.citando.texto}
+                    </p>
+                  </div>
+                )}
+                {m.linkCard && (
+                  <div className="mt-1 flex items-center gap-2 rounded-md bg-black/25 p-2">
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[12px] font-semibold leading-snug text-white">
+                        El Pana Beto — El reporte del grupo
+                      </p>
+                      <p className="text-[11px] text-[#8696a0]">elpanabeto.com</p>
+                    </div>
+                    <Image
+                      src="/beto.jpg"
+                      alt=""
+                      width={44}
+                      height={44}
+                      className="shrink-0 rounded-md object-cover"
+                    />
+                  </div>
+                )}
+                {m.tarjeta && (
+                  <div className="mt-1 rounded-md bg-[#f7f3ec] px-3 py-2.5">
+                    <p className="text-[12.5px] leading-snug text-[#191613]">
+                      {m.tarjeta}
+                    </p>
+                  </div>
+                )}
+                {m.texto && (
+                  <p className="text-[13.5px] leading-snug text-[#e9edef]">
+                    {m.texto}
+                    <span className="ml-2 inline-block translate-y-0.5 whitespace-nowrap text-[10px] text-[#8696a0]">
+                      {m.hora}
+                      {m.propia && <Checks />}
+                    </span>
+                  </p>
+                )}
+                {!m.texto && (m.linkCard || m.tarjeta) && (
+                  <p className="mt-0.5 text-right text-[10px] text-[#8696a0]">
+                    {m.hora}
+                    {m.propia && <Checks />}
+                  </p>
+                )}
+              </div>
+            </div>
+            {m.reaccion && (
+              <div
+                className={`-mt-1 flex ${m.propia ? "justify-end pr-2" : "justify-start pl-2"}`}
+              >
+                <span className="rounded-full border border-[#0b141a] bg-[#202c33] px-1.5 py-0.5 text-[11px]">
+                  {m.reaccion}
+                </span>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function VeredictoBeto({ children }: { children: React.ReactNode }) {
   return (
     <div className="mt-5 flex items-start gap-3">

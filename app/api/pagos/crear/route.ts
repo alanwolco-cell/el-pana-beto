@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
 import {
+  descuentoReferido,
   hostPagueloFacil,
   pagosConfigurados,
-  precioReporte,
+  PLANES,
+  precioPlan,
+  validarDescuento,
+  type Plan,
 } from "@/lib/pagos";
 import { leerReporte } from "@/lib/storage";
 
@@ -17,7 +21,13 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Pagos no configurados" }, { status: 503 });
   }
 
-  let cuerpo: { reporteId?: string; nombre?: string; partes?: number };
+  let cuerpo: {
+    reporteId?: string;
+    nombre?: string;
+    plan?: string;
+    partes?: number;
+    descuento?: string;
+  };
   try {
     cuerpo = await req.json();
   } catch {
@@ -30,20 +40,38 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Reporte no existe" }, { status: 404 });
   }
 
+  const plan: Plan =
+    cuerpo.plan === "doblete" || cuerpo.plan === "expediente"
+      ? cuerpo.plan
+      : "basico";
   const nombre = (cuerpo.nombre ?? "").trim().slice(0, 40) || "Alguien del grupo";
-  const partes = Math.min(Math.max(Math.trunc(cuerpo.partes ?? 1), 1), 6);
-  const precio = precioReporte(guardado.tipo);
-  // PagueloFacil no acepta cobros menores a $1.00
+  // La vaca solo aplica al plan básico; PagueloFacil no cobra menos de $1.00.
+  const partes =
+    plan === "basico"
+      ? Math.min(Math.max(Math.trunc(cuerpo.partes ?? 1), 1), 4)
+      : 1;
+  // Código de pana: descuento solo sobre el plan básico.
+  let precio = precioPlan(plan);
+  let codigoDescuento = "";
+  if (plan === "basico" && cuerpo.descuento) {
+    const limpio = cuerpo.descuento.trim().toUpperCase();
+    if (await validarDescuento(limpio)) {
+      precio = Math.max(1, precio - descuentoReferido());
+      codigoDescuento = limpio;
+    }
+  }
   const monto = Math.max(1, Math.round((precio / partes) * 100) / 100);
 
   const returnUrl = `${baseUrl(req)}/api/pagos/retorno`;
   const params = new URLSearchParams({
     CCLW: process.env.PF_CCLW!,
     CMTN: monto.toFixed(2),
-    CDSC: `El Pana Beto - Reporte "${guardado.grupo || "sin nombre"}"`.slice(0, 150),
+    CDSC: `El Pana Beto — ${PLANES[plan].nombre} · ${guardado.grupo || "chat sin nombre"}`.slice(0, 150),
     RETURN_URL: Buffer.from(returnUrl).toString("hex"),
     PARM_1: reporteId,
     PARM_2: encodeURIComponent(nombre),
+    PARM_3: plan,
+    PARM_4: codigoDescuento,
   });
 
   try {
@@ -59,7 +87,7 @@ export async function POST(req: Request) {
   } catch (e) {
     console.error("Error creando pago PagueloFacil:", e);
     return NextResponse.json(
-      { error: "No se pudo iniciar el pago. Intenta de nuevo." },
+      { error: "La caja registradora de Beto se trabó. Intenta de nuevo." },
       { status: 502 },
     );
   }

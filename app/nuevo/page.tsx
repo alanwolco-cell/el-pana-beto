@@ -2,13 +2,14 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { ChatWhatsAppDark } from "@/app/chat-demo";
 import {
   analizarChat,
   nombreGrupoDesdeArchivo,
   type Participante,
 } from "@/lib/parse-chat";
 
-const TOTAL_PASOS = 7;
+const TOTAL_PASOS = 9;
 
 const idiomas = ["Español", "English", "Português", "Français", "Italiano"];
 
@@ -45,11 +46,12 @@ export default function NuevoReporte() {
   const [totalMensajes, setTotalMensajes] = useState(0);
   const [nombreUsuario, setNombreUsuario] = useState("");
   const [grupo, setGrupo] = useState("");
-  const [tipo, setTipo] = useState<"clasico" | "profundo">("clasico");
+  const [foto, setFoto] = useState("");
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(false);
   const [mensajeIdx, setMensajeIdx] = useState(0);
   const inputArchivo = useRef<HTMLInputElement>(null);
+  const inputFoto = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!cargando) return;
@@ -92,12 +94,12 @@ export default function NuevoReporte() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           grupo,
-          tipo,
           chat,
           idioma,
           contexto,
           nota,
           nombreUsuario,
+          foto,
         }),
       });
       const data = await res.json();
@@ -262,6 +264,47 @@ export default function NuevoReporte() {
       {paso === 5 && (
         <section className="mt-10">
           <h1 className="font-display text-3xl font-semibold">
+            Compartirlo es la mejor parte.
+          </h1>
+          <p className="mt-2 text-muted">
+            Cuando el link cae en el grupo, el chat no se calla en una semana.
+          </p>
+          <div className="mx-auto mt-8 max-w-sm">
+            <ChatWhatsAppDark
+              titulo="Los Panas del Kilo"
+              miembros="Kike, Nando, Chino y 8 más"
+              mensajes={[
+                {
+                  linkCard: true,
+                  texto: "Señores. Léanlo completo.",
+                  hora: "5:38 p.m.",
+                  propia: true,
+                },
+                {
+                  de: "Kike",
+                  colorDe: "text-[#53bdeb]",
+                  texto: "¿QUIÉN LE DIO NUESTRO CHAT A ESE SEÑOR?",
+                  hora: "5:39 p.m.",
+                  reaccion: "😂 3",
+                },
+                {
+                  de: "Nando",
+                  colorDe: "text-[#e77f51]",
+                  texto: "el apodo que me puso no me lo merezco",
+                  hora: "5:40 p.m.",
+                },
+              ]}
+            />
+          </div>
+          <button onClick={avanzar} className={`${botonPrimario} mt-8`}>
+            Continuar →
+          </button>
+        </section>
+      )}
+
+      {paso === 6 && (
+        <section className="mt-10">
+          <h1 className="font-display text-3xl font-semibold">
             Exporta y sube tu conversación
           </h1>
           {origen === "WhatsApp" ? (
@@ -336,18 +379,19 @@ export default function NuevoReporte() {
         </section>
       )}
 
-      {paso === 6 && (
+      {paso === 7 && (
         <section className="mt-10">
           <h1 className="font-display text-3xl font-semibold">
             {participantes.length >= 2
               ? "Esto fue lo que encontró Beto"
-              : "Cuéntanos del grupo"}
+              : "Listo, Beto ya tiene el chat"}
           </h1>
-          {participantes.length >= 2 && (
+          {participantes.length >= 2 ? (
             <div className="mt-6 space-y-4">
               <p className="text-sm text-muted">
                 {totalMensajes.toLocaleString("es-PA")} mensajes de{" "}
-                {participantes.length} personas.
+                {participantes.length} personas. Beto ya está frotándose las
+                manos.
               </p>
               {participantes.slice(0, 10).map((p) => {
                 const pct = Math.round((p.mensajes / totalMensajes) * 100);
@@ -371,36 +415,51 @@ export default function NuevoReporte() {
                 );
               })}
             </div>
+          ) : (
+            <p className="mt-4 text-muted">
+              No pudimos separar los participantes automáticamente, pero no
+              importa: Beto los va a conocer leyendo.
+            </p>
           )}
-          <div className="mt-8">
-            <label className="block text-sm font-medium">
-              ¿Cuál eres tú? (para que Beto no te perdone nada)
-            </label>
-            {participantes.length >= 2 && (
-              <div className="mt-2 flex flex-wrap gap-2">
-                {participantes.slice(0, 8).map((p) => (
-                  <button
-                    key={p.nombre}
-                    onClick={() => setNombreUsuario(p.nombre)}
-                    className={`rounded-full border px-3 py-1.5 text-sm transition-colors ${
-                      nombreUsuario === p.nombre
-                        ? "border-accent bg-card font-medium"
-                        : "border-line hover:border-muted"
-                    }`}
-                  >
-                    {p.nombre}
-                  </button>
-                ))}
-              </div>
-            )}
-            <input
-              type="text"
-              value={nombreUsuario}
-              onChange={(e) => setNombreUsuario(e.target.value)}
-              placeholder="Tu nombre en el chat"
-              className="mt-3 w-full rounded-md border border-line bg-card px-4 py-3 outline-none transition-colors focus:border-accent"
-            />
-          </div>
+          <button onClick={avanzar} className={`${botonPrimario} mt-8`}>
+            Continuar →
+          </button>
+        </section>
+      )}
+
+      {paso === 8 && (
+        <section className="mt-10">
+          <h1 className="font-display text-3xl font-semibold">
+            Beto va a usar estos nombres
+          </h1>
+          <p className="mt-2 text-muted">
+            Dinos cuál eres tú — pa&rsquo; que Beto no te perdone nada — y
+            confirma el nombre del grupo.
+          </p>
+          {participantes.length >= 2 && (
+            <div className="mt-6 flex flex-wrap gap-2">
+              {participantes.slice(0, 8).map((p) => (
+                <button
+                  key={p.nombre}
+                  onClick={() => setNombreUsuario(p.nombre)}
+                  className={`rounded-full border px-3 py-1.5 text-sm transition-colors ${
+                    nombreUsuario === p.nombre
+                      ? "border-accent bg-card font-medium"
+                      : "border-line hover:border-muted"
+                  }`}
+                >
+                  {p.nombre}
+                </button>
+              ))}
+            </div>
+          )}
+          <input
+            type="text"
+            value={nombreUsuario}
+            onChange={(e) => setNombreUsuario(e.target.value)}
+            placeholder="Tu nombre en el chat"
+            className="mt-4 w-full rounded-md border border-line bg-card px-4 py-3 outline-none transition-colors focus:border-accent"
+          />
           <div className="mt-6">
             <label htmlFor="grupo" className="block text-sm font-medium">
               Nombre del grupo
@@ -420,77 +479,62 @@ export default function NuevoReporte() {
         </section>
       )}
 
-      {paso === 7 && (
+      {paso === 9 && (
         <section className="mt-10">
           <h1 className="font-display text-3xl font-semibold">
-            ¿Cuál reporte quieres?
+            Ponle una foto al reporte
           </h1>
-          <div className="mt-6 space-y-3">
-            {(
-              [
-                [
-                  "clasico",
-                  "Reporte Clásico",
-                  "$9.99",
-                  "Humor al frente, verdades bien puestas. El que empezó todo.",
-                  "El más pedido",
-                ],
-                [
-                  "profundo",
-                  "Reporte Profundo",
-                  "$14.99",
-                  "Menos chiste, más verdad. Las dinámicas que nadie nombra.",
-                  "Para valientes",
-                ],
-              ] as const
-            ).map(([valor, nombre, precio, desc, tag]) => (
-              <button
-                key={valor}
-                onClick={() => setTipo(valor)}
-                className={`w-full rounded-lg border p-5 text-left transition-colors ${
-                  tipo === valor
-                    ? "border-accent bg-card"
-                    : "border-line hover:border-muted"
-                }`}
-              >
-                <div className="flex items-baseline justify-between">
-                  <span className="font-display text-lg font-semibold">
-                    {nombre}
-                  </span>
-                  <span className="font-medium">{precio}</span>
-                </div>
-                <p className="mt-1 text-xs font-medium uppercase tracking-widest text-accent">
-                  {tag}
-                </p>
-                <p className="mt-2 text-sm text-muted">{desc}</p>
-              </button>
-            ))}
-            <div className="w-full rounded-lg border border-line p-5 text-left opacity-60">
-              <div className="flex items-baseline justify-between">
-                <span className="font-display text-lg font-semibold">
-                  El Espejo
-                </span>
-                <span className="text-sm text-muted">Próximamente</span>
-              </div>
-              <p className="mt-2 text-sm text-muted">
-                Varios chats tuyos comparados: cómo cambias según con quién
-                hablas.
-              </p>
-            </div>
-          </div>
-          <p className="mt-6 text-sm text-muted">
-            Generarlo es <span className="font-medium text-ink">gratis</span>:
-            ves el adelanto con el veredicto de Beto y pagas solo si quieren
-            desbloquear el reporte completo. Pueden hacer la vaca.
+          <p className="mt-2 text-muted">
+            Una foto del grupo lo hace sentir de colección. Es opcional — Beto
+            no juzga… bueno, sí juzga, pero no por esto.
           </p>
+          <button
+            type="button"
+            onClick={() => inputFoto.current?.click()}
+            className="mt-6 flex w-full flex-col items-center rounded-md border border-dashed border-muted px-4 py-8 text-sm text-muted transition-colors hover:border-accent hover:text-accent"
+          >
+            {foto ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={foto}
+                alt="Foto del grupo"
+                className="max-h-48 rounded-md object-cover"
+              />
+            ) : (
+              "Subir una foto del grupo"
+            )}
+          </button>
+          <input
+            ref={inputFoto}
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            className="hidden"
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (!f) return;
+              if (f.size > 4 * 1024 * 1024) {
+                setError("La foto es muy pesada (máx. 4 MB).");
+                return;
+              }
+              const lector = new FileReader();
+              lector.onload = () => setFoto(String(lector.result));
+              lector.readAsDataURL(f);
+            }}
+          />
           {error && (
             <p className="mt-4 rounded-md border border-accent/40 bg-accent/5 px-4 py-3 text-sm text-accent">
               {error}
             </p>
           )}
-          <button onClick={enviar} className={`${botonPrimario} mt-6 w-full bg-accent`}>
-            Que Beto lo lea gratis →
+          <button
+            onClick={enviar}
+            className={`${botonPrimario} mt-8 w-full bg-accent`}
+          >
+            {foto ? "Que Beto lo lea →" : "Saltar y que Beto lo lea →"}
           </button>
+          <p className="mt-3 text-center text-xs text-muted">
+            Sin cuenta y sin tarjeta. En unos minutos Beto te da su veredicto.
+          </p>
         </section>
       )}
     </div>

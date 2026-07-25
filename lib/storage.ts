@@ -20,6 +20,24 @@ export async function guardarReporte(reporte: ReporteGuardado): Promise<void> {
   await fs.writeFile(path.join(dirLocal, `${reporte.id}.json`), cuerpo);
 }
 
+// Guarda la foto de portada (solo con Blob configurado; en local se omite).
+export async function guardarFoto(
+  id: string,
+  dataUrl: string,
+): Promise<string | undefined> {
+  const m = dataUrl.match(/^data:(image\/(?:jpeg|png|webp));base64,(.+)$/);
+  if (!m || !usaBlob) return undefined;
+  const buf = Buffer.from(m[2], "base64");
+  if (buf.length > 4_500_000) return undefined;
+  const { put } = await import("@vercel/blob");
+  const blob = await put(`portadas/${id}`, buf, {
+    access: "public",
+    addRandomSuffix: false,
+    contentType: m[1],
+  });
+  return blob.url;
+}
+
 export async function leerReporte(
   id: string,
 ): Promise<ReporteGuardado | null> {

@@ -3,7 +3,7 @@ import { generateText, Output } from "ai";
 import { NextResponse } from "next/server";
 import { promptSistema } from "@/lib/beto";
 import { reporteSchema, type ReporteGuardado } from "@/lib/schema";
-import { guardarReporte } from "@/lib/storage";
+import { guardarFoto, guardarReporte } from "@/lib/storage";
 
 export const maxDuration = 300;
 
@@ -43,6 +43,7 @@ export async function POST(req: Request) {
     contexto?: string;
     nota?: string;
     nombreUsuario?: string;
+    foto?: string;
   };
   try {
     cuerpo = await req.json();
@@ -78,12 +79,23 @@ export async function POST(req: Request) {
       maxOutputTokens: 16_000,
     });
 
+    const id = randomUUID();
+    let fotoUrl: string | undefined;
+    if (cuerpo.foto) {
+      try {
+        fotoUrl = await guardarFoto(id, cuerpo.foto);
+      } catch {
+        fotoUrl = undefined;
+      }
+    }
+
     const guardado: ReporteGuardado = {
-      id: randomUUID(),
+      id,
       grupo,
       tipo,
       creado: new Date().toISOString(),
       mensajes: contarMensajes(chat),
+      fotoUrl,
       reporte: output,
     };
     await guardarReporte(guardado);

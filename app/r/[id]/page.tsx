@@ -3,10 +3,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
+  descuentoReferido,
   estaDesbloqueado,
   leerPagos,
-  precioReporte,
+  obtenerCodigoPana,
+  pagosConfigurados,
+  precioDesbloqueo,
+  precioPlan,
   totalPagado,
+  USOS_PARA_CORTESIA,
 } from "@/lib/pagos";
 import { leerReporte } from "@/lib/storage";
 import { BotonCompartir } from "./compartir";
@@ -62,9 +67,10 @@ export default async function PaginaReporte({ params }: Props) {
 
   const pagos = await leerPagos(id);
   if (!estaDesbloqueado(pagos)) {
-    const precio = pagos?.precio ?? precioReporte(guardado.tipo);
+    const precio = pagos?.precio ?? precioDesbloqueo();
     const pagado = pagos ? totalPagado(pagos) : 0;
     const primerPerfil = r.perfiles[0];
+    const segundoPerfil = r.perfiles[1];
     const bloqueado = [
       { icono: "🔥", texto: `${r.temas.length} temas que dominan el grupo` },
       {
@@ -129,12 +135,33 @@ export default async function PaginaReporte({ params }: Props) {
                 {primerPerfil.descripcion}
               </p>
             </div>
-            {r.perfiles.length > 1 && (
-              <p className="mt-3 text-sm text-muted">
-                …y {r.perfiles.length - 1} perfiles más esperando bajo llave.
-              </p>
-            )}
           </div>
+        )}
+
+        {segundoPerfil && (
+          <div className="relative mt-4 overflow-hidden rounded-lg border border-line bg-card p-5">
+            <div className="flex flex-wrap items-baseline gap-x-3">
+              <h3 className="font-display text-lg font-semibold">
+                {segundoPerfil.nombre}
+              </h3>
+              <span className="text-sm italic text-accent">
+                «{segundoPerfil.apodo}»
+              </span>
+            </div>
+            <p className="mt-2 leading-relaxed text-muted">
+              {segundoPerfil.descripcion.slice(0, 90)}
+            </p>
+            <div className="absolute inset-0 flex items-end justify-center bg-gradient-to-b from-transparent via-card/60 to-card pb-4">
+              <p className="text-sm font-medium">
+                🔒 Y justo cuando se estaba poniendo bueno—
+              </p>
+            </div>
+          </div>
+        )}
+        {r.perfiles.length > 2 && (
+          <p className="mt-3 text-sm text-muted">
+            …y {r.perfiles.length - 2} perfiles más esperando bajo llave.
+          </p>
         )}
 
         <div className="mt-10">
@@ -157,6 +184,11 @@ export default async function PaginaReporte({ params }: Props) {
         <PanelDesbloqueo
           reporteId={id}
           precio={precio}
+          precios={{
+            basico: precioPlan("basico"),
+            doblete: precioPlan("doblete"),
+            expediente: precioPlan("expediente"),
+          }}
           pagado={pagado}
           pagos={(pagos?.pagos ?? []).map((p) => ({
             nombre: p.nombre,
@@ -193,7 +225,41 @@ export default async function PaginaReporte({ params }: Props) {
         <BotonCompartir />
       </div>
 
+      {guardado.fotoUrl && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={guardado.fotoUrl}
+          alt={`Foto del grupo ${guardado.grupo}`}
+          className="mt-8 max-h-80 w-full rounded-lg border border-line object-cover"
+        />
+      )}
+
       <p className="mt-10 text-lg leading-relaxed">{r.veredicto}</p>
+
+      {pagos?.cupones && pagos.cupones.length > 0 && (
+        <div className="mt-8 rounded-lg border border-line bg-card p-5">
+          <p className="font-display font-semibold">
+            🎟️ Tus códigos pa&rsquo;l próximo bochinche
+          </p>
+          <p className="mt-1 text-sm text-muted">
+            Cada uno desbloquea el reporte de otro chat. Úsalos en el botón
+            «¿Tienes un código de Beto?».
+          </p>
+          <p className="mt-3 font-mono text-sm">{pagos.cupones.join(" · ")}</p>
+        </div>
+      )}
+
+      {pagosConfigurados() && (
+        <div className="mt-8 rounded-lg border border-line bg-card p-5">
+          <p className="font-display font-semibold">🤝 Tu código de pana</p>
+          <p className="mt-1 text-sm text-muted">
+            Regala ${descuentoReferido().toFixed(2)} de descuento a cualquier
+            otro grupo. Y cuando {USOS_PARA_CORTESIA} grupos lo usen, Beto te
+            debe un reporte de cortesía — te aparece aquí solito.
+          </p>
+          <p className="mt-3 font-mono text-sm">{await obtenerCodigoPana(id)}</p>
+        </div>
+      )}
 
       <Seccion titulo="🔥 Los temas del grupo">
         <div className="space-y-6">
