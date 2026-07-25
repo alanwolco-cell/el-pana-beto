@@ -24,14 +24,14 @@ const pasos = [
 ];
 
 const contenido = [
-  { emoji: "🔥", titulo: "Los temas del grupo", desc: "Las obsesiones que ustedes creen normales." },
-  { emoji: "👤", titulo: "Un perfil por cabeza", desc: "Con el apodo que cada uno se ganó a pulso." },
-  { emoji: "🏆", titulo: "Los premios", desc: "Al que más habla, al que solo aparece en los cumpleaños." },
-  { emoji: "✨", titulo: "El ranking de aura", desc: "Quién tiene aura infinita y quién quedó debiendo." },
-  { emoji: "🗣️", titulo: "El diccionario", desc: "Su jerga interna, traducida al español." },
-  { emoji: "🚩", titulo: "Las banderas", desc: "Verdes y rojas, con evidencia citada." },
-  { emoji: "🤯", titulo: "Frases célebres", desc: "Textuales, con contexto y sin piedad." },
-  { emoji: "🔮", titulo: "Predicciones", desc: "Cómo va a reaccionar cada uno al leer esto." },
+  { emoji: "🔥", titulo: "Los temas del grupo", desc: "Esas obsesiones que ustedes juran que son normales." },
+  { emoji: "👤", titulo: "Un perfil por cabeza", desc: "Con el apodo que cada quien se ganó a pulso." },
+  { emoji: "🏆", titulo: "Los premios", desc: "Del que no suelta el chat al que solo revive en los cumpleaños." },
+  { emoji: "✨", titulo: "El ranking de aura", desc: "Quién la tiene infinita y quién quedó debiendo." },
+  { emoji: "🗣️", titulo: "El diccionario", desc: "Esos inside jokes que nadie de afuera entiende." },
+  { emoji: "🚩", titulo: "Las banderas", desc: "Green flags y red flags, con los recibos en mano." },
+  { emoji: "🤯", titulo: "Frases célebres", desc: "Textuales, con contexto y sin filtro." },
+  { emoji: "🔮", titulo: "Predicciones", desc: "Cómo va a reaccionar cada uno cuando lea esto." },
 ];
 
 const preguntas = [
@@ -73,13 +73,7 @@ const telefonos = [
     mensajes: [
       {
         linkCard: true,
-        texto: "Reporte completo señores",
-        hora: "5:38 p.m.",
-        propia: true,
-      },
-      { texto: "Vale la pena leerlo", hora: "5:38 p.m.", propia: true },
-      {
-        texto: "Pagué mis palos así que pónganse serios",
+        texto: "señores tienen que leer esto",
         hora: "5:38 p.m.",
         propia: true,
       },
@@ -87,30 +81,30 @@ const telefonos = [
         de: "Kike",
         colorDe: "text-[#53bdeb]",
         avatar: "🧢",
-        texto: "y yo puse los míos! 😂",
+        texto: "¿QUIÉN le dio nuestro chat a este man? 😭",
         hora: "5:39 p.m.",
+        reaccion: "😂 4",
       },
       {
         de: "Nando",
         colorDe: "text-[#e77f51]",
         avatar: "😎",
-        citando: { de: "Tú", texto: "Reporte completo señores" },
-        texto: "hazle screen record",
+        citando: { de: "Tú", texto: "señores tienen que leer esto" },
+        texto: "el apodo que me puso lowkey me la aplicó",
         hora: "5:39 p.m.",
       },
       {
         de: "Chino",
         colorDe: "text-[#25d366]",
         avatar: "🕶️",
-        texto: "cobrándole a los panas así 💀",
+        texto: "te lo mereces la verdad 💀",
         hora: "5:39 p.m.",
-        reaccion: "😂 4",
       },
       {
         de: "Kike",
         colorDe: "text-[#53bdeb]",
         avatar: "🧢",
-        texto: "puta está demasiado bueno",
+        texto: "diablo está muy bueno esto",
         hora: "5:40 p.m.",
       },
     ],
@@ -233,8 +227,8 @@ export default function Home() {
               nadie se atreve.
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">
-              Sube cualquier chat de WhatsApp. Beto se lee cada mensaje y
-              escribe un reporte con su opinión sincera de todos ustedes.
+              Subes cualquier chat de WhatsApp, Beto se lee cada mensaje y te
+              tira un reporte con su opinión real de todos ustedes. Sin filtro.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-4">
               <Link
@@ -436,8 +430,8 @@ export default function Home() {
           Qué trae el reporte
         </h2>
         <p className="mt-3 text-muted">
-          No es un resumen. Es la opinión de un pana que se leyó todo y tiene
-          mucho que decir.
+          No es un summary aburrido. Es la opinión de un pana que se leyó todo
+          y tiene demasiado que decir.
         </p>
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {contenido.map((c) => (
