@@ -28,6 +28,7 @@ export async function POST(req: Request) {
     foto?: string;
     telefono?: string;
     mensajes?: number;
+    pais?: string;
   };
   try {
     cuerpo = await req.json();
@@ -61,6 +62,7 @@ export async function POST(req: Request) {
         contexto: (cuerpo.contexto ?? "").slice(0, 60),
         nota: (cuerpo.nota ?? "").slice(0, 1000),
         nombreUsuario: (cuerpo.nombreUsuario ?? "").slice(0, 40),
+        pais: (cuerpo.pais ?? "").slice(0, 40),
       }),
       prompt: `Nombre del grupo: ${grupo || "(sin nombre)"}\n\nChat exportado:\n\n${texto}`,
       maxOutputTokens: 16_000,

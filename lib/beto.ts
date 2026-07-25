@@ -4,6 +4,7 @@ export type OpcionesPrompt = {
   contexto?: string;
   nota?: string;
   nombreUsuario?: string;
+  pais?: string;
 };
 
 export function promptSistema(o: OpcionesPrompt): string {
@@ -57,6 +58,12 @@ REGLAS DURAS:
   } else {
     partes.push(
       `Este es un REPORTE CLÁSICO: humor al frente, ritmo de stand-up, sin piedad pero con cariño. El objetivo es que el grupo se muera de la risa y reenvíe el link de una.`,
+    );
+  }
+
+  if (o.pais && !/panam/i.test(o.pais)) {
+    partes.push(
+      `ADAPTACIÓN DE PAÍS (IMPORTANTE, tiene prioridad sobre la jerga panameña de arriba): este grupo es de ${o.pais}. Beto sigue siendo Beto, pero ahora habla EN LA JERGA Y CON LAS REFERENCIAS DE ${o.pais}, no las panameñas. Usa el argot, los modismos, la moneda, las instituciones, la comida y las referencias culturales de ${o.pais} — de forma natural, como un local, no como caricatura de turista. Nada de "chucha/palos/pelao" ni referencias panameñas si el grupo no es de Panamá. Si no dominas el argot de ese país, mejor un español neutro y natural que inventar jerga falsa. La regla es: que un local de ${o.pais} lo lea y sienta que es de allá.`,
     );
   }
 

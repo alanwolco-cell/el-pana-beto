@@ -113,6 +113,7 @@ export default function NuevoReporte() {
   const [foto, setFoto] = useState("");
   const [telefono, setTelefono] = useState("");
   const [tono, setTono] = useState<"clasico" | "yeye" | "profundo">("clasico");
+  const [pais, setPais] = useState("");
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(false);
   const [mensajeIdx, setMensajeIdx] = useState(0);
@@ -194,6 +195,7 @@ export default function NuevoReporte() {
           nombreUsuario,
           foto,
           telefono,
+          pais,
         }),
       });
       const texto = await res.text();
@@ -575,8 +577,23 @@ export default function NuevoReporte() {
       {paso === 8 && (
         <section className="mt-10">
           <h1 className="font-display text-3xl font-semibold">
-            ¿En qué tono lo quieres?
+            ¿De dónde es el grupo?
           </h1>
+          <p className="mt-2 text-muted">
+            Así Beto se pone en tu tono y usa la jerga de tu país. Si lo dejas
+            vacío, tira panameño.
+          </p>
+          <input
+            type="text"
+            value={pais}
+            onChange={(e) => setPais(e.target.value)}
+            placeholder="Ej: México, Colombia, Argentina, Panamá…"
+            className="mt-3 w-full rounded-md border border-line bg-card px-4 py-3 outline-none transition-colors focus:border-accent"
+          />
+
+          <h2 className="font-display mt-10 text-2xl font-semibold">
+            ¿En qué tono lo quieres?
+          </h2>
           <div className="mt-4 space-y-2">
             {(
               [
