@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { promptSistema } from "@/lib/beto";
 import { reporteSchema, type ReporteGuardado } from "@/lib/schema";
 import { guardarFoto, guardarReporte } from "@/lib/storage";
+import { enviarReporteWhatsApp, whatsappConfigurado } from "@/lib/whatsapp";
 
 export const maxDuration = 300;
 
@@ -44,6 +45,7 @@ export async function POST(req: Request) {
     nota?: string;
     nombreUsuario?: string;
     foto?: string;
+    telefono?: string;
   };
   try {
     cuerpo = await req.json();
@@ -99,6 +101,21 @@ export async function POST(req: Request) {
       reporte: output,
     };
     await guardarReporte(guardado);
+
+    if (cuerpo.telefono && whatsappConfigurado()) {
+      const base = process.env.VERCEL_PROJECT_PRODUCTION_URL
+        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+        : new URL(req.url).origin;
+      try {
+        await enviarReporteWhatsApp(
+          cuerpo.telefono,
+          output.titulo,
+          `${base}/r/${id}`,
+        );
+      } catch (e) {
+        console.error("WhatsApp falló (no bloquea el reporte):", e);
+      }
+    }
 
     return NextResponse.json({ id: guardado.id });
   } catch (e) {

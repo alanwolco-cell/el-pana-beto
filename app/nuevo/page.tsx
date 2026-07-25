@@ -1,5 +1,6 @@
 "use client";
 
+import { strFromU8, unzipSync } from "fflate";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ChatWhatsAppDark } from "@/app/chat-demo";
@@ -8,6 +9,45 @@ import {
   nombreGrupoDesdeArchivo,
   type Participante,
 } from "@/lib/parse-chat";
+import { TutorialExportar } from "./tutorial";
+
+// WhatsApp a veces exporta un .zip con el _chat.txt adentro.
+async function extraerTexto(f: File): Promise<string> {
+  if (f.name.toLowerCase().endsWith(".zip") || f.type === "application/zip") {
+    const datos = unzipSync(new Uint8Array(await f.arrayBuffer()));
+    const txts = Object.entries(datos).filter(([n]) =>
+      n.toLowerCase().endsWith(".txt"),
+    );
+    if (!txts.length)
+      throw new Error("Ese zip no trae ningún .txt adentro. Exporta de nuevo con «Sin archivos».");
+    txts.sort((a, b) => b[1].length - a[1].length);
+    return strFromU8(txts[0][1]);
+  }
+  return f.text();
+}
+
+// Reduce y convierte cualquier imagen a JPEG liviano antes de enviarla.
+function comprimirImagen(f: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(f);
+    const img = new window.Image();
+    img.onload = () => {
+      const max = 1600;
+      const escala = Math.min(1, max / Math.max(img.width, img.height));
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.round(img.width * escala);
+      canvas.height = Math.round(img.height * escala);
+      canvas.getContext("2d")!.drawImage(img, 0, 0, canvas.width, canvas.height);
+      URL.revokeObjectURL(url);
+      resolve(canvas.toDataURL("image/jpeg", 0.82));
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("No pudimos leer esa imagen. Intenta con JPG o PNG."));
+    };
+    img.src = url;
+  });
+}
 
 const TOTAL_PASOS = 8;
 
@@ -46,11 +86,35 @@ export default function NuevoReporte() {
   const [nombreUsuario, setNombreUsuario] = useState("");
   const [grupo, setGrupo] = useState("");
   const [foto, setFoto] = useState("");
+  const [telefono, setTelefono] = useState("");
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(false);
   const [mensajeIdx, setMensajeIdx] = useState(0);
+  const [arrastrando, setArrastrando] = useState(false);
+  const [arrastrandoFoto, setArrastrandoFoto] = useState(false);
   const inputArchivo = useRef<HTMLInputElement>(null);
   const inputFoto = useRef<HTMLInputElement>(null);
+
+  async function manejarArchivoChat(f: File) {
+    try {
+      procesarTexto(await extraerTexto(f), f.name);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "No pudimos leer ese archivo.");
+    }
+  }
+
+  async function manejarFoto(f: File) {
+    setError("");
+    if (f.size > 15 * 1024 * 1024) {
+      setError("Esa foto pesa demasiado (máx. 15 MB).");
+      return;
+    }
+    try {
+      setFoto(await comprimirImagen(f));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "No pudimos leer esa imagen.");
+    }
+  }
 
   useEffect(() => {
     if (!cargando) return;
@@ -99,9 +163,20 @@ export default function NuevoReporte() {
           nota,
           nombreUsuario,
           foto,
+          telefono,
         }),
       });
-      const data = await res.json();
+      const texto = await res.text();
+      let data: { id?: string; error?: string };
+      try {
+        data = JSON.parse(texto);
+      } catch {
+        throw new Error(
+          res.status === 413
+            ? "El envío quedó muy pesado. Quita la foto o inténtalo de nuevo."
+            : `El servidor respondió con un error (${res.status}). Intenta de nuevo.`,
+        );
+      }
       if (!res.ok) throw new Error(data.error || "Error inesperado");
       router.push(`/r/${data.id}`);
     } catch (err) {
@@ -275,30 +350,54 @@ export default function NuevoReporte() {
           <h1 className="font-display text-3xl font-semibold">
             Exporta y sube tu conversación
           </h1>
-          <ol className="mt-6 space-y-2 text-muted">
-            <li>1. Abre el chat en WhatsApp y toca el nombre del grupo.</li>
-            <li>2. Baja hasta «Exportar chat».</li>
-            <li>3. Elige «Sin archivos».</li>
-            <li>4. Guárdalo y sube aquí el .txt que te genera.</li>
-          </ol>
+          <TutorialExportar />
           <div className="mt-8 space-y-3">
-            <button
-              type="button"
+            <div
               onClick={() => inputArchivo.current?.click()}
-              className="w-full rounded-md border border-dashed border-muted px-4 py-8 text-center text-sm text-muted transition-colors hover:border-accent hover:text-accent"
+              onDragOver={(e) => {
+                e.preventDefault();
+                setArrastrando(true);
+              }}
+              onDragLeave={() => setArrastrando(false)}
+              onDrop={(e) => {
+                e.preventDefault();
+                setArrastrando(false);
+                const f = e.dataTransfer.files?.[0];
+                if (f) manejarArchivoChat(f);
+              }}
+              className={`cursor-pointer rounded-md border border-dashed px-4 py-8 text-center text-sm transition-colors ${
+                arrastrando
+                  ? "border-accent bg-accent/5 text-accent"
+                  : "border-muted text-muted hover:border-accent hover:text-accent"
+              }`}
             >
               {archivo
                 ? `✓ Archivo cargado: ${archivo}`
-                : "Subir el archivo exportado (.txt)"}
-            </button>
+                : "Arrastra aquí el .txt o .zip exportado, o toca para buscarlo"}
+            </div>
+            {archivo && (
+              <button
+                type="button"
+                onClick={() => {
+                  setArchivo("");
+                  setChat("");
+                  setParticipantes([]);
+                  setTotalMensajes(0);
+                }}
+                className="text-sm text-muted underline transition-colors hover:text-accent"
+              >
+                ✕ Quitar archivo
+              </button>
+            )}
             <input
               ref={inputArchivo}
               type="file"
-              accept=".txt,text/plain"
+              accept=".txt,.zip,text/plain,application/zip"
               className="hidden"
-              onChange={async (e) => {
+              onChange={(e) => {
                 const f = e.target.files?.[0];
-                if (f) procesarTexto(await f.text(), f.name);
+                if (f) manejarArchivoChat(f);
+                e.target.value = "";
               }}
             />
             <textarea
@@ -448,10 +547,24 @@ export default function NuevoReporte() {
             Una foto del grupo lo hace sentir de colección. Es opcional — Beto
             no juzga… bueno, sí juzga, pero no por esto.
           </p>
-          <button
-            type="button"
+          <div
             onClick={() => inputFoto.current?.click()}
-            className="mt-6 flex w-full flex-col items-center rounded-md border border-dashed border-muted px-4 py-8 text-sm text-muted transition-colors hover:border-accent hover:text-accent"
+            onDragOver={(e) => {
+              e.preventDefault();
+              setArrastrandoFoto(true);
+            }}
+            onDragLeave={() => setArrastrandoFoto(false)}
+            onDrop={(e) => {
+              e.preventDefault();
+              setArrastrandoFoto(false);
+              const f = e.dataTransfer.files?.[0];
+              if (f) manejarFoto(f);
+            }}
+            className={`mt-6 flex w-full cursor-pointer flex-col items-center rounded-md border border-dashed px-4 py-8 text-sm transition-colors ${
+              arrastrandoFoto
+                ? "border-accent bg-accent/5 text-accent"
+                : "border-muted text-muted hover:border-accent hover:text-accent"
+            }`}
           >
             {foto ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -461,26 +574,46 @@ export default function NuevoReporte() {
                 className="max-h-48 rounded-md object-cover"
               />
             ) : (
-              "Subir una foto del grupo"
+              "Arrastra una foto del grupo aquí, o toca para buscarla"
             )}
-          </button>
+          </div>
+          {foto && (
+            <button
+              type="button"
+              onClick={() => setFoto("")}
+              className="mt-3 text-sm text-muted underline transition-colors hover:text-accent"
+            >
+              ✕ Quitar foto
+            </button>
+          )}
           <input
             ref={inputFoto}
             type="file"
-            accept="image/jpeg,image/png,image/webp"
+            accept="image/*"
             className="hidden"
             onChange={(e) => {
               const f = e.target.files?.[0];
-              if (!f) return;
-              if (f.size > 4 * 1024 * 1024) {
-                setError("La foto es muy pesada (máx. 4 MB).");
-                return;
-              }
-              const lector = new FileReader();
-              lector.onload = () => setFoto(String(lector.result));
-              lector.readAsDataURL(f);
+              if (f) manejarFoto(f);
+              e.target.value = "";
             }}
           />
+          <div className="mt-8">
+            <label htmlFor="telefono" className="block text-sm font-medium">
+              ¿Te avisamos por WhatsApp cuando esté listo? (opcional)
+            </label>
+            <input
+              id="telefono"
+              type="tel"
+              value={telefono}
+              onChange={(e) => setTelefono(e.target.value)}
+              placeholder="+507 6123-4567"
+              className="mt-2 w-full rounded-md border border-line bg-card px-4 py-3 outline-none transition-colors focus:border-accent"
+            />
+            <p className="mt-1.5 text-xs text-muted">
+              Beto te escribe una sola vez, con el link de tu reporte. Nada de
+              spam.
+            </p>
+          </div>
           {error && (
             <p className="mt-4 rounded-md border border-accent/40 bg-accent/5 px-4 py-3 text-sm text-accent">
               {error}
@@ -490,7 +623,7 @@ export default function NuevoReporte() {
             onClick={enviar}
             className={`${botonPrimario} mt-8 w-full bg-accent`}
           >
-            {foto ? "Que Beto lo lea →" : "Saltar y que Beto lo lea →"}
+            Que Beto lo lea →
           </button>
           <p className="mt-3 text-center text-xs text-muted">
             Sin cuenta y sin tarjeta. En unos minutos Beto te da su veredicto.
