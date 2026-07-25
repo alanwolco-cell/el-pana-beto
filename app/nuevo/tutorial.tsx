@@ -1,169 +1,55 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
-const PASOS_TUTORIAL = [
-  "1. Abre el chat y toca el nombre del grupo",
-  "2. Toca los tres puntitos (⋯) → «Exportar chat»",
-  "3. Elige «Sin archivos»",
-  "4. Guárdalo y súbelo aquí abajo",
+const PASOS = [
+  {
+    n: "1",
+    titulo: "Abre el chat",
+    detalle: "Entra al grupo y toca su nombre arriba.",
+  },
+  {
+    n: "2",
+    titulo: "Los tres puntitos",
+    detalle: "Toca ⋯ (arriba a la derecha) → «Exportar chat».",
+  },
+  {
+    n: "3",
+    titulo: "«Sin archivos»",
+    detalle: "Cuando pregunte, elige Sin archivos.",
+  },
+  {
+    n: "4",
+    titulo: "Súbelo aquí",
+    detalle: "Guarda el .txt y súbelo abajo. Listo.",
+  },
 ];
 
-function Pulso() {
-  return (
-    <span className="absolute -right-1.5 -top-1.5 flex h-5 w-5">
-      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
-      <span className="relative inline-flex h-5 w-5 rounded-full border-2 border-white/70 bg-accent/80" />
-    </span>
-  );
-}
-
 export function TutorialExportar() {
-  const [escena, setEscena] = useState(0);
-
-  useEffect(() => {
-    const t = setInterval(
-      () => setEscena((e) => (e + 1) % PASOS_TUTORIAL.length),
-      3000,
-    );
-    return () => clearInterval(t);
-  }, []);
-
   return (
-    <div className="mx-auto mt-6 max-w-xs">
-      <div className="overflow-hidden rounded-[1.5rem] border border-black/50 bg-[#0b141a] shadow-xl">
-        {escena === 0 && (
-          <div>
-            <div className="flex items-center gap-2.5 bg-[#1f2c34] px-3 py-2.5">
-              <span className="text-lg leading-none text-[#4fa3ff]">‹</span>
-              <div className="relative flex items-center gap-2 rounded-md px-1">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-b from-[#0d6e5f] to-[#00a884]">
-                  🍻
-                </div>
-                <div>
-                  <p className="text-[14px] font-semibold leading-tight text-white">
-                    Los Panas 🇵🇦
-                  </p>
-                  <p className="text-[11px] text-[#8696a0]">12 miembros</p>
-                </div>
-                <Pulso />
-              </div>
-            </div>
-            <div className="space-y-2 px-3 py-4">
-              {[
-                ["w-40", "bg-[#202c33]"],
-                ["w-52", "bg-[#202c33]"],
-                ["w-36 ml-auto", "bg-[#005c4b]"],
-                ["w-44", "bg-[#202c33]"],
-                ["w-28 ml-auto", "bg-[#005c4b]"],
-              ].map(([w, bg], i) => (
-                <div key={i} className={`h-7 rounded-lg ${w} ${bg}`} />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {(escena === 1 || escena === 2) && (
-          <div className="relative">
-            <div className="flex items-center justify-between px-4 pt-3">
-              <span className="text-lg leading-none text-[#4fa3ff]">‹</span>
-              <div className="flex items-center gap-3 text-[#aebac1]">
-                <span className="text-[15px]">▣</span>
-                <span className="relative px-1 text-lg font-bold leading-none">
-                  ⋯
-                  {escena === 1 && <Pulso />}
-                </span>
-              </div>
-            </div>
-            <div className="flex flex-col items-center bg-[#0b141a] px-3 pb-2 pt-2">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-b from-[#0d6e5f] to-[#00a884] text-2xl">
-                🍻
-              </div>
-              <p className="mt-2 text-[15px] font-bold text-white">
-                Los Panas 🇵🇦
-              </p>
-              <p className="text-[11px] text-[#25d366]">Grupo · 12 miembros</p>
-            </div>
-            <div className="space-y-px px-3 py-3">
-              {["Archivos, enlaces y docs", "Destacados", "Tema del chat"].map(
-                (fila) => (
-                  <div
-                    key={fila}
-                    className="flex items-center justify-between rounded-md bg-[#111b21] px-3 py-2.5 text-[13px] text-[#c6cdd1]"
-                  >
-                    {fila}
-                    <span className="text-[#8696a0]">›</span>
-                  </div>
-                ),
-              )}
-            </div>
-            {escena === 1 && (
-              <div className="absolute right-3 top-9 w-44 overflow-hidden rounded-xl bg-[#233138] shadow-2xl">
-                {["Buscar", "Silenciar", "Exportar chat", "Vaciar chat"].map(
-                  (item) => (
-                    <div
-                      key={item}
-                      className={`relative px-4 py-2.5 text-[13px] ${
-                        item === "Exportar chat"
-                          ? "bg-[#2f3d45] font-semibold text-white"
-                          : "text-[#c6cdd1]"
-                      }`}
-                    >
-                      {item}
-                      {item === "Exportar chat" && <Pulso />}
-                    </div>
-                  ),
-                )}
-              </div>
-            )}
-            {escena === 2 && (
-              <div className="absolute inset-0 flex items-end bg-black/60 p-3">
-                <div className="w-full overflow-hidden rounded-xl bg-[#1f2c34]">
-                  <p className="px-4 pb-2 pt-3 text-center text-[11px] text-[#8696a0]">
-                    ¿Incluir archivos y fotos?
-                  </p>
-                  <div className="relative border-t border-black/40 px-4 py-3 text-center text-[14px] font-semibold text-white">
-                    Sin archivos
-                    <Pulso />
-                  </div>
-                  <div className="border-t border-black/40 px-4 py-3 text-center text-[14px] text-[#4fa3ff]">
-                    Adjuntar archivos
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-
-        {escena === 3 && (
-          <div className="flex h-64 flex-col items-center justify-center gap-4 px-6">
-            <p className="text-[14px] font-semibold text-white">
-              Exportando chat…
-            </p>
-            <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#202c33]">
-              <div className="h-full w-3/4 rounded-full bg-[#25d366]" />
-            </div>
-            <div className="mt-2 w-full rounded-xl bg-[#1f2c34] px-4 py-3 text-center text-[13px] font-medium text-white">
-              📄 Los Panas.txt → Guardar en Archivos
-            </div>
-          </div>
-        )}
-      </div>
-
-      <div className="mt-4 flex items-center justify-center gap-2">
-        {PASOS_TUTORIAL.map((_, i) => (
-          <button
-            key={i}
-            aria-label={`Paso ${i + 1}`}
-            onClick={() => setEscena(i)}
-            className={`h-2 rounded-full transition-all ${
-              escena === i ? "w-6 bg-accent" : "w-2 bg-line"
-            }`}
-          />
+    <div className="mt-6 rounded-xl border border-line bg-card p-5">
+      <p className="text-sm font-medium">
+        Cómo exportar tu chat de WhatsApp — solo una vez:
+      </p>
+      <ol className="mt-4 grid gap-3 sm:grid-cols-2">
+        {PASOS.map((p) => (
+          <li
+            key={p.n}
+            className="flex items-start gap-3 rounded-lg border border-line bg-paper p-3"
+          >
+            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent text-sm font-semibold text-paper">
+              {p.n}
+            </span>
+            <span>
+              <span className="block text-sm font-semibold">{p.titulo}</span>
+              <span className="mt-0.5 block text-xs leading-relaxed text-muted">
+                {p.detalle}
+              </span>
+            </span>
+          </li>
         ))}
-      </div>
-      <p className="mt-2 text-center text-sm font-medium">
-        {PASOS_TUTORIAL[escena]}
+      </ol>
+      <p className="mt-3 text-xs text-muted">
+        💡 En iPhone: Ajustes del chat → baja hasta «Exportar chat». En Android:
+        el menú de los ⋮ → «Más» → «Exportar chat».
       </p>
     </div>
   );

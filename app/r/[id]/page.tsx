@@ -143,7 +143,7 @@ export default async function PaginaReporte({ params }: Props) {
         {primerPerfil && (
           <div className="mt-10">
             <h2 className="font-display border-b border-line pb-3 text-2xl font-semibold">
-              👤 Una muestra gratis, cortesía de Beto
+              👤 Beto arranca con este
             </h2>
             <div className="mt-6 rounded-lg border border-line bg-card p-5">
               <div className="flex flex-wrap items-baseline gap-x-3">

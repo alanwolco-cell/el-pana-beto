@@ -49,7 +49,7 @@ const preguntas = [
   },
   {
     p: "¿Cuánto tarda?",
-    r: "Buco rápido: unos 5 minutos exportando de tu lado, y otros 5 mientras Beto lee todo y escribe.",
+    r: "Buco rápido: unos minutos exportando de tu lado, y unos 3 mientras Beto lee todo y escribe.",
   },
   {
     p: "¿Es seguro compartir mi chat?",
@@ -244,7 +244,7 @@ export default function Home() {
                 Pedir mi reporte
               </Link>
               <p className="text-sm text-muted">
-                Sin cuenta y sin tarjeta · 5 min pa&rsquo;l reporte
+                Sin cuenta y sin tarjeta · 3 min pa&rsquo;l reporte
               </p>
             </div>
             <p className="mt-6 max-w-xl rounded-lg border border-line bg-card px-4 py-3 text-sm text-muted">
@@ -345,6 +345,67 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="border-t border-line">
+        <div className="mx-auto grid max-w-5xl items-center gap-10 px-6 py-20 sm:grid-cols-2">
+          <div>
+            <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
+              No solo pa&rsquo; reír
+            </p>
+            <h2 className="font-display mt-3 text-3xl font-semibold sm:text-4xl">
+              ¿Tú y tu pareja? Beto también los lee.
+            </h2>
+            <p className="mt-4 leading-relaxed text-muted">
+              Suban su chat y Beto les dice lo que de verdad está pasando: quién
+              persigue y quién huye, qué se repite en cada pelea, cuáles son sus
+              green flags y sus red flags. Un espejo con humor — de esos que
+              incomodan porque aciertan. Para el que quiere entenderse un poco
+              más, o para la pareja que se atreve a leerlo junta.
+            </p>
+            <Link
+              href="/nuevo"
+              className="mt-6 inline-block rounded-full bg-accent px-6 py-3 font-medium text-paper transition-transform hover:-translate-y-0.5"
+            >
+              Leer nuestra relación
+            </Link>
+          </div>
+          <div className="flotar-b mx-auto w-full max-w-[300px]">
+            <ChatWhatsAppDark
+              titulo="Andrés 💛"
+              miembros="en línea"
+              avatar="💛"
+              noLeidos="2"
+              mensajes={[
+                {
+                  de: "Andrés",
+                  colorDe: "text-[#e0b0ff]",
+                  texto: "todo bien?",
+                  hora: "11:02 p.m.",
+                },
+                { texto: "sí", hora: "11:20 p.m.", propia: true },
+                {
+                  de: "Andrés",
+                  colorDe: "text-[#e0b0ff]",
+                  texto: "segura? te sentí rara hoy",
+                  hora: "11:21 p.m.",
+                },
+                { texto: "que sí Andrés, todo bien 🙂", hora: "11:40 p.m.", propia: true },
+                {
+                  de: "Andrés",
+                  colorDe: "text-[#e0b0ff]",
+                  texto: "ok…",
+                  hora: "11:41 p.m.",
+                },
+              ]}
+            />
+            <VeredictoBeto>
+              Ese «sí» tardó 18 minutos y vino con punto final. Andrés, mijo,
+              eso no es un sí — eso es una citación. Aquí alguien persigue y
+              alguien contesta con emoji. Beto sabe cuál es cuál.
+            </VeredictoBeto>
+          </div>
+        </div>
+      </section>
+
       <section className="mx-auto max-w-5xl px-6 py-20">
         <h2 className="font-display text-3xl font-semibold sm:text-4xl">
           Qué trae el reporte
@@ -369,54 +430,6 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="border-t border-line">
-        <div className="mx-auto grid max-w-5xl gap-10 px-6 py-20 sm:grid-cols-2 sm:items-center">
-          <div>
-            <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
-              No solo pa&rsquo; reír
-            </p>
-            <h2 className="font-display mt-3 text-3xl font-semibold sm:text-4xl">
-              ¿Tú y tu pareja? Beto también los lee.
-            </h2>
-            <p className="mt-4 leading-relaxed text-muted">
-              Suban su chat y Beto les dice lo que de verdad está pasando: quién
-              persigue y quién huye, qué se repite en cada pelea, cuáles son sus
-              green flags y sus red flags. Un espejo con humor — de esos que
-              incomodan porque aciertan. Ideal para el que quiere entenderse un
-              poco más, o para la pareja que se atreve a leerlo junta.
-            </p>
-            <Link
-              href="/nuevo"
-              className="mt-6 inline-block rounded-full border border-ink px-6 py-3 font-medium transition-colors hover:bg-ink hover:text-paper"
-            >
-              Leer nuestra relación
-            </Link>
-          </div>
-          <div className="rounded-lg border border-line bg-card p-6">
-            <p className="font-display text-lg font-semibold">
-              El «Reporte Profundo» va más hondo
-            </p>
-            <ul className="mt-4 space-y-3 text-sm text-muted">
-              <li className="flex gap-2">
-                <span className="text-accent">—</span> Los patrones que ninguno
-                de los dos quiere nombrar.
-              </li>
-              <li className="flex gap-2">
-                <span className="text-accent">—</span> Quién carga la relación y
-                quién se dejó llevar.
-              </li>
-              <li className="flex gap-2">
-                <span className="text-accent">—</span> De qué se pelean de
-                verdad (spoiler: no es lo que dicen).
-              </li>
-              <li className="flex gap-2">
-                <span className="text-accent">—</span> Y sí, también con humor —
-                porque llorar y reír a la vez es lo más honesto que hay.
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
 
       <section className="border-t border-line bg-card">
         <div className="mx-auto grid max-w-5xl gap-10 px-6 py-20 sm:grid-cols-[2fr_3fr] sm:items-center">
@@ -435,9 +448,8 @@ export default function Home() {
             <p className="mt-4 leading-relaxed text-muted">
               Elige el género —plena, reggaetón, salsa, típico o balada de
               despecho— y Beto compone un himno original con los apodos, los
-              premios y las vergüenzas del grupo. Escuchas un adelanto gratis y
-              desbloqueas la canción completa para reventarla en el próximo
-              party. Se vuelve el nuevo audio que todos reenvían.
+              premios y las vergüenzas del grupo. Se vuelve el nuevo audio que
+              todos reenvían en el chat.
             </p>
             <Link
               href="/nuevo"

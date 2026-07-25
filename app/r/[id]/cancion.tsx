@@ -124,16 +124,22 @@ export function CancionDelGrupo({
       ) : previewUrl ? (
         <>
           <p className="text-muted">
-            El abreboca — 30 segundos de {genero.toLowerCase()} sobre ustedes:
+            La canción del grupo, en {genero.toLowerCase()}. Súbele el volumen:
           </p>
-          <audio controls src={previewUrl} className="mt-4 w-full" />
+          <audio controls autoPlay src={previewUrl} className="mt-4 w-full" />
           {!comprada && (
-            <button
-              onClick={pagarCancion}
-              className="mt-4 w-full rounded-full bg-accent px-6 py-3 font-medium text-paper transition-transform hover:-translate-y-0.5"
-            >
-              Desbloquear la canción completa — ${precio.toFixed(2)}
-            </button>
+            <div className="mt-4">
+              <p className="text-sm text-muted">
+                ¿Se picaron? Eso fue solo el arranque. La canción completa los
+                espera.
+              </p>
+              <button
+                onClick={pagarCancion}
+                className="mt-3 w-full rounded-full bg-accent px-6 py-3 font-medium text-paper transition-transform hover:-translate-y-0.5"
+              >
+                Quiero la completa — ${precio.toFixed(2)}
+              </button>
+            </div>
           )}
         </>
       ) : (

@@ -52,9 +52,9 @@ export async function POST(req: Request) {
 
   try {
     const { output } = await generateText({
-      // Opus da mejor comedia pero requiere créditos pagados en el Gateway.
-      // Cuando se agreguen, cambiar MODELO_REPORTE a "anthropic/claude-opus-5".
-      model: process.env.MODELO_REPORTE ?? "anthropic/claude-sonnet-5",
+      // Opus para el mejor humor. Requiere créditos pagados en el Gateway.
+      // Si se agotan, poner MODELO_REPORTE=anthropic/claude-sonnet-5 en Vercel.
+      model: process.env.MODELO_REPORTE ?? "anthropic/claude-opus-5",
       output: Output.object({ schema: reporteSchema }),
       temperature: 1,
       system: promptSistema({
