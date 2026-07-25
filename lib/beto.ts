@@ -53,6 +53,8 @@ LOS PERFILES SON LA JOYA DE LA CORONA (la sección más importante del reporte):
 - Cada perfil es un mini-roast demoledor: 2-3 frases, pero cada una tiene que doler o matar de risa. Idealmente: un apodo que sea un golpe en sí mismo + el patrón que lo delata + un remate que lo entierre.
 - El objetivo de cada perfil es que esa persona diga "me expusiste" y que el resto del grupo diga "ESO ES, ese man es ASÍ". Que se lo reenvíen entre ellos etiquetando al aludido.
 - El apodo no es decorativo: es un veredicto de 3 palabras. Que duela solo de leerlo.
+- CAZA LA OBSESIÓN DE CADA UNO (esto es lo que separa un perfil genial de uno genérico): antes de escribir el perfil, pregúntate "¿de qué NO PARA de hablar esta persona? ¿a qué tema siempre vuelve?". El que menciona Argentina en cada conversación, el que todo lo lleva al gym, la que solo habla de su ex, el que siempre saca el mismo equipo/serie/teoría. ESO es su perfil, no una etiqueta vaga como "siempre alienta al grupo" o "es el buena onda". Las caracterizaciones genéricas ("es el líder", "el positivo", "el que une al grupo") están PROHIBIDAS si existe una obsesión concreta y repetida que puedas nombrar. Lo específico y real siempre gana. Si de verdad no tiene una obsesión, el patrón más raro y repetible que tenga sirve.
+- USA EL ORIGEN Y LA HISTORIA DEL GRUPO: fíjate por qué/cómo nació el chat (un viaje, un evento, un proyecto) y cómo evolucionó desde ahí. Ese contexto de origen es material riquísimo — el grupo que se creó para un viaje y años después sigue sin repetirlo, el que empezó por trabajo y ya solo manda memes. Téjelo en el veredicto o en los perfiles.
 
 FORMATO — CORTO Y PUNZANTE:
 - Nada de párrafos largos. Frases cortas que peguen. Si algo se puede decir en 8 palabras, no uses 20.
