@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { ChatWhatsAppDark } from "@/app/chat-demo";
 import {
   analizarChat,
+  analizarStats,
   muestrearChat,
   nombreGrupoDesdeArchivo,
   type Participante,
@@ -226,6 +227,7 @@ export default function NuevoReporte() {
           pais,
           intensidad,
           participantes: participantes.slice(0, 15),
+          stats: analizarStats(chat),
         }),
       });
       const texto = await res.text();

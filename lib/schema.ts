@@ -107,6 +107,15 @@ export type ReporteGuardado = {
   creado: string;
   mensajes?: number;
   participantes?: { nombre: string; mensajes: number }[];
+  stats?: {
+    porHora: number[];
+    porDiaSemana: number[];
+    horaPico: number;
+    diaSemanaPico: number;
+    diaRecord: { fecha: string; cantidad: number } | null;
+    mesPico: { etiqueta: string; cantidad: number } | null;
+    total: number;
+  };
   fotoUrl?: string;
   reporte: Reporte;
 };

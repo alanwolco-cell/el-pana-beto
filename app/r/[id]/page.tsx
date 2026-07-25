@@ -22,6 +22,7 @@ import { BotonCompartir } from "./compartir";
 import { BotonCompartirImagen } from "./compartir-imagen";
 import { PanelDesbloqueo } from "./desbloquear";
 import { Predicciones } from "./predicciones";
+import { EstadisticasGrupo } from "./stats";
 
 export const dynamic = "force-dynamic";
 
@@ -350,6 +351,12 @@ export default async function PaginaReporte({ params }: Props) {
               </ul>
             );
           })()}
+        </Seccion>
+      )}
+
+      {guardado.stats && guardado.stats.total >= 20 && (
+        <Seccion titulo="📈 El grupo en números">
+          <EstadisticasGrupo stats={guardado.stats} />
         </Seccion>
       )}
 

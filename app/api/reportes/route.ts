@@ -3,7 +3,7 @@ import { generateText, Output } from "ai";
 import { NextResponse } from "next/server";
 import { promptSistema } from "@/lib/beto";
 import { incrementarContador } from "@/lib/contador";
-import { muestrearChat } from "@/lib/parse-chat";
+import { muestrearChat, resumenStats } from "@/lib/parse-chat";
 import { reporteSchema, type ReporteGuardado } from "@/lib/schema";
 import { guardarFoto, guardarReporte } from "@/lib/storage";
 import { enviarReporteWhatsApp, whatsappConfigurado } from "@/lib/whatsapp";
@@ -31,6 +31,7 @@ export async function POST(req: Request) {
     pais?: string;
     participantes?: { nombre: string; mensajes: number }[];
     intensidad?: string;
+    stats?: ReporteGuardado["stats"];
   };
   try {
     cuerpo = await req.json();
@@ -74,7 +75,12 @@ export async function POST(req: Request) {
             ? cuerpo.intensidad
             : "normal",
       }),
-      prompt: `Nombre del grupo: ${grupo || "(sin nombre)"}\n\nChat exportado:\n\n${texto}`,
+      prompt:
+        `Nombre del grupo: ${grupo || "(sin nombre)"}\n\n` +
+        (cuerpo.stats
+          ? `Estadísticas reales del grupo (ya calculadas, úsalas para uno o dos chistes: quién escribe a esas horas, qué dice de ellos el día/mes pico): ${resumenStats(cuerpo.stats)}\n\n`
+          : "") +
+        `Chat exportado:\n\n${texto}`,
       maxOutputTokens: 12_000,
     };
 
@@ -130,6 +136,12 @@ export async function POST(req: Request) {
               mensajes: Math.trunc(p.mensajes),
             }))
         : undefined,
+      stats:
+        cuerpo.stats &&
+        Array.isArray(cuerpo.stats.porHora) &&
+        cuerpo.stats.total > 0
+          ? cuerpo.stats
+          : undefined,
       fotoUrl,
       reporte: output,
     };
