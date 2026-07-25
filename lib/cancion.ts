@@ -73,18 +73,34 @@ export async function generarLetra(
 ): Promise<string> {
   const r = guardado.reporte;
   const material = [
-    `Grupo: ${guardado.grupo || "el grupo"}`,
-    `Veredicto: ${r.veredicto}`,
-    `Integrantes y apodos: ${r.perfiles.map((p) => `${p.nombre} «${p.apodo}»`).join(", ")}`,
-    `Premios: ${r.premios.map((p) => `${p.premio}: ${p.ganador}`).join("; ")}`,
-    `Temas del grupo: ${r.temas.map((t) => t.titulo).join("; ")}`,
-  ].join("\n");
+    `Nombre del grupo: ${guardado.grupo || "el grupo"}`,
+    `De qué se trata el grupo: ${r.veredicto}`,
+    `Los personajes (usa estos nombres y apodos TAL CUAL en la letra):`,
+    ...r.perfiles.map((p) => `  - ${p.nombre} «${p.apodo}»: ${p.descripcion}`),
+    `Temas/obsesiones del grupo: ${r.temas.map((t) => `${t.titulo} (${t.descripcion})`).join(" · ")}`,
+    `Premios: ${r.premios.map((p) => `${p.premio} → ${p.ganador}: ${p.motivo}`).join(" · ")}`,
+    r.frases?.length
+      ? `Frases célebres del grupo: ${r.frases.map((f) => `"${f.frase}" (${f.autor})`).join(" · ")}`
+      : "",
+  ]
+    .filter(Boolean)
+    .join("\n");
 
   const { text } = await generateText({
     model: "anthropic/claude-sonnet-5",
-    system: `Eres Beto, el pana panameño que leyó todo el chat del grupo. Escribe la LETRA de una canción 100% ORIGINAL sobre este grupo, en español con sabor panameño, estilo ${genero}. Reglas: material completamente original (nada de melodías, letras ni frases de canciones existentes); usa los apodos, premios y temas del grupo; con humor y cariño, nunca cruel; estructura: [Verso 1], [Coro], [Verso 2], [Coro], [Puente], [Coro final]; máximo 2000 caracteres. Devuelve SOLO la letra con sus etiquetas de sección.`,
+    system: `Eres Beto, el pana panameño que leyó todo el chat de ESTE grupo específico. Escribe la LETRA de una canción 100% ORIGINAL y ESPECÍFICA sobre ellos, estilo ${genero}, español con sabor panameño.
+
+REGLAS CLAVE:
+- La canción tiene que ser SOBRE ESTE GRUPO EN PARTICULAR — nada genérico. Menciona nombres reales, apodos reales y momentos reales del material. Alguien del grupo tiene que escucharla y decir "esto es sobre NOSOTROS".
+- Nombra al menos 4 integrantes por su nombre/apodo dentro de la letra, cada uno con el detalle que lo hace único.
+- El coro debe tener el nombre del grupo y ser pegajoso, de esos que se cantan solos.
+- Humor y cariño, con el toque roast de Beto. Nunca cruel.
+- Material 100% original: nada de melodías, letras ni frases de canciones que ya existen. Todo inventado por ti.
+- Estructura con etiquetas: [Verso 1] [Coro] [Verso 2] [Coro] [Puente] [Coro final]. Máximo 1900 caracteres.
+- Devuelve SOLO la letra con sus etiquetas.`,
     prompt: material,
     maxOutputTokens: 1500,
+    temperature: 1,
   });
   return text.trim().slice(0, 3900);
 }
@@ -101,7 +117,8 @@ export async function generarAudio(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      prompt: `Canción de ${genero} en español latino con sabor panameño, voz masculina carismática, alegre y con humor, producción moderna de alta calidad. Canta esta letra original.`,
+      // La letra manda: la música debe CANTAR exactamente estas palabras.
+      prompt: `Estilo ${genero}, español latino con sabor panameño. Voz masculina carismática y clara. Canta EXACTAMENTE la letra provista, respetando cada palabra, nombre y apodo. Producción moderna, pegajosa, apta para compartir. No cambies ni improvises la letra.`,
       lyrics_text: letra,
       music_length_ms: duracionMs,
     }),

@@ -90,6 +90,14 @@ export default async function PaginaReporte({ params }: Props) {
         texto: `El ranking de aura — quién tiene y quién quedó debiendo`,
       },
       {
+        icono: "🥊",
+        texto: `Quién ganaría una pelea (y quién cae de primero)`,
+      },
+      {
+        icono: "📊",
+        texto: `Los rankings que van a poner a pelear al grupo`,
+      },
+      {
         icono: "🗣️",
         texto: `Diccionario del grupo (${r.vocabulario.length} términos)`,
       },
@@ -347,6 +355,42 @@ export default async function PaginaReporte({ params }: Props) {
           </ol>
         </Seccion>
       )}
+
+      {r.peleas && r.peleas.length > 0 && (
+        <Seccion titulo="🥊 Quién ganaría una pelea">
+          <ol className="space-y-4">
+            {r.peleas.map((p, i) => (
+              <li
+                key={p.nombre}
+                className="flex items-baseline gap-4 border-b border-line pb-4"
+              >
+                <span className="font-display w-8 shrink-0 text-xl font-semibold text-muted">
+                  {i + 1}º
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="font-medium">{p.nombre}</p>
+                  <p className="mt-1 text-sm text-muted">{p.motivo}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </Seccion>
+      )}
+
+      {r.listas?.map((lista) => (
+        <Seccion key={lista.titulo} titulo={lista.titulo}>
+          <ol className="space-y-3">
+            {lista.items.map((item, i) => (
+              <li key={i} className="flex gap-3 leading-relaxed">
+                <span className="font-display font-semibold text-accent">
+                  {i + 1}.
+                </span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ol>
+        </Seccion>
+      ))}
 
       {r.vocabulario.length > 0 && (
         <Seccion titulo="🗣️ Diccionario del grupo">

@@ -28,7 +28,9 @@ export function analizarChat(texto: string): {
   return { participantes, total };
 }
 
-const MAX_CHARS = 400_000;
+// Tope del texto que se manda a la IA. Más alto = más contexto pero más
+// lento; ~130k caracteres genera de forma confiable sin timeout.
+const MAX_CHARS = 130_000;
 
 function alSalto(texto: string, idx: number): number {
   const salto = texto.indexOf("\n", idx);

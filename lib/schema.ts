@@ -42,6 +42,22 @@ export const reporteSchema = z.object({
       }),
     )
     .describe("Ranking de aura de los integrantes, de mayor a menor"),
+  peleas: z
+    .array(
+      z.object({
+        nombre: z.string(),
+        motivo: z.string().describe("Por qué ganaría o perdería, con humor y basado en el chat"),
+      }),
+    )
+    .describe("Ranking de quién ganaría una pelea, del más peligroso al que cae de primero. Puro humor."),
+  listas: z
+    .array(
+      z.object({
+        titulo: z.string().describe("Título gancho de la lista, ej: 'Los 3 que nunca leen el chat' o 'Ranking de quién llega tarde'"),
+        items: z.array(z.string()).describe("Los puestos de la lista, en orden, cada uno con nombre y un detalle real que dé risa o intriga"),
+      }),
+    )
+    .describe("2-3 listas tipo ranking que creen intriga y den ganas de discutir en el grupo (ej: quién es más tóxico, quién paga siempre, quién desaparece). Originales según lo que pasa en el chat."),
   vocabulario: z
     .array(
       z.object({

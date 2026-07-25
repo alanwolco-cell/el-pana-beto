@@ -65,6 +65,12 @@ const preguntas = [
   },
 ];
 
+const reaccionesImgs = [
+  { src: "/wa-panas.png", alt: "Grupo de panas reaccionando a su reporte" },
+  { src: "/wa-familia.png", alt: "Grupo familiar reaccionando a su reporte" },
+  { src: "/wa-uni.png", alt: "Grupo de la universidad reaccionando a su reporte" },
+];
+
 const telefonos = [
   {
     titulo: "Los Panas del Kilo",
@@ -262,125 +268,38 @@ export default function Home() {
       <section className="border-y border-line bg-card">
         <div className="mx-auto max-w-5xl px-6 py-20">
           <h2 className="font-display text-3xl font-semibold sm:text-4xl">
-            Así se ve cuando Beto opina
+            Lo que pasa cuando sueltas el link
           </h2>
-          <div className="mt-12 grid gap-x-10 gap-y-14 sm:grid-cols-2">
+          <p className="mt-3 max-w-xl text-muted">
+            El chat no se calla en una semana. Esto es real: la gente
+            reaccionando a su propio reporte.
+          </p>
+          <div className="mt-12 grid items-start gap-8 sm:grid-cols-2">
             <div className="flotar-a">
-              <ChatWhatsAppDark
-                titulo="Familia Quintero 🇵🇦"
-                miembros="Mamá, Tía Mirna, Papo y tú"
-                avatar="🏠"
-                mensajes={[
-                  { fecha: "Hoy" },
-                  {
-                    de: "Tía Mirna",
-                    colorDe: "text-[#f472b6]",
-                    avatar: "👵🏽",
-                    reenviado: true,
-                    texto:
-                      "Buenos días familia 🌹🙏 El que no reenvíe esta oración no quiere a su madre",
-                    hora: "6:02 a.m.",
-                  },
-                  {
-                    de: "Mamá",
-                    colorDe: "text-[#a78bfa]",
-                    avatar: "👩🏽‍🦱",
-                    texto:
-                      "¿QUIÉN se comió el arroz con pollo que era PARA EL DOMINGO?",
-                    hora: "9:14 a.m.",
-                  },
-                  {
-                    de: "Papo",
-                    colorDe: "text-[#53bdeb]",
-                    avatar: "🧔🏽",
-                    texto: "yo no fui, yo estaba en el gym",
-                    hora: "9:20 a.m.",
-                  },
-                  {
-                    de: "Mamá",
-                    colorDe: "text-[#a78bfa]",
-                    avatar: "👩🏽‍🦱",
-                    texto: "Papo tú no tienes gym",
-                    hora: "9:21 a.m.",
-                  },
-                  {
-                    texto: "yo vi a Papo con un plato a las 2 a.m. 👀",
-                    hora: "9:30 a.m.",
-                    propia: true,
-                  },
-                  {
-                    de: "Papo",
-                    colorDe: "text-[#53bdeb]",
-                    avatar: "🧔🏽",
-                    texto: "sapo",
-                    hora: "9:31 a.m.",
-                    reaccion: "😂 8",
-                  },
-                ]}
+              <Image
+                src="/wa-panas.png"
+                alt="Un grupo de amigos reaccionando en WhatsApp a su reporte de El Pana Beto"
+                width={440}
+                height={900}
+                className="mx-auto w-full max-w-[300px] rounded-[2rem] border border-line shadow-2xl"
               />
               <VeredictoBeto>
-                El «gym» de Papo abre solo de madrugada y queda en la cocina. Y
-                la cadena de la tía Mirna tiene más alcance que TVN. Aquí todo
-                el mundo sabe todo — están esperando a ver quién lo dice
-                primero.
+                Cuando el link cae en el grupo de los panas, lo primero es
+                «¿quién le dio nuestro chat a este man?». Lo segundo es leerlo
+                tres veces.
               </VeredictoBeto>
             </div>
             <div className="flotar-b">
-              <ChatWhatsAppDark
-                titulo="Los Frenes 🍻"
-                miembros="Kike, Nando, Chino y tú"
-                avatar="🍻"
-                mensajes={[
-                  { fecha: "Miércoles" },
-                  {
-                    de: "Kike",
-                    colorDe: "text-[#53bdeb]",
-                    avatar: "🧢",
-                    texto: "fren SERIO este sábado playa sí o sí",
-                    hora: "8:03 p.m.",
-                  },
-                  {
-                    de: "Nando",
-                    colorDe: "text-[#e77f51]",
-                    avatar: "😎",
-                    texto: "confirmo 🔥",
-                    hora: "8:04 p.m.",
-                  },
-                  {
-                    de: "Chino",
-                    colorDe: "text-[#25d366]",
-                    avatar: "🕶️",
-                    texto: "confirmadísimo",
-                    hora: "8:04 p.m.",
-                  },
-                  { texto: "ok, yo alquilo el carro", hora: "8:05 p.m.", propia: true },
-                  { fecha: "Sábado" },
-                  {
-                    de: "Kike",
-                    colorDe: "text-[#53bdeb]",
-                    avatar: "🧢",
-                    texto: "fren amanecí malito 🤧",
-                    hora: "7:14 a.m.",
-                  },
-                  {
-                    de: "Nando",
-                    colorDe: "text-[#e77f51]",
-                    avatar: "😎",
-                    texto: "me salió un cumple que se me había olvidado",
-                    hora: "7:20 a.m.",
-                  },
-                  {
-                    texto: "ya pagué el carro.",
-                    hora: "7:21 a.m.",
-                    propia: true,
-                    reaccion: "💀 2",
-                  },
-                ]}
+              <Image
+                src="/wa-familia.png"
+                alt="Un grupo familiar reaccionando en WhatsApp a su reporte de El Pana Beto"
+                width={440}
+                height={900}
+                className="mx-auto w-full max-w-[300px] rounded-[2rem] border border-line shadow-2xl"
               />
               <VeredictoBeto>
-                Tres confirmaciones, cero asistencia: este grupo confirma con
-                el corazón y cancela con el alma. Y tú sigues alquilando carros
-                como si no los conocieras desde el colegio.
+                Y en la familia hasta la abuela pregunta «¿qué es esto?» — justo
+                antes de que mamá lo reenvíe a otros cuatro grupos.
               </VeredictoBeto>
             </div>
           </div>
@@ -404,22 +323,23 @@ export default function Home() {
       <section className="border-y border-line bg-card py-16">
         <div className="mx-auto max-w-5xl px-6">
           <h2 className="font-display text-3xl font-semibold sm:text-4xl">
-            Los grupos reaccionando a su reporte
+            Familia, frenes o el grupo de la U
           </h2>
           <p className="mt-3 text-muted">
-            Lo que pasa en el chat cuando alguien suelta el link.
+            Beto los lee todos. Y en todos pasa lo mismo.
           </p>
         </div>
         <div className="marquee mt-10">
           <div className="marquee-track items-start">
-            {[...telefonos, ...telefonos].map((t, i) => (
-              <div key={`${t.titulo}-${i}`} className="w-80 shrink-0">
-                <ChatWhatsAppDark
-                  titulo={t.titulo}
-                  miembros={t.miembros}
-                  mensajes={t.mensajes}
-                />
-              </div>
+            {[...reaccionesImgs, ...reaccionesImgs].map((r, i) => (
+              <Image
+                key={`${r.src}-${i}`}
+                src={r.src}
+                alt={r.alt}
+                width={300}
+                height={640}
+                className="w-56 shrink-0 rounded-[1.75rem] border border-line shadow-xl"
+              />
             ))}
           </div>
         </div>
@@ -446,6 +366,86 @@ export default function Home() {
               <p className="mt-1 text-sm leading-relaxed text-muted">{c.desc}</p>
             </article>
           ))}
+        </div>
+      </section>
+
+      <section className="border-t border-line">
+        <div className="mx-auto grid max-w-5xl gap-10 px-6 py-20 sm:grid-cols-2 sm:items-center">
+          <div>
+            <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
+              No solo pa&rsquo; reír
+            </p>
+            <h2 className="font-display mt-3 text-3xl font-semibold sm:text-4xl">
+              ¿Tú y tu pareja? Beto también los lee.
+            </h2>
+            <p className="mt-4 leading-relaxed text-muted">
+              Suban su chat y Beto les dice lo que de verdad está pasando: quién
+              persigue y quién huye, qué se repite en cada pelea, cuáles son sus
+              green flags y sus red flags. Un espejo con humor — de esos que
+              incomodan porque aciertan. Ideal para el que quiere entenderse un
+              poco más, o para la pareja que se atreve a leerlo junta.
+            </p>
+            <Link
+              href="/nuevo"
+              className="mt-6 inline-block rounded-full border border-ink px-6 py-3 font-medium transition-colors hover:bg-ink hover:text-paper"
+            >
+              Leer nuestra relación
+            </Link>
+          </div>
+          <div className="rounded-lg border border-line bg-card p-6">
+            <p className="font-display text-lg font-semibold">
+              El «Reporte Profundo» va más hondo
+            </p>
+            <ul className="mt-4 space-y-3 text-sm text-muted">
+              <li className="flex gap-2">
+                <span className="text-accent">—</span> Los patrones que ninguno
+                de los dos quiere nombrar.
+              </li>
+              <li className="flex gap-2">
+                <span className="text-accent">—</span> Quién carga la relación y
+                quién se dejó llevar.
+              </li>
+              <li className="flex gap-2">
+                <span className="text-accent">—</span> De qué se pelean de
+                verdad (spoiler: no es lo que dicen).
+              </li>
+              <li className="flex gap-2">
+                <span className="text-accent">—</span> Y sí, también con humor —
+                porque llorar y reír a la vez es lo más honesto que hay.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-line bg-card">
+        <div className="mx-auto grid max-w-5xl gap-10 px-6 py-20 sm:grid-cols-[2fr_3fr] sm:items-center">
+          <div className="flex justify-center">
+            <div className="flex h-40 w-40 items-center justify-center rounded-full border border-line bg-paper text-6xl shadow-sm">
+              🎵
+            </div>
+          </div>
+          <div>
+            <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
+              Nuevo
+            </p>
+            <h2 className="font-display mt-3 text-3xl font-semibold sm:text-4xl">
+              Beto también le hace una canción a tu grupo.
+            </h2>
+            <p className="mt-4 leading-relaxed text-muted">
+              Elige el género —plena, reggaetón, salsa, típico o balada de
+              despecho— y Beto compone un himno original con los apodos, los
+              premios y las vergüenzas del grupo. Escuchas un adelanto gratis y
+              desbloqueas la canción completa para reventarla en el próximo
+              party. Se vuelve el nuevo audio que todos reenvían.
+            </p>
+            <Link
+              href="/nuevo"
+              className="mt-6 inline-block rounded-full bg-accent px-6 py-3 font-medium text-paper transition-transform hover:-translate-y-0.5"
+            >
+              Que Beto nos componga
+            </Link>
+          </div>
         </div>
       </section>
 
