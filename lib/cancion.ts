@@ -120,7 +120,7 @@ export async function generarAudio(
     },
     body: JSON.stringify({
       // La letra manda: la música debe CANTAR exactamente estas palabras.
-      prompt: `Estilo ${genero}, español latino con sabor panameño. Voz masculina carismática y clara. Canta EXACTAMENTE la letra provista, respetando cada palabra, nombre y apodo. Producción moderna, pegajosa, apta para compartir. No cambies ni improvises la letra.`,
+      prompt: `Estilo ${genero}, español latino con sabor panameño. Voz masculina carismática, potente y MUY CLARA (que se entienda cada palabra, nombre y apodo). Canta EXACTAMENTE la letra provista, sin cambiar ni improvisar. Empieza FUERTE con el coro: hook pegajoso, energía alta desde el segundo uno, un buen drop/beat que enganche. Producción moderna, limpia y radiofónica, mezcla nítida (voz al frente, sin saturar). Que los primeros segundos hagan querer subir el volumen.`,
       lyrics_text: letra,
       music_length_ms: duracionMs,
     }),
