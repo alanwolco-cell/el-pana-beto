@@ -49,7 +49,9 @@ export async function POST(req: Request) {
 
   try {
     const { output } = await generateText({
-      model: process.env.MODELO_REPORTE ?? "anthropic/claude-opus-5",
+      // Opus da mejor comedia pero requiere créditos pagados en el Gateway.
+      // Cuando se agreguen, cambiar MODELO_REPORTE a "anthropic/claude-opus-5".
+      model: process.env.MODELO_REPORTE ?? "anthropic/claude-sonnet-5",
       output: Output.object({ schema: reporteSchema }),
       temperature: 1,
       system: promptSistema({
