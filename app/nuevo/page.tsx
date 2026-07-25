@@ -229,7 +229,7 @@ export default function NuevoReporte() {
           {mensajesEspera[mensajeIdx]}
         </h1>
         <p className="mt-4 text-muted">
-          Esto toma unos minutos. No cierres esta página.
+          Esto toma unos 3 minutos. No cierres esta página.
         </p>
       </div>
     );
@@ -318,8 +318,8 @@ export default function NuevoReporte() {
             ¿Algo que Beto deba saber?
           </h1>
           <p className="mt-2 text-muted">
-            Cuéntale lo que ayude. Beto lo toma en serio: si le pides un
-            enfoque, lo cumple.
+            Cuéntale lo que quieras que tenga en cuenta. Si le pides algo,
+            Beto te hace caso.
           </p>
           <textarea
             value={nota}
@@ -522,7 +522,7 @@ export default function NuevoReporte() {
             Beto va a usar estos nombres
           </h1>
           <p className="mt-2 text-muted">
-            Dinos cuál eres tú — pa&rsquo; que Beto no te perdone nada — y
+            Dinos cuál eres tú (pa&rsquo; que Beto no te perdone nada) y
             confirma el nombre del grupo.
           </p>
           {participantes.length >= 2 && (
@@ -576,9 +576,9 @@ export default function NuevoReporte() {
           <div className="mt-4 space-y-2">
             {(
               [
-                ["clasico", "Clásico", "Humor al frente, sabor panameño, sin filtro."],
-                ["yeye", "Yeye", "Con el vibe del yeyesito: spanglish, irónico y fresa."],
-                ["profundo", "Profundo", "Menos chiste, más verdad. Para parejas y valientes."],
+                ["clasico", "Clásico", "El Beto de siempre: humor sin filtro."],
+                ["yeye", "Yeye", "Modo yeyesito: spanglish y sarcasmo fino."],
+                ["profundo", "Profundo", "Beto se pone serio. Pa' parejas y pa'l que aguante."],
               ] as const
             ).map(([valor, nombre, desc]) => (
               <button
@@ -600,7 +600,7 @@ export default function NuevoReporte() {
             Ponle una foto al reporte
           </h2>
           <p className="mt-2 text-muted">
-            Una foto del grupo lo hace sentir de colección. Es opcional — Beto
+            Una foto del grupo lo hace sentir de colección. Es opcional. Beto
             no juzga… bueno, sí juzga, pero no por esto.
           </p>
           <div
@@ -682,7 +682,7 @@ export default function NuevoReporte() {
             Que Beto lo lea →
           </button>
           <p className="mt-3 text-center text-xs text-muted">
-            Sin cuenta y sin tarjeta. En unos minutos Beto te da su veredicto.
+            Sin cuenta y sin tarjeta. En unos 3 minutos Beto te da su veredicto.
           </p>
         </section>
       )}

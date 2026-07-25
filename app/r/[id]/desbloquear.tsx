@@ -212,7 +212,7 @@ export function PanelDesbloqueo({
 
       <div className="mt-6">
         <label htmlFor="nombre" className="block text-sm font-medium">
-          Tu nombre — pa&rsquo; que el grupo sepa quién fue el héroe
+          Tu nombre, pa&rsquo; que el grupo sepa quién fue el héroe
         </label>
         <input
           id="nombre"

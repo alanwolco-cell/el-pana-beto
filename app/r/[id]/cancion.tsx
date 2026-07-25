@@ -110,7 +110,7 @@ export function CancionDelGrupo({
       ) : completaUrl ? (
         <>
           <p className="text-muted">
-            La versión completa, con todo el bochinche hecho música:
+            La completa, lista pa&rsquo;l próximo parking:
           </p>
           <audio controls src={completaUrl} className="mt-4 w-full" />
           <a
@@ -130,8 +130,8 @@ export function CancionDelGrupo({
           {!comprada && (
             <div className="mt-4">
               <p className="text-sm text-muted">
-                ¿Se picaron? Eso fue solo el arranque. La canción completa los
-                espera.
+                ¿Se picaron? Eso fue solo el arranque. La completa trae todo
+                el resto.
               </p>
               <button
                 onClick={pagarCancion}
@@ -146,7 +146,7 @@ export function CancionDelGrupo({
         <>
           <p className="text-muted">
             Beto también compone. Elige el género y le hace un himno al grupo
-            con sus apodos, sus premios y sus vergüenzas.
+            con los apodos y las vergüenzas de cada quien.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
             {GENEROS.map((g) => (

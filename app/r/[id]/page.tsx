@@ -83,12 +83,12 @@ export default async function PaginaReporte({ params }: Props) {
       { icono: "🔥", texto: `${r.temas.length} temas que dominan el grupo` },
       {
         icono: "👤",
-        texto: `${r.perfiles.length} perfiles con apodo — incluido el tuyo`,
+        texto: `${r.perfiles.length} perfiles con apodo (el tuyo también)`,
       },
       { icono: "🏆", texto: `${r.premios.length} premios y reconocimientos` },
       {
         icono: "✨",
-        texto: `El ranking de aura — quién tiene y quién quedó debiendo`,
+        texto: `El ranking de aura: quién tiene y quién quedó debiendo`,
       },
       {
         icono: "🥊",
@@ -113,7 +113,7 @@ export default async function PaginaReporte({ params }: Props) {
       },
       {
         icono: "🎵",
-        texto: `La Canción del Grupo — el bochinche hecho música`,
+        texto: `La Canción del Grupo: sí, Beto también compone`,
       },
     ];
     return (
@@ -177,7 +177,7 @@ export default async function PaginaReporte({ params }: Props) {
             </p>
             <div className="absolute inset-0 flex items-end justify-center bg-gradient-to-b from-transparent via-card/60 to-card pb-4">
               <p className="text-sm font-medium">
-                🔒 Y justo cuando se estaba poniendo bueno—
+                🔒 Y justo cuando se estaba poniendo bueno…
               </p>
             </div>
           </div>
@@ -282,7 +282,7 @@ export default async function PaginaReporte({ params }: Props) {
           <p className="mt-1 text-sm text-muted">
             Regala ${descuentoReferido().toFixed(2)} de descuento a cualquier
             otro grupo. Y cuando {USOS_PARA_CORTESIA} grupos lo usen, Beto te
-            debe un reporte de cortesía — te aparece aquí solito.
+            debe un reporte de cortesía. Te aparece aquí solito.
           </p>
           <p className="mt-3 font-mono text-sm">{await obtenerCodigoPana(id)}</p>
         </div>

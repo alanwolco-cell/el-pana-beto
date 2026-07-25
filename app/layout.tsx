@@ -17,11 +17,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "El Pana Beto — La IA que lee tu chat y te dice las verdades",
   description:
-    "Pásale cualquier chat de WhatsApp. Beto se lee todos los mensajes y escribe un reporte con su opinión sincera del grupo: las dinámicas, los chistes internos y los veredictos.",
+    "Pásale cualquier chat de WhatsApp. Beto se lee todo y te escribe un reporte con lo que de verdad piensa del grupo: apodos, premios, banderas y frases célebres.",
   openGraph: {
     title: "El Pana Beto — Reportes de tu chat de grupo",
     description:
-      "Beto se lee todo tu chat y te dice lo que nadie se atreve a decir.",
+      "Beto se lee todo tu chat y te dice las cosas como son.",
     locale: "es_PA",
     siteName: "El Pana Beto",
     images: [{ url: "/beto.jpg", width: 900, height: 900, alt: "Beto" }],
@@ -80,8 +80,8 @@ export default function RootLayout({
                 className="underline transition-colors hover:text-accent"
               >
                 elpanabeto.com@gmail.com
-              </a>{" "}
-              — sí, con el .com adentro. Compramos el dominio y de la emoción
+              </a>
+              . Sí, con el .com adentro: compramos el dominio y de la emoción
               lo metimos hasta en el correo.
             </p>
           </div>

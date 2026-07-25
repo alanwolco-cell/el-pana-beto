@@ -18,9 +18,9 @@ export default function NoEncontrado() {
         Este link no existe, pana.
       </h1>
       <p className="mt-4 leading-relaxed text-muted">
-        Beto se lee todo — y esto no aparece por ningún lado. Revisa que el
-        link esté completo, o dile al que te lo mandó que deje de recortar las
-        cosas… como recorta los cuentos.
+        Beto se lee todo y esto no aparece por ningún lado. Revisa que el link
+        esté completo. Seguro el que te lo mandó lo copió a la mitad, típico
+        de él.
       </p>
       <Link
         href="/"

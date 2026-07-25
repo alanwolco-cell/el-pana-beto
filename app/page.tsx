@@ -16,13 +16,13 @@ const pasos = [
     numero: "02",
     titulo: "Pásaselo a Beto",
     texto:
-      "Sube el archivo o pega la conversación. Beto se lee todo el bochinche, desde el primer «xopá» hasta la última pelea — las épocas viejas también cuentan.",
+      "Sube el archivo o pega la conversación. Beto se lee todo el bochinche, hasta las épocas viejas que ustedes ya ni recuerdan.",
   },
   {
     numero: "03",
     titulo: "Recibe el veredicto",
     texto:
-      "En unos minutos Beto te entrega su opinión: perfiles con apodo, premios, banderas rojas y las frases que nadie quiere recordar.",
+      "A los 3 minutos Beto te suelta el reporte: apodos, premios, banderas rojas y las frases que nadie quería que quedaran guardadas.",
   },
 ];
 
@@ -33,14 +33,14 @@ const contenido = [
   { emoji: "✨", titulo: "El ranking de aura", desc: "Quién la tiene infinita y quién quedó debiendo." },
   { emoji: "🗣️", titulo: "El diccionario", desc: "Esos inside jokes que nadie de afuera entiende." },
   { emoji: "🚩", titulo: "Las banderas", desc: "Green flags y red flags, con los recibos en mano." },
-  { emoji: "🤯", titulo: "Frases célebres", desc: "Textuales, con contexto y sin filtro." },
+  { emoji: "🤯", titulo: "Frases célebres", desc: "Tal cual las escribieron, con contexto." },
   { emoji: "🔮", titulo: "Predicciones", desc: "Cómo va a reaccionar cada uno cuando lea esto." },
 ];
 
 const preguntas = [
   {
     p: "¿Quién es Beto?",
-    r: "Una IA con alma de tío panameño: se lee tu chat completo, sin filtro y sin pena ajena. No existe de verdad, pero opina como si hubiera estado en el grupo desde el 2015.",
+    r: "Una IA que opina como un tío panameño. No existe de verdad, pero se lee tu chat completo y comenta como si estuviera en el grupo desde el 2015.",
   },
   {
     p: "¿Qué chats sirven?",
@@ -48,7 +48,7 @@ const preguntas = [
   },
   {
     p: "¿Qué apps soporta?",
-    r: "WhatsApp — que es donde vive el bochinche de verdad. Exportas el chat con la opción «Sin archivos» y te genera un .txt listo para subir.",
+    r: "WhatsApp, que es donde está el bochinche de verdad. Exportas el chat con la opción «Sin archivos» y te genera un .txt listo para subir.",
   },
   {
     p: "¿Cuánto tarda?",
@@ -64,7 +64,7 @@ const preguntas = [
   },
   {
     p: "¿Y si necesito ayuda?",
-    r: "Escríbenos a elpanabeto.com@gmail.com — sí, el correo lleva el .com adentro: compramos el dominio y nos emocionamos. Beto no contesta correos (está leyendo chats), pero su equipo sí.",
+    r: "Escríbenos a elpanabeto.com@gmail.com. Sí, el correo lleva el .com adentro: compramos el dominio y nos emocionamos. Beto no contesta correos (está leyendo chats), pero su equipo sí.",
   },
 ];
 
@@ -232,8 +232,8 @@ export default function Home() {
               ¿Qué xopá? · Reportes de chats de grupo
             </p>
             <h1 className="font-display text-5xl font-semibold leading-[1.05] tracking-tight sm:text-6xl">
-              Pásale el chat a Beto. Él lee todo el bochinche y dice lo que
-              nadie se atreve.
+              Pásale el chat a Beto. Él se lee todo el bochinche y te dice
+              las cosas como son.
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">
               Subes cualquier chat de WhatsApp, Beto se lee cada mensaje y te
@@ -290,8 +290,8 @@ export default function Home() {
                 className="mx-auto w-full max-w-[300px] rounded-[2rem] border border-line shadow-2xl"
               />
               <VeredictoBeto>
-                Cuando el link cae en el grupo de los panas, lo primero es
-                «¿quién le dio nuestro chat a este man?». Lo segundo es leerlo
+                Cuando el link cae en el grupo, lo primero que preguntan es
+                «¿quién le dio nuestro chat a este man?». Después lo leen
                 tres veces.
               </VeredictoBeto>
             </div>
@@ -304,8 +304,8 @@ export default function Home() {
                 className="mx-auto w-full max-w-[300px] rounded-[2rem] border border-line shadow-2xl"
               />
               <VeredictoBeto>
-                Y en la familia hasta la abuela pregunta «¿qué es esto?» — justo
-                antes de que mamá lo reenvíe a otros cuatro grupos.
+                En la familia hasta la abuela pregunta «¿qué es esto?». Y mamá
+                ya lo reenvió a otros cuatro grupos.
               </VeredictoBeto>
             </div>
           </div>
@@ -361,11 +361,10 @@ export default function Home() {
               ¿Tú y tu pareja? Beto también los lee.
             </h2>
             <p className="mt-4 leading-relaxed text-muted">
-              Suban su chat y Beto les dice lo que de verdad está pasando: quién
-              persigue y quién huye, qué se repite en cada pelea, cuáles son sus
-              green flags y sus red flags. Un espejo con humor — de esos que
-              incomodan porque aciertan. Para el que quiere entenderse un poco
-              más, o para la pareja que se atreve a leerlo junta.
+              Suban su chat y Beto les cuenta qué es lo que realmente está
+              pasando: quién persigue, quién se hace el loco y cuál pelea se
+              repite cada dos semanas. Da risa hasta que te toca a ti. Si se
+              atreven, léanlo juntos.
             </p>
             <Link
               href="/nuevo"
@@ -404,9 +403,9 @@ export default function Home() {
               ]}
             />
             <VeredictoBeto>
-              Ese «sí» tardó 18 minutos y vino con punto final. Andrés, mijo,
-              eso no es un sí — eso es una citación. Aquí alguien persigue y
-              alguien contesta con emoji. Beto sabe cuál es cuál.
+              Ese «sí» tardó 18 minutos y vino con punto final. Eso es una
+              citación, Andrés. Aquí uno persigue y el otro contesta con
+              emoji, y Beto ya sabe quién es quién.
             </VeredictoBeto>
           </div>
         </div>
@@ -417,8 +416,8 @@ export default function Home() {
           Qué trae el reporte
         </h2>
         <p className="mt-3 text-muted">
-          No es un summary aburrido. Es la opinión de un pana que se leyó todo
-          y tiene demasiado que decir.
+          La opinión completa de un pana que se leyó todo tu chat y tiene
+          demasiado que decir.
         </p>
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {contenido.map((c) => (
@@ -452,10 +451,10 @@ export default function Home() {
               Beto también le hace una canción a tu grupo.
             </h2>
             <p className="mt-4 leading-relaxed text-muted">
-              Elige el género —plena, reggaetón, salsa, típico o balada de
-              despecho— y Beto compone un himno original con los apodos, los
-              premios y las vergüenzas del grupo. Se vuelve el nuevo audio que
-              todos reenvían en el chat.
+              Plena, reggaetón, salsa, típico o balada de despecho. Tú eliges
+              el género y Beto le compone un himno al grupo con los apodos y
+              las vergüenzas de cada quien. Ese audio va a terminar reenviado
+              en todos lados.
             </p>
             <Link
               href="/nuevo"
