@@ -63,12 +63,20 @@ export default function RootLayout({
                 El Pana Beto<span className="text-accent">.</span>
               </span>
             </Link>
-            <Link
-              href="/nuevo"
-              className="shrink-0 whitespace-nowrap rounded-full bg-ink px-4 py-2.5 text-sm font-medium text-paper transition-colors hover:bg-accent sm:py-2"
-            >
-              Pedir mi reporte
-            </Link>
+            <div className="flex shrink-0 items-center gap-3">
+              <Link
+                href="/mis-reportes"
+                className="hidden whitespace-nowrap text-sm font-medium text-muted transition-colors hover:text-accent sm:block"
+              >
+                Mis reportes
+              </Link>
+              <Link
+                href="/nuevo"
+                className="whitespace-nowrap rounded-full bg-ink px-4 py-2.5 text-sm font-medium text-paper transition-colors hover:bg-accent sm:py-2"
+              >
+                Pedir mi reporte
+              </Link>
+            </div>
           </div>
         </header>
         <main>{children}</main>

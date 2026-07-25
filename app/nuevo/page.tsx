@@ -10,6 +10,7 @@ import {
   nombreGrupoDesdeArchivo,
   type Participante,
 } from "@/lib/parse-chat";
+import { guardarReporteLocal } from "@/lib/mis-reportes";
 import { TutorialExportar } from "./tutorial";
 
 // Lee los bytes del archivo de forma robusta. El navegador a veces "vence"
@@ -235,6 +236,7 @@ export default function NuevoReporte() {
         );
       }
       if (!res.ok) throw new Error(data.error || "Error inesperado");
+      if (data.id) guardarReporteLocal(data.id, grupo);
       router.push(`/r/${data.id}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error inesperado");
