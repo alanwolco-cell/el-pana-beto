@@ -37,19 +37,25 @@ function alSalto(texto: string, idx: number): number {
   return salto === -1 ? idx : salto + 1;
 }
 
-// Anti recency-bias: si el chat no cabe completo, se muestrea el inicio,
-// el medio y el final en vez de quedarse solo con lo más reciente.
+// Anti recency-bias: si el chat no cabe completo, se toman MUCHAS ventanas
+// delgadas repartidas de forma pareja por toda la historia (no 3 bloques
+// grandes donde el final reciente pesa más). Así ninguna época domina.
 // Se ejecuta en el navegador para que el envío nunca pese demasiado.
 export function muestrearChat(chat: string, max: number = MAX_CHARS): string {
   if (chat.length <= max) return chat;
-  const tercio = Math.floor(max / 3);
-  const inicio = chat.slice(0, alSalto(chat, tercio));
-  const desdeMedio = alSalto(chat, Math.floor(chat.length / 2));
-  const medio = chat.slice(desdeMedio, alSalto(chat, desdeMedio + tercio));
-  const fin = chat.slice(alSalto(chat, chat.length - tercio));
+
+  const VENTANAS = 12; // más ventanas = cobertura temporal más pareja
+  const tam = Math.floor(max / VENTANAS);
+  const paso = chat.length / VENTANAS;
   const corte =
-    "\n\n[NOTA: aquí se omitió un tramo del chat por longitud — considera igual las tres épocas]\n\n";
-  return inicio + corte + medio + corte + fin;
+    "\n\n[…tramo omitido por longitud; todas las épocas del chat cuentan igual…]\n\n";
+
+  const partes: string[] = [];
+  for (let i = 0; i < VENTANAS; i++) {
+    const desde = alSalto(chat, Math.floor(i * paso));
+    partes.push(chat.slice(desde, alSalto(chat, desde + tam)));
+  }
+  return partes.join(corte);
 }
 
 export function nombreGrupoDesdeArchivo(nombre: string): string {
