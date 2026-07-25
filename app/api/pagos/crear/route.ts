@@ -4,6 +4,7 @@ import {
   hostPagueloFacil,
   pagosConfigurados,
   PLANES,
+  precioCancion,
   precioPlan,
   validarDescuento,
   type Plan,
@@ -40,6 +41,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Reporte no existe" }, { status: 404 });
   }
 
+  const esCancion = cuerpo.plan === "cancion";
   const plan: Plan =
     cuerpo.plan === "doblete" || cuerpo.plan === "expediente"
       ? cuerpo.plan
@@ -47,13 +49,13 @@ export async function POST(req: Request) {
   const nombre = (cuerpo.nombre ?? "").trim().slice(0, 40) || "Alguien del grupo";
   // La vaca solo aplica al plan básico; PagueloFacil no cobra menos de $1.00.
   const partes =
-    plan === "basico"
+    !esCancion && plan === "basico"
       ? Math.min(Math.max(Math.trunc(cuerpo.partes ?? 1), 1), 4)
       : 1;
   // Código de pana: descuento solo sobre el plan básico.
-  let precio = precioPlan(plan);
+  let precio = esCancion ? precioCancion() : precioPlan(plan);
   let codigoDescuento = "";
-  if (plan === "basico" && cuerpo.descuento) {
+  if (!esCancion && plan === "basico" && cuerpo.descuento) {
     const limpio = cuerpo.descuento.trim().toUpperCase();
     if (await validarDescuento(limpio)) {
       precio = Math.max(1, precio - descuentoReferido());
@@ -62,15 +64,19 @@ export async function POST(req: Request) {
   }
   const monto = Math.max(1, Math.round((precio / partes) * 100) / 100);
 
+  const descripcion = esCancion
+    ? `El Pana Beto — La Canción del Grupo · ${guardado.grupo || "chat sin nombre"}`
+    : `El Pana Beto — ${PLANES[plan].nombre} · ${guardado.grupo || "chat sin nombre"}`;
+
   const returnUrl = `${baseUrl(req)}/api/pagos/retorno`;
   const params = new URLSearchParams({
     CCLW: process.env.PF_CCLW!,
     CMTN: monto.toFixed(2),
-    CDSC: `El Pana Beto — ${PLANES[plan].nombre} · ${guardado.grupo || "chat sin nombre"}`.slice(0, 150),
+    CDSC: descripcion.slice(0, 150),
     RETURN_URL: Buffer.from(returnUrl).toString("hex"),
     PARM_1: reporteId,
     PARM_2: encodeURIComponent(nombre),
-    PARM_3: plan,
+    PARM_3: esCancion ? "cancion" : plan,
     PARM_4: codigoDescuento,
   });
 

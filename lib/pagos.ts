@@ -6,6 +6,7 @@ export type Pago = {
   monto: number;
   nombre: string;
   fecha: string;
+  plan?: string;
 };
 
 export type EstadoPagos = {
@@ -62,8 +63,21 @@ export function hostPagueloFacil(): string {
     : "https://secure.paguelofacil.com";
 }
 
+// La canción se paga aparte: sus pagos no cuentan para la vaca del reporte.
 export function totalPagado(estado: EstadoPagos): number {
-  return estado.pagos.reduce((s, p) => s + p.monto, 0);
+  return estado.pagos
+    .filter((p) => p.plan !== "cancion")
+    .reduce((s, p) => s + p.monto, 0);
+}
+
+export function precioCancion(): number {
+  const p = Number(process.env.PRECIO_CANCION);
+  return Number.isFinite(p) && p >= 1 ? p : 4.99;
+}
+
+export function cancionComprada(estado: EstadoPagos | null): boolean {
+  if (!pagosConfigurados()) return true;
+  return !!estado?.pagos.some((p) => p.plan === "cancion");
 }
 
 export function estaDesbloqueado(estado: EstadoPagos | null): boolean {

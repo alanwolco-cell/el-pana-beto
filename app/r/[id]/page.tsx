@@ -2,18 +2,22 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { cancionConfigurada, leerCancion } from "@/lib/cancion";
 import {
+  cancionComprada,
   descuentoReferido,
   estaDesbloqueado,
   leerPagos,
   obtenerCodigoPana,
   pagosConfigurados,
+  precioCancion,
   precioDesbloqueo,
   precioPlan,
   totalPagado,
   USOS_PARA_CORTESIA,
 } from "@/lib/pagos";
 import { leerReporte } from "@/lib/storage";
+import { CancionDelGrupo } from "./cancion";
 import { BotonCompartir } from "./compartir";
 import { PanelDesbloqueo } from "./desbloquear";
 import { Predicciones } from "./predicciones";
@@ -67,6 +71,8 @@ export default async function PaginaReporte({ params }: Props) {
     : "";
 
   const pagos = await leerPagos(id);
+  // undefined = rockola apagada; null = configurada pero sin canción aún
+  const cancion = cancionConfigurada() ? await leerCancion(id) : undefined;
   if (!estaDesbloqueado(pagos)) {
     const precio = pagos?.precio ?? precioDesbloqueo();
     const pagado = pagos ? totalPagado(pagos) : 0;
@@ -95,6 +101,10 @@ export default async function PaginaReporte({ params }: Props) {
       {
         icono: "🔮",
         texto: `Cómo va a reaccionar cada uno al leer esto`,
+      },
+      {
+        icono: "🎵",
+        texto: `La Canción del Grupo — el bochinche hecho música`,
       },
     ];
     return (
@@ -401,6 +411,19 @@ export default async function PaginaReporte({ params }: Props) {
       <Seccion titulo="🔮 Cómo van a reaccionar a este reporte">
         <Predicciones items={r.predicciones} />
       </Seccion>
+
+      {cancion !== undefined && (
+        <Seccion titulo="🎵 La Canción del Grupo">
+          <CancionDelGrupo
+            reporteId={id}
+            precio={precioCancion()}
+            comprada={cancionComprada(pagos)}
+            previewUrl={cancion?.previewUrl}
+            completaUrl={cancion?.completaUrl}
+            generoInicial={cancion?.genero}
+          />
+        </Seccion>
+      )}
 
       <div className="mt-16 rounded-lg border border-line bg-card p-8 text-center">
         <h2 className="font-display text-2xl font-semibold">

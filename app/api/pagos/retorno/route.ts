@@ -49,6 +49,23 @@ export async function GET(req: Request) {
     return destino("fallo");
   }
 
+  // La canción es un producto aparte: se registra con su plan y no toca
+  // ni la vaca ni los cupones.
+  if (planRaw === "cancion") {
+    await registrarPago(
+      reporteId,
+      {
+        oper,
+        monto: total,
+        nombre,
+        fecha: new Date().toISOString(),
+        plan: "cancion",
+      },
+      precioDesbloqueo(),
+    );
+    return destino("cancion");
+  }
+
   const codigoDescuento = param(sp, "PARM_4", "parm_4");
   const umbral = codigoDescuento
     ? Math.max(1, precioDesbloqueo() - descuentoReferido())
