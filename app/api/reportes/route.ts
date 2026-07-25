@@ -81,12 +81,13 @@ export async function POST(req: Request) {
           ? `Estadísticas reales del grupo (ya calculadas, úsalas para uno o dos chistes: quién escribe a esas horas, qué dice de ellos el día/mes pico): ${resumenStats(cuerpo.stats)}\n\n`
           : "") +
         `Chat exportado:\n\n${texto}`,
-      maxOutputTokens: 12_000,
+      maxOutputTokens: 9_000,
     };
 
-    // Opus para el mejor humor; si no hay créditos en el Gateway (tier gratis),
-    // cae automáticamente a Sonnet para que el sitio nunca se caiga.
-    const preferido = process.env.MODELO_REPORTE ?? "anthropic/claude-opus-5";
+    // opus-5-fast: mismo Opus 5 (misma calidad de humor) pero inferencia más
+    // rápida. Si no hay créditos en el Gateway, cae a Sonnet automáticamente.
+    const preferido =
+      process.env.MODELO_REPORTE ?? "anthropic/claude-opus-5-fast";
     let output;
     try {
       ({ output } = await generateText({ model: preferido, ...opciones }));
