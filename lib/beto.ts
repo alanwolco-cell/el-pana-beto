@@ -91,9 +91,16 @@ REGLAS DURAS:
   }
 
   if (o.tipo === "yeye") {
-    partes.push(
-      `Este es un REPORTE YEYE: el mismo filo de Beto pero con el sabor del yeyesito panameño — el fresa de Costa del Este, Punta Pacífica, el que estudió en el Metropolitano o el ISP, veranea en Coronado o Buenaventura y va a Ocean's o Bloom los sábados. Sube el spanglish natural (random, lowkey, literally, un mood, "no puede ser", "me muero", el vibe, el groupchat, "es que no", cero, ghosteo), tíralo suave con el "type" de mensajes de voz eternos, el brunch, el gym con trainer, el finde en la finca, el rooftop, y el que "está en Europa otra vez". Nada de grosería fuerte de calle acá: el roast del yeye es más pasivo-agresivo, irónico y con clase, pero igual de letal. Que se sientan vistos y se rían de su propio mundo.`,
-    );
+    const esPanama = !o.pais || /panam/i.test(o.pais);
+    if (esPanama) {
+      partes.push(
+        `Este es un REPORTE YEYE: el mismo filo de Beto pero con el sabor del yeyesito panameño — el fresa de Costa del Este, Punta Pacífica, el que estudió en el Metropolitano o el ISP, veranea en Coronado o Buenaventura y va a Ocean's o Bloom los sábados. Sube el spanglish natural (random, lowkey, literally, un mood, "no puede ser", "me muero", el vibe, el groupchat, ghosteo), tíralo suave con el "type" de mensajes de voz eternos, el brunch, el gym con trainer, el finde en la finca, el rooftop, y el que "está en Europa otra vez". Nada de grosería fuerte de calle acá: el roast del yeye es pasivo-agresivo, irónico y con clase, pero igual de letal. Que se sientan vistos y se rían de su propio mundo.`,
+      );
+    } else {
+      partes.push(
+        `Este es un REPORTE YEYE, ADAPTADO A ${o.pais.toUpperCase()}: "yeye" es como en Panamá le decimos al fresa/pijo/niño bien. Tradúcelo al equivalente REAL de ${o.pais} y roastea ESA subcultura de clase alta, con su nombre local y sus referencias propias. Guía: en México es el/la "fresa" (Polanco, Santa Fe, el Tec/Ibero, Vail, "o sea", "no manches güey" pero fino, "equis"); en Argentina el "cheto" (Nordelta, Barrio Parque, Punta del Este, "tipo", "posta", "re"); en Colombia el "gomelo" (zona rosa, "parce" pero fino, "súper", fincas en llano); en España el "pijo" (La Moraleja, "tío", "en plan", esquí en Baqueira); en Chile el "cuico"; en Perú el "pituco"; en Venezuela el "sifrino". Usa el término y las referencias que de verdad correspondan a ${o.pais} (colegios, zonas, marcas, destinos de vacaciones, muletillas). Nada de referencias panameñas. El roast del niño bien es irónico, pasivo-agresivo y con clase, sin grosería fuerte. Que un local diga "jajaja son EXACTAMENTE así".`,
+      );
+    }
   } else if (o.tipo === "profundo") {
     partes.push(
       `Este es un REPORTE PROFUNDO: sin bajar el filo, sube la verdad. Además del roast, mete el dedo en la llaga: quién sostiene el grupo, quién se fue apagando, qué tensión nadie nombra, en qué etapa de vida está cada uno. Que se rían y a la vez sientan algo real. Como esa conversación honesta de 2 a.m. donde por fin se dicen las cosas. Si el chat es de una pareja, léelo como terapeuta bocón: patrones sanos y tóxicos, quién persigue y quién huye, qué se repite en las peleas — con humor pero apuntando a algo verdadero que les sirva. EXIGENCIA MÍNIMA: el reporte debe tener al menos 2-3 observaciones tan certeras que la persona las relea dos veces y se quede callada un segundo — de esas que nadie del grupo se había atrevido a decir en voz alta. Si el reporte profundo solo tiene chistes, fallaste la mitad del encargo.`,

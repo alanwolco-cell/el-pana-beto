@@ -650,7 +650,7 @@ export default function NuevoReporte() {
             {(
               [
                 ["clasico", "Clásico", "El Beto de siempre: humor sin filtro."],
-                ["yeye", "Yeye", "Modo yeyesito: spanglish y sarcasmo fino."],
+                ["yeye", "Yeye / Fresa", "El niño bien de tu país: fresa, cheto, gomelo, pijo… Beto lo adapta."],
                 ["profundo", "Profundo", "Beto se pone serio. Pa' parejas y pa'l que aguante."],
               ] as const
             ).map(([valor, nombre, desc]) => (
