@@ -5,10 +5,11 @@ import { useEffect, useRef, useState } from "react";
 
 const mensajesEspera = [
   "Beto está abriendo el chat…",
-  "Leyendo mensaje por mensaje…",
+  "Leyendo el bochinche completo…",
   "Beto encontró algo interesante…",
   "Tomando nota de los apodos…",
   "Beto se está riendo solo…",
+  "Beto fue por un raspao, ya vuelve…",
   "Redactando el veredicto…",
   "Puliendo las banderas rojas…",
 ];
@@ -68,7 +69,13 @@ export default function NuevoReporte() {
   if (cargando) {
     return (
       <div className="mx-auto flex max-w-xl flex-col items-center px-6 py-32 text-center">
-        <div className="h-10 w-10 animate-spin rounded-full border-2 border-line border-t-accent" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/beto.jpg"
+          alt="Beto"
+          className="h-20 w-20 rounded-full border border-line object-cover"
+        />
+        <div className="mt-6 h-8 w-8 animate-spin rounded-full border-2 border-line border-t-accent" />
         <h1 className="font-display mt-8 text-3xl font-semibold">
           {mensajesEspera[mensajeIdx]}
         </h1>

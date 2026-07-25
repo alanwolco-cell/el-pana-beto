@@ -70,7 +70,7 @@ export function PanelDesbloqueo({ reporteId, precio, pagado, pagos }: Props) {
         </div>
         {pagos.length > 0 && (
           <p className="mt-2 text-xs text-muted">
-            Ya pusieron su parte:{" "}
+            Ya pusieron pa&rsquo; la vaca:{" "}
             {pagos.map((p) => `${p.nombre} ($${p.monto.toFixed(2)})`).join(" · ")}
           </p>
         )}
@@ -92,7 +92,9 @@ export function PanelDesbloqueo({ reporteId, precio, pagado, pagos }: Props) {
         </div>
 
         <fieldset>
-          <legend className="text-sm font-medium">¿Cómo van a pagar?</legend>
+          <legend className="text-sm font-medium">
+            ¿Pagas completo o hacen la vaca?
+          </legend>
           <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4">
             {[1, 2, 3, 4].map((n) => (
               <label

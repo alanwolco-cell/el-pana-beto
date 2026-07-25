@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -95,10 +96,19 @@ export default async function PaginaReporte({ params }: Props) {
         {r.titulo}
       </h1>
       <div className="mt-6 flex items-center justify-between border-y border-line py-4">
-        <p className="text-sm text-muted">
-          Por <span className="font-medium text-ink">Beto</span>, que se leyó
-          todo el chat
-        </p>
+        <div className="flex items-center gap-3">
+          <Image
+            src="/beto.jpg"
+            alt="Beto"
+            width={40}
+            height={40}
+            className="rounded-full border border-line object-cover"
+          />
+          <p className="text-sm text-muted">
+            Por <span className="font-medium text-ink">Beto</span>, que se leyó
+            todo el bochinche
+          </p>
+        </div>
         <BotonCompartir />
       </div>
 

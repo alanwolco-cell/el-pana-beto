@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, Inter } from "next/font/google";
+import Image from "next/image";
 import Link from "next/link";
 import "./globals.css";
 
@@ -23,6 +24,7 @@ export const metadata: Metadata = {
       "Beto se lee todo tu chat y te dice lo que nadie se atreve a decir.",
     locale: "es_PA",
     siteName: "El Pana Beto",
+    images: [{ url: "/beto.jpg", width: 900, height: 900, alt: "Beto" }],
   },
 };
 
@@ -36,8 +38,15 @@ export default function RootLayout({
           <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
             <Link
               href="/"
-              className="font-display text-xl font-semibold tracking-tight"
+              className="font-display flex items-center gap-2.5 text-xl font-semibold tracking-tight"
             >
+              <Image
+                src="/beto.jpg"
+                alt=""
+                width={34}
+                height={34}
+                className="rounded-full border border-line object-cover"
+              />
               El Pana Beto<span className="text-accent">.</span>
             </Link>
             <Link
