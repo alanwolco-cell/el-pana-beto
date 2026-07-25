@@ -10,17 +10,28 @@ const mensajes = [
   "Beto se está riendo solo…",
   "Beto fue por un raspao, ya vuelve…",
   "Redactando el veredicto…",
-  "Puliendo las banderas rojas…",
+  "Puliendo los flags rojos…",
 ];
+
+const ESTIMADO = 45; // segundos estimados (con margen sobre los ~25-40 reales)
 
 export function GenerandoReporte({ id }: { id: string }) {
   const [idx, setIdx] = useState(0);
   const [falló, setFalló] = useState(false);
+  const [seg, setSeg] = useState(0);
 
   useEffect(() => {
     const rot = setInterval(() => setIdx((i) => (i + 1) % mensajes.length), 4000);
-    return () => clearInterval(rot);
+    const tic = setInterval(() => setSeg((s) => s + 1), 1000);
+    return () => {
+      clearInterval(rot);
+      clearInterval(tic);
+    };
   }, []);
+
+  // Progreso que avanza hacia ~95% y se queda ahí hasta que de verdad termina.
+  const progreso = Math.min(95, Math.round((seg / ESTIMADO) * 100));
+  const faltan = Math.max(0, ESTIMADO - seg);
 
   useEffect(() => {
     let vivo = true;
@@ -85,13 +96,27 @@ export function GenerandoReporte({ id }: { id: string }) {
         alt="Beto"
         className="h-20 w-20 rounded-full border border-line object-cover"
       />
-      <div className="mt-6 h-8 w-8 animate-spin rounded-full border-2 border-line border-t-accent" />
       <h1 className="font-display mt-8 text-3xl font-semibold">
         {mensajes[idx]}
       </h1>
-      <p className="mt-4 text-muted">
-        Esto toma un par de minutos. Puedes salir de la página tranquilo: cuando
-        vuelvas, tu reporte va a estar aquí. Ya guardamos el link.
+
+      <div className="mt-8 w-full max-w-sm">
+        <div className="h-2.5 overflow-hidden rounded-full bg-line">
+          <div
+            className="h-full rounded-full bg-accent transition-all duration-1000 ease-linear"
+            style={{ width: `${progreso}%` }}
+          />
+        </div>
+        <p className="mt-2 text-sm text-muted">
+          {progreso < 95
+            ? `${progreso}% · le faltan como ${faltan}s`
+            : "Ya casi… dándole los últimos toques"}
+        </p>
+      </div>
+
+      <p className="mt-6 text-muted">
+        Puedes salir de la página tranquilo: cuando vuelvas, tu reporte va a
+        estar aquí. Ya guardamos el link.
       </p>
     </div>
   );

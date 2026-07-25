@@ -22,13 +22,13 @@ export const metadata: Metadata = {
     template: "%s · El Pana Beto",
   },
   description:
-    "Sube el chat del grupo y Beto te escribe un reporte sin filtro: apodos, premios, banderas rojas, ranking de aura y las frases que nadie quería que quedaran guardadas. Sin cuenta y sin tarjeta, en 3 minutos.",
+    "Sube el chat del grupo y Beto te escribe un reporte sin filtro: apodos, premios, flags rojos, ranking de aura y las frases que nadie quería que quedaran guardadas. Sin cuenta y sin tarjeta, en menos de un minuto.",
   openGraph: {
     type: "website",
     url: "https://elpanabeto.com",
     title: "El Pana Beto — La IA que se lee el chat del grupo y suelta las verdades",
     description:
-      "Apodos, premios, banderas rojas y el ranking de aura de cada quien. Sin cuenta y sin tarjeta: en 3 minutos Beto opina de tu grupo.",
+      "Apodos, premios, flags rojos y el ranking de aura de cada quien. Sin cuenta y sin tarjeta: en menos de un minuto Beto opina de tu grupo.",
     locale: "es_PA",
     siteName: "El Pana Beto",
   },
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "El Pana Beto — La IA que se lee el chat del grupo y suelta las verdades",
     description:
-      "Apodos, premios, banderas rojas y el ranking de aura de cada quien. Sin cuenta y sin tarjeta: en 3 minutos Beto opina de tu grupo.",
+      "Apodos, premios, flags rojos y el ranking de aura de cada quien. Sin cuenta y sin tarjeta: en menos de un minuto Beto opina de tu grupo.",
   },
 };
 

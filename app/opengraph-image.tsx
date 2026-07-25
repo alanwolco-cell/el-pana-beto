@@ -131,7 +131,7 @@ export default async function OpengraphImage() {
                   maxWidth: "640px",
                 }}
               >
-                Apodos, premios, banderas rojas y las frases que nadie quería
+                Apodos, premios, flags rojos y las frases que nadie quería
                 que quedaran guardadas.
               </div>
             </div>
@@ -154,7 +154,7 @@ export default async function OpengraphImage() {
                   fontWeight: 600,
                 }}
               >
-                Sin cuenta · Sin tarjeta · 3 minutos
+                Sin cuenta · Sin tarjeta · 1 minuto
               </div>
               <div
                 style={{

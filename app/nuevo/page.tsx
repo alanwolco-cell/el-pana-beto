@@ -121,7 +121,7 @@ const mensajesEspera = [
   "Beto se está riendo solo…",
   "Beto fue por un raspao, ya vuelve…",
   "Redactando el veredicto…",
-  "Puliendo las banderas rojas…",
+  "Puliendo los flags rojos…",
 ];
 
 export default function NuevoReporte() {
@@ -265,7 +265,7 @@ export default function NuevoReporte() {
           {mensajesEspera[mensajeIdx]}
         </h1>
         <p className="mt-4 text-muted">
-          Esto toma unos 3 minutos. No cierres esta página.
+          Esto toma menos de un minuto. No cierres esta página.
         </p>
       </div>
     );
@@ -818,7 +818,7 @@ export default function NuevoReporte() {
             Que Beto lo lea →
           </button>
           <p className="mt-3 text-center text-xs text-muted">
-            Sin cuenta y sin tarjeta. En unos 3 minutos Beto te da su veredicto.
+            Sin cuenta y sin tarjeta. En menos de un minuto Beto te da su veredicto.
           </p>
         </section>
       )}

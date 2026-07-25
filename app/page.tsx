@@ -22,7 +22,7 @@ const pasos = [
     numero: "03",
     titulo: "Recibe el veredicto",
     texto:
-      "A los 3 minutos Beto te suelta el reporte: apodos, premios, flags rojos y las frases que nadie quería que quedaran guardadas.",
+      "En menos de un minuto Beto te suelta el reporte: apodos, premios, flags rojos y las frases que nadie quería que quedaran guardadas.",
   },
 ];
 
@@ -73,7 +73,7 @@ const preguntas = [
   },
   {
     p: "¿Cuánto tarda?",
-    r: "Buco rápido: unos minutos exportando de tu lado, y unos 3 mientras Beto lee todo y escribe.",
+    r: "Buco rápido: unos minutos exportando de tu lado, y menos de un minuto mientras Beto lee todo y escribe.",
   },
   {
     p: "¿Es seguro compartir mi chat?",
@@ -124,7 +124,7 @@ export default function Home() {
               <div>
                 <ContadorReportes />
                 <p className="text-sm text-muted">
-                  Sin cuenta y sin tarjeta · 3 min pa&rsquo;l reporte
+                  Sin cuenta y sin tarjeta · 1 min pa&rsquo;l reporte
                 </p>
               </div>
             </div>
@@ -145,7 +145,7 @@ export default function Home() {
               className="mx-auto w-full max-w-xs rounded-2xl border border-line shadow-sm sm:max-w-none"
             />
             <VeredictoBeto>
-              Me leí 3 años de este grupo en 3 minutos. Ya sé quién deja en
+              Me leí 3 años de este grupo en un minuto. Ya sé quién deja en
               visto, quién revive el chat a la 1 a.m. y quién sigue debiendo
               la plata del viaje.
             </VeredictoBeto>
@@ -475,7 +475,7 @@ export default function Home() {
           <div className="mt-4 flex flex-col items-center gap-1">
             <ContadorReportes />
             <p className="text-sm text-muted">
-              Sin cuenta y sin tarjeta · 3 min pa&rsquo;l reporte
+              Sin cuenta y sin tarjeta · 1 min pa&rsquo;l reporte
             </p>
           </div>
         </div>
