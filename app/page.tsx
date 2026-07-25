@@ -59,6 +59,10 @@ const preguntas = [
     p: "¿Cómo comparto el reporte?",
     r: "Cada reporte tiene su link único. Lo mandas al grupo y que empiece el bochinche.",
   },
+  {
+    p: "¿Y si necesito ayuda?",
+    r: "Escríbenos a elpanabeto.com@gmail.com — sí, el correo lleva el .com adentro: compramos el dominio y nos emocionamos. Beto no contesta correos (está leyendo chats), pero su equipo sí.",
+  },
 ];
 
 const telefonos = [

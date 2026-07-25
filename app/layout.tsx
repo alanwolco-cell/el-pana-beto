@@ -59,11 +59,24 @@ export default function RootLayout({
         </header>
         <main>{children}</main>
         <footer className="border-t border-line">
-          <div className="mx-auto flex max-w-5xl flex-col gap-2 px-6 py-8 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
-            <p>© 2026 El Pana Beto. Todos los derechos reservados.</p>
+          <div className="mx-auto flex max-w-5xl flex-col gap-3 px-6 py-8 text-sm text-muted">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <p>© 2026 El Pana Beto. Todos los derechos reservados.</p>
+              <p>
+                Tu chat no se guarda: se procesa una vez, se descarta y nunca
+                entrena ningún modelo. Ley 81 de 2019 (Panamá).
+              </p>
+            </div>
             <p>
-              Tu chat no se guarda: se procesa una vez, se descarta y nunca
-              entrena ningún modelo. Ley 81 de 2019 (Panamá).
+              Soporte, quejas y bochinche:{" "}
+              <a
+                href="mailto:elpanabeto.com@gmail.com"
+                className="underline transition-colors hover:text-accent"
+              >
+                elpanabeto.com@gmail.com
+              </a>{" "}
+              — sí, con el .com adentro. Compramos el dominio y de la emoción
+              lo metimos hasta en el correo.
             </p>
           </div>
         </footer>
