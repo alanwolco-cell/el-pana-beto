@@ -9,17 +9,17 @@ export function Predicciones({ items }: { items: Prediccion[] }) {
 
   if (!abierto) {
     return (
-      <div className="rounded-lg border border-line bg-card p-6 text-center sm:p-8">
+      <div className="rounded-xl border border-line bg-card p-6 text-center shadow-card sm:p-8">
         <p className="font-display text-lg font-semibold">
           Beto ya sabe cómo va a reaccionar cada uno a este reporte.
         </p>
-        <p className="mt-1 text-sm text-muted">
+        <p className="mx-auto mt-1 max-w-md text-sm leading-relaxed text-muted">
           Léelo antes de mandar el link al grupo… o después, pa&rsquo;
           comprobar que Beto no falla.
         </p>
         <button
           onClick={() => setAbierto(true)}
-          className="mt-5 w-full rounded-full bg-ink px-6 py-3 font-medium text-paper transition-colors hover:bg-accent sm:w-auto"
+          className="mt-5 w-full rounded-full bg-ink px-6 py-3 font-medium text-paper transition-all duration-200 ease-suave hover:-translate-y-0.5 hover:bg-accent active:translate-y-0 sm:w-auto"
         >
           🔮 Revelar predicciones
         </button>
@@ -28,7 +28,7 @@ export function Predicciones({ items }: { items: Prediccion[] }) {
   }
 
   return (
-    <ul className="space-y-4">
+    <ul className="aparecer space-y-4">
       {items.map((p) => (
         <li key={p.nombre} className="border-b border-line pb-4 last:border-0">
           <p className="font-medium">{p.nombre}</p>

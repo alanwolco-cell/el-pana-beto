@@ -113,8 +113,8 @@ export function PanelDesbloqueo({
   }
 
   return (
-    <div className="mt-10 rounded-lg border border-line bg-card p-5 sm:p-8">
-      <h2 className="font-display text-2xl font-semibold">
+    <div className="mt-12 rounded-2xl border border-line bg-card p-5 shadow-panel sm:p-8">
+      <h2 className="font-display text-2xl font-semibold leading-snug tracking-tight sm:text-[1.65rem]">
         Beto ya lo escribió todo. Está ahí, con el documento bocabajo,
         tomándose un café.
       </h2>
@@ -132,7 +132,7 @@ export function PanelDesbloqueo({
           </div>
           <div className="mt-2 h-2 overflow-hidden rounded-full bg-line">
             <div
-              className="h-full rounded-full bg-accent transition-all"
+              className="h-full rounded-full bg-accent transition-all duration-500 ease-suave"
               style={{ width: `${Math.min(100, (pagado / precio) * 100)}%` }}
             />
           </div>
@@ -148,31 +148,50 @@ export function PanelDesbloqueo({
           <button
             key={p.id}
             onClick={() => setPlan(p.id)}
-            className={`w-full rounded-lg border p-4 text-left transition-colors ${
+            aria-pressed={plan === p.id}
+            className={`w-full rounded-xl border p-4 text-left transition-all duration-200 ease-suave sm:p-5 ${
               plan === p.id
-                ? "border-accent bg-paper"
+                ? "border-accent bg-paper shadow-card"
                 : "border-line hover:border-muted"
             }`}
           >
-            <div className="flex items-baseline justify-between">
-              <span className="font-display font-semibold">{p.nombre}</span>
-              <span className="font-medium">
-                {p.id === "basico" && descuento > 0 ? (
-                  <>
-                    <s className="mr-1.5 text-muted">
-                      ${precios.basico.toFixed(2)}
-                    </s>
-                    ${precioBasico.toFixed(2)}
-                  </>
-                ) : (
-                  <>${precios[p.id].toFixed(2)}</>
-                )}
+            <div className="flex items-start gap-3">
+              <span
+                aria-hidden
+                className={`mt-1 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border transition-colors duration-200 ${
+                  plan === p.id ? "border-accent" : "border-line"
+                }`}
+              >
+                <span
+                  className={`h-2 w-2 rounded-full bg-accent transition-transform duration-200 ease-suave ${
+                    plan === p.id ? "scale-100" : "scale-0"
+                  }`}
+                />
               </span>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-baseline justify-between gap-3">
+                  <span className="font-display font-semibold">{p.nombre}</span>
+                  <span className="font-medium tabular-nums">
+                    {p.id === "basico" && descuento > 0 ? (
+                      <>
+                        <s className="mr-1.5 text-muted">
+                          ${precios.basico.toFixed(2)}
+                        </s>
+                        ${precioBasico.toFixed(2)}
+                      </>
+                    ) : (
+                      <>${precios[p.id].toFixed(2)}</>
+                    )}
+                  </span>
+                </div>
+                <p className="mt-0.5 text-xs font-medium uppercase tracking-widest text-accent">
+                  {p.tag}
+                </p>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted">
+                  {p.desc}
+                </p>
+              </div>
             </div>
-            <p className="mt-0.5 text-xs font-medium uppercase tracking-widest text-accent">
-              {p.tag}
-            </p>
-            <p className="mt-1.5 text-sm text-muted">{p.desc}</p>
           </button>
         ))}
       </div>
@@ -186,9 +205,9 @@ export function PanelDesbloqueo({
             {[1, 2, 3, 4].map((n) => (
               <label
                 key={n}
-                className={`cursor-pointer rounded-md border px-2 py-2.5 text-center text-sm transition-colors ${
+                className={`cursor-pointer rounded-lg border px-2 py-2.5 text-center text-sm transition-all duration-200 ease-suave ${
                   partes === n
-                    ? "border-accent bg-paper font-medium"
+                    ? "border-accent bg-paper font-medium shadow-card"
                     : "border-line hover:border-muted"
                 }`}
               >
@@ -220,19 +239,19 @@ export function PanelDesbloqueo({
           value={nombre}
           onChange={(e) => setNombre(e.target.value)}
           placeholder="Ej: Karla"
-          className="mt-2 w-full rounded-md border border-line bg-paper px-4 py-3 outline-none transition-colors focus:border-accent"
+          className="mt-2 w-full rounded-lg border border-line bg-paper px-4 py-3 outline-none transition-colors duration-200 focus:border-accent"
         />
       </div>
 
       {descuento > 0 && (
-        <p className="mt-4 rounded-md border border-green-700/40 bg-green-700/5 px-4 py-3 text-sm text-green-800">
+        <p className="mt-4 rounded-lg border border-verde/30 bg-verde/[0.06] px-4 py-3 text-sm text-verde">
           🤝 Código de pana aplicado: −${descuento.toFixed(2)} en El Reporte.
           Salúdame al que te lo pasó.
         </p>
       )}
 
       {error && (
-        <p className="mt-4 rounded-md border border-accent/40 bg-accent/5 px-4 py-3 text-sm text-accent">
+        <p className="mt-4 rounded-lg border border-accent/40 bg-accent/5 px-4 py-3 text-sm text-accent">
           {error}
         </p>
       )}
@@ -240,7 +259,7 @@ export function PanelDesbloqueo({
       <button
         onClick={pagar}
         disabled={cargando}
-        className="mt-6 w-full rounded-full bg-accent px-6 py-4 font-medium text-paper transition-transform hover:-translate-y-0.5 disabled:opacity-60"
+        className="mt-6 w-full rounded-full bg-accent px-6 py-4 font-medium text-paper shadow-boton transition-all duration-200 ease-suave hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60"
       >
         {cargando
           ? "Abriendo la caja registradora de Beto…"
@@ -256,13 +275,13 @@ export function PanelDesbloqueo({
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setMostrarCodigo((v) => !v)}
-            className="rounded-full border border-line px-4 py-2 text-xs font-medium text-muted transition-colors hover:border-muted"
+            className="rounded-full border border-line px-4 py-2 text-xs font-medium text-muted transition-colors duration-200 hover:border-muted hover:text-ink"
           >
             ¿Tienes un código de Beto?
           </button>
           <button
             onClick={copiarLink}
-            className="rounded-full border border-ink px-4 py-2 text-xs font-medium transition-colors hover:bg-ink hover:text-paper"
+            className="rounded-full border border-ink px-4 py-2 text-xs font-medium transition-colors duration-200 hover:bg-ink hover:text-paper"
           >
             {copiado ? "¡Copiado!" : "Mandar el link al grupo"}
           </button>
@@ -276,12 +295,12 @@ export function PanelDesbloqueo({
             value={codigo}
             onChange={(e) => setCodigo(e.target.value)}
             placeholder="BETO-XXXXXXXX"
-            className="w-full rounded-md border border-line bg-paper px-4 py-2.5 text-base uppercase outline-none transition-colors focus:border-accent sm:text-sm"
+            className="w-full rounded-lg border border-line bg-paper px-4 py-2.5 font-mono text-base uppercase tracking-wide outline-none transition-colors duration-200 focus:border-accent sm:text-sm"
           />
           <button
             onClick={canjear}
             disabled={cargando}
-            className="shrink-0 rounded-md border border-ink px-4 py-2.5 text-sm font-medium transition-colors hover:bg-ink hover:text-paper disabled:opacity-60"
+            className="shrink-0 rounded-lg border border-ink px-4 py-2.5 text-sm font-medium transition-colors duration-200 hover:bg-ink hover:text-paper disabled:opacity-60"
           >
             Canjear
           </button>

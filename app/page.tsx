@@ -37,6 +37,19 @@ const contenido = [
   { emoji: "🔮", titulo: "Predicciones", desc: "Cómo va a reaccionar cada uno cuando lea esto." },
 ];
 
+const paises = [
+  "🇵🇦 Panamá",
+  "🇲🇽 México",
+  "🇨🇴 Colombia",
+  "🇦🇷 Argentina",
+  "🇻🇪 Venezuela",
+  "🇨🇱 Chile",
+  "🇪🇸 España",
+  "🇩🇴 Rep. Dominicana",
+  "🇵🇪 Perú",
+  "🇪🇨 Ecuador",
+];
+
 const preguntas = [
   {
     p: "¿Quién es Beto?",
@@ -49,6 +62,10 @@ const preguntas = [
   {
     p: "¿Qué apps soporta?",
     r: "WhatsApp, que es donde está el bochinche de verdad. Exportas el chat con la opción «Sin archivos» y te genera un .txt listo para subir.",
+  },
+  {
+    p: "¿Beto solo funciona pa' Panamá?",
+    r: "No, qué va. Le dices de dónde es el grupo y Beto adapta la jerga, las referencias y los chistes a tu país: México, Colombia, Argentina, España, donde sea. Si no le dices nada, tira panameño clásico.",
   },
   {
     p: "¿Cuánto tarda?",
@@ -74,170 +91,24 @@ const reaccionesImgs = [
   { src: "/wa-uni.png", alt: "Grupo de la universidad reaccionando a su reporte" },
 ];
 
-const telefonos = [
-  {
-    titulo: "Los Panas del Kilo",
-    miembros: "Kike, Nando, Chino, Tavo y 8 más",
-    avatar: "🍺",
-    mensajes: [
-      {
-        linkCard: true,
-        texto: "señores tienen que leer esto",
-        hora: "5:38 p.m.",
-        propia: true,
-      },
-      {
-        de: "Kike",
-        colorDe: "text-[#53bdeb]",
-        avatar: "🧢",
-        texto: "¿QUIÉN le dio nuestro chat a este man? 😭",
-        hora: "5:39 p.m.",
-        reaccion: "😂 4",
-      },
-      {
-        de: "Nando",
-        colorDe: "text-[#e77f51]",
-        avatar: "😎",
-        citando: { de: "Tú", texto: "señores tienen que leer esto" },
-        texto: "el apodo que me puso lowkey me la aplicó",
-        hora: "5:39 p.m.",
-      },
-      {
-        de: "Chino",
-        colorDe: "text-[#25d366]",
-        avatar: "🕶️",
-        texto: "te lo mereces la verdad 💀",
-        hora: "5:39 p.m.",
-      },
-      {
-        de: "Kike",
-        colorDe: "text-[#53bdeb]",
-        avatar: "🧢",
-        texto: "diablo está muy bueno esto",
-        hora: "5:40 p.m.",
-      },
-    ],
-  },
-  {
-    titulo: "Familia Unida 🙏",
-    miembros: "Mamá, Tía Mirna, Papo y 9 más",
-    avatar: "🙏",
-    mensajes: [
-      {
-        de: "Papo",
-        colorDe: "text-[#53bdeb]",
-        avatar: "🧔🏽",
-        tarjeta:
-          "Banderas verdes: aquí hay amor del bueno. Cuando Papo por fin consiguió trabajo, el grupo celebró como si Panamá hubiera clasificado al Mundial.",
-        hora: "8:12 p.m.",
-      },
-      {
-        de: "Mamá",
-        colorDe: "text-[#a78bfa]",
-        avatar: "👩🏽‍🦱",
-        texto: "JAJAJAJAJAJA",
-        hora: "8:13 p.m.",
-      },
-      { texto: "Jajajajajajjajajaa", hora: "8:13 p.m.", propia: true },
-      { texto: "SEÑORES", hora: "8:13 p.m.", propia: true },
-      {
-        de: "Tía Mirna",
-        colorDe: "text-[#f472b6]",
-        avatar: "👵🏽",
-        texto: "Q locura",
-        hora: "8:14 p.m.",
-      },
-      {
-        de: "Abuela",
-        colorDe: "text-[#fbbf24]",
-        avatar: "👵🏼",
-        texto: "Que es esto",
-        hora: "8:14 p.m.",
-        reaccion: "😂 4",
-      },
-      { texto: "Léelo", hora: "8:15 p.m.", propia: true },
-      {
-        de: "Papo",
-        colorDe: "text-[#53bdeb]",
-        avatar: "🧔🏽",
-        texto: "Que honor",
-        hora: "8:16 p.m.",
-      },
-    ],
-  },
-  {
-    titulo: "La Junta 🍻",
-    miembros: "Moncho, Yeyo, Lalo y 5 más",
-    avatar: "🎱",
-    mensajes: [
-      {
-        de: "Yeyo",
-        colorDe: "text-[#25d366]",
-        avatar: "🧉",
-        tarjeta:
-          "Predicción: Moncho va a decir que él no es así. Moncho es exactamente así.",
-        hora: "10:02 p.m.",
-      },
-      {
-        de: "Moncho",
-        colorDe: "text-[#e77f51]",
-        avatar: "🐻",
-        texto: "yo no soy así",
-        hora: "10:03 p.m.",
-        reaccion: "💀 6",
-      },
-      {
-        de: "Lalo",
-        colorDe: "text-[#53bdeb]",
-        avatar: "🎧",
-        texto: "JAJAJAJA lo clavó",
-        hora: "10:03 p.m.",
-      },
-      {
-        de: "Yeyo",
-        colorDe: "text-[#25d366]",
-        avatar: "🧉",
-        texto: "Wild",
-        hora: "10:03 p.m.",
-      },
-      {
-        texto: "me gané la copa línea más loca",
-        hora: "10:04 p.m.",
-        propia: true,
-      },
-      {
-        texto: "¿metemos a Beto al hate club?",
-        hora: "10:04 p.m.",
-        propia: true,
-        reaccion: "😂 3",
-      },
-      {
-        de: "Lalo",
-        colorDe: "text-[#53bdeb]",
-        avatar: "🎧",
-        texto: "Beto ya sabe más de nosotros que nosotros",
-        hora: "10:05 p.m.",
-      },
-    ],
-  },
-];
-
 export default function Home() {
   return (
     <>
+      {/* Hero: valor en 3 segundos + CTA + prueba social + cero fricción */}
       <section className="mx-auto max-w-5xl px-6 pb-16 pt-10 sm:pb-20 sm:pt-20">
         <div className="grid items-center gap-10 sm:grid-cols-[3fr_2fr]">
           <div>
             <p className="mb-5 text-xs font-medium uppercase tracking-[0.2em] text-accent sm:mb-6">
-              ¿Qué xopá? · Reportes de chats de grupo
+              ¿Qué xopá? · Reportes de chats de WhatsApp
             </p>
             <h1 className="font-display text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl sm:leading-[1.05] lg:text-6xl">
               Pásale el chat a Beto. Él se lee todo el bochinche y te dice
               las cosas como son.
             </h1>
             <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted sm:mt-6">
-              Subes cualquier chat de WhatsApp, Beto se lee cada mensaje y te
-              tira un reporte con su opinión real de todos ustedes. Sin filtro.
+              Subes cualquier chat de WhatsApp y Beto se lee cada mensaje. Te
+              tira un reporte con apodos, premios, banderas rojas y su opinión
+              real de todos ustedes. Sin filtro.
             </p>
             <div className="mt-8 flex flex-col items-stretch gap-4 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center">
               <Link
@@ -260,17 +131,25 @@ export default function Home() {
               Datos Personales de Panamá.
             </p>
           </div>
-          <Image
-            src="/beto.jpg"
-            alt="Beto: un señor panameño sonriente con sombrero pintado y guayabera"
-            width={450}
-            height={450}
-            priority
-            className="mx-auto w-full max-w-xs rounded-2xl border border-line shadow-sm sm:max-w-none"
-          />
+          <div>
+            <Image
+              src="/beto.jpg"
+              alt="Beto: un señor panameño sonriente con sombrero pintado y guayabera"
+              width={450}
+              height={450}
+              priority
+              className="mx-auto w-full max-w-xs rounded-2xl border border-line shadow-sm sm:max-w-none"
+            />
+            <VeredictoBeto>
+              Me leí 3 años de este grupo en 3 minutos. Ya sé quién deja en
+              visto, quién revive el chat a la 1 a.m. y quién sigue debiendo
+              la plata del viaje.
+            </VeredictoBeto>
+          </div>
         </div>
       </section>
 
+      {/* Prueba social: reacciones reales, arriba y visibles */}
       <section className="border-y border-line bg-card">
         <div className="mx-auto max-w-5xl px-6 py-14 sm:py-20">
           <h2 className="font-display text-3xl font-semibold sm:text-4xl">
@@ -312,46 +191,131 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Valor y curiosidad: qué trae el reporte, con CTA en el punto de decisión */}
       <section className="mx-auto max-w-5xl px-6 py-14 sm:py-20">
-        <div className="grid gap-8 sm:grid-cols-3 sm:gap-10">
-          {pasos.map((p) => (
-            <div key={p.numero}>
-              <p className="text-sm font-semibold text-accent">{p.numero}</p>
-              <h2 className="font-display mt-2 text-2xl font-semibold">
-                {p.titulo}
-              </h2>
-              <p className="mt-3 leading-relaxed text-muted">{p.texto}</p>
-            </div>
+        <h2 className="font-display text-3xl font-semibold sm:text-4xl">
+          Qué trae el reporte
+        </h2>
+        <p className="mt-3 text-muted">
+          La opinión completa de un pana que se leyó todo tu chat y tiene
+          demasiado que decir.
+        </p>
+        <div className="mt-8 grid gap-4 sm:mt-10 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+          {contenido.map((c) => (
+            <article
+              key={c.titulo}
+              className="rounded-lg border border-line bg-card p-5"
+            >
+              <p className="text-2xl">{c.emoji}</p>
+              <h3 className="font-display mt-2 text-lg font-semibold">
+                {c.titulo}
+              </h3>
+              <p className="mt-1 text-sm leading-relaxed text-muted">{c.desc}</p>
+            </article>
           ))}
+        </div>
+        <div className="mt-8 flex flex-col items-start gap-3 sm:mt-10 sm:flex-row sm:items-center sm:gap-5">
+          <Link
+            href="/nuevo"
+            className="inline-block w-full rounded-full bg-accent px-6 py-3.5 text-center font-medium text-paper transition-transform hover:-translate-y-0.5 sm:w-auto sm:py-3"
+          >
+            Quiero ver el mío
+          </Link>
+          <p className="text-sm text-muted">
+            Ya estás pensando en tu grupo. Beto lo sabe.
+          </p>
         </div>
       </section>
 
-      <section className="border-y border-line bg-card py-14 sm:py-16">
-        <div className="mx-auto max-w-5xl px-6">
+      {/* Fricción cero: tres pasos */}
+      <section className="border-y border-line bg-card">
+        <div className="mx-auto max-w-5xl px-6 py-14 sm:py-20">
           <h2 className="font-display text-3xl font-semibold sm:text-4xl">
-            Familia, frenes o el grupo de la U
+            Tres pasos. Ni cuenta necesitas.
           </h2>
-          <p className="mt-3 text-muted">
-            Beto los lee todos. Y en todos pasa lo mismo.
-          </p>
-        </div>
-        <div className="marquee mt-10">
-          <div className="marquee-track items-start">
-            {[...reaccionesImgs, ...reaccionesImgs].map((r, i) => (
-              <Image
-                key={`${r.src}-${i}`}
-                src={r.src}
-                alt={r.alt}
-                width={300}
-                height={640}
-                className="w-48 shrink-0 rounded-[1.75rem] border border-line shadow-xl sm:w-56"
-              />
+          <div className="mt-8 grid gap-8 sm:mt-10 sm:grid-cols-3 sm:gap-10">
+            {pasos.map((p) => (
+              <div key={p.numero}>
+                <p className="text-sm font-semibold text-accent">{p.numero}</p>
+                <h3 className="font-display mt-2 text-2xl font-semibold">
+                  {p.titulo}
+                </h3>
+                <p className="mt-3 leading-relaxed text-muted">{p.texto}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="border-t border-line">
+      {/* Diferenciador 1: la canción */}
+      <section>
+        <div className="mx-auto grid max-w-5xl gap-8 px-6 py-14 sm:grid-cols-[2fr_3fr] sm:items-center sm:gap-10 sm:py-20">
+          <div className="flex justify-center">
+            <div className="flex h-32 w-32 items-center justify-center rounded-full border border-line bg-card text-5xl shadow-sm sm:h-40 sm:w-40 sm:text-6xl">
+              🎵
+            </div>
+          </div>
+          <div>
+            <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
+              Nuevo
+            </p>
+            <h2 className="font-display mt-3 text-3xl font-semibold sm:text-4xl">
+              Beto también le hace una canción a tu grupo.
+            </h2>
+            <p className="mt-4 leading-relaxed text-muted">
+              Plena, reggaetón, salsa, típico o balada de despecho. Tú eliges
+              el género y Beto le compone un himno al grupo con los apodos y
+              las vergüenzas de cada quien. Ese audio va a terminar reenviado
+              en todos lados.
+            </p>
+            <Link
+              href="/nuevo"
+              className="mt-6 inline-block w-full rounded-full bg-accent px-6 py-3.5 text-center font-medium text-paper transition-transform hover:-translate-y-0.5 sm:w-auto sm:py-3"
+            >
+              Que Beto nos componga
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Diferenciador 2: Beto se adapta a tu país */}
+      <section className="border-y border-line bg-card">
+        <div className="mx-auto grid max-w-5xl items-center gap-10 px-6 py-14 sm:grid-cols-2 sm:py-20">
+          <div>
+            <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
+              Donde sea que estén
+            </p>
+            <h2 className="font-display mt-3 text-3xl font-semibold sm:text-4xl">
+              Dile de dónde son y Beto les habla en su idioma.
+            </h2>
+            <p className="mt-4 leading-relaxed text-muted">
+              Beto es panameño hasta la muerte, pero viaja. Le dices el país
+              del grupo y adapta la jerga, las referencias y los chistes:
+              el reporte les suena a alguien que creció con ustedes. Y si no
+              le dices nada, tira panameño clásico.
+            </p>
+            <Link
+              href="/nuevo"
+              className="mt-6 inline-block w-full rounded-full bg-accent px-6 py-3.5 text-center font-medium text-paper transition-transform hover:-translate-y-0.5 sm:w-auto sm:py-3"
+            >
+              Probar con mi grupo
+            </Link>
+          </div>
+          <div className="flex flex-wrap content-center justify-center gap-2">
+            {paises.map((p) => (
+              <span
+                key={p}
+                className="rounded-full border border-line bg-paper px-4 py-2 text-sm"
+              >
+                {p}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Caso de uso secundario: la pareja */}
+      <section>
         <div className="mx-auto grid max-w-5xl items-center gap-10 px-6 py-14 sm:grid-cols-2 sm:py-20">
           <div>
             <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
@@ -411,62 +375,33 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-5xl px-6 py-14 sm:py-20">
-        <h2 className="font-display text-3xl font-semibold sm:text-4xl">
-          Qué trae el reporte
-        </h2>
-        <p className="mt-3 text-muted">
-          La opinión completa de un pana que se leyó todo tu chat y tiene
-          demasiado que decir.
-        </p>
-        <div className="mt-8 grid gap-4 sm:mt-10 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
-          {contenido.map((c) => (
-            <article
-              key={c.titulo}
-              className="rounded-lg border border-line bg-card p-5"
-            >
-              <p className="text-2xl">{c.emoji}</p>
-              <h3 className="font-display mt-2 text-lg font-semibold">
-                {c.titulo}
-              </h3>
-              <p className="mt-1 text-sm leading-relaxed text-muted">{c.desc}</p>
-            </article>
-          ))}
+      {/* Más prueba social: todos los grupos caen */}
+      <section className="border-y border-line bg-card py-14 sm:py-16">
+        <div className="mx-auto max-w-5xl px-6">
+          <h2 className="font-display text-3xl font-semibold sm:text-4xl">
+            Familia, frenes o el grupo de la U
+          </h2>
+          <p className="mt-3 text-muted">
+            Beto los lee todos. Y en todos pasa lo mismo.
+          </p>
         </div>
-      </section>
-
-
-      <section className="border-t border-line bg-card">
-        <div className="mx-auto grid max-w-5xl gap-8 px-6 py-14 sm:grid-cols-[2fr_3fr] sm:items-center sm:gap-10 sm:py-20">
-          <div className="flex justify-center">
-            <div className="flex h-32 w-32 items-center justify-center rounded-full border border-line bg-paper text-5xl shadow-sm sm:h-40 sm:w-40 sm:text-6xl">
-              🎵
-            </div>
-          </div>
-          <div>
-            <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
-              Nuevo
-            </p>
-            <h2 className="font-display mt-3 text-3xl font-semibold sm:text-4xl">
-              Beto también le hace una canción a tu grupo.
-            </h2>
-            <p className="mt-4 leading-relaxed text-muted">
-              Plena, reggaetón, salsa, típico o balada de despecho. Tú eliges
-              el género y Beto le compone un himno al grupo con los apodos y
-              las vergüenzas de cada quien. Ese audio va a terminar reenviado
-              en todos lados.
-            </p>
-            <Link
-              href="/nuevo"
-              className="mt-6 inline-block w-full rounded-full bg-accent px-6 py-3.5 text-center font-medium text-paper transition-transform hover:-translate-y-0.5 sm:w-auto sm:py-3"
-            >
-              Que Beto nos componga
-            </Link>
+        <div className="marquee mt-10">
+          <div className="marquee-track items-start">
+            {[...reaccionesImgs, ...reaccionesImgs].map((r, i) => (
+              <Image
+                key={`${r.src}-${i}`}
+                src={r.src}
+                alt={r.alt}
+                width={300}
+                height={640}
+                className="w-48 shrink-0 rounded-[1.75rem] border border-line shadow-xl sm:w-56"
+              />
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="border-t border-line">
+      <section>
         <div className="mx-auto max-w-3xl px-6 py-14 sm:py-20">
           <h2 className="font-display text-3xl font-semibold sm:text-4xl">
             Preguntas que todo el mundo hace
@@ -487,6 +422,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Cierre: el último empujón */}
       <section className="border-t border-line bg-card">
         <div className="mx-auto max-w-5xl px-6 py-14 text-center sm:py-20">
           <Image
@@ -517,6 +453,12 @@ export default function Home() {
           >
             Pedir mi reporte
           </Link>
+          <div className="mt-4 flex flex-col items-center gap-1">
+            <ContadorReportes />
+            <p className="text-sm text-muted">
+              Sin cuenta y sin tarjeta · 3 min pa&rsquo;l reporte
+            </p>
+          </div>
         </div>
       </section>
     </>

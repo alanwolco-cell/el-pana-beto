@@ -15,16 +15,28 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "El Pana Beto — La IA que lee tu chat y te dice las verdades",
+  metadataBase: new URL("https://elpanabeto.com"),
+  title: {
+    default:
+      "El Pana Beto — La IA que se lee tu chat de WhatsApp y te dice las verdades",
+    template: "%s · El Pana Beto",
+  },
   description:
-    "Pásale cualquier chat de WhatsApp. Beto se lee todo y te escribe un reporte con lo que de verdad piensa del grupo: apodos, premios, banderas y frases célebres.",
+    "Sube el chat del grupo y Beto te escribe un reporte sin filtro: apodos, premios, banderas rojas, ranking de aura y las frases que nadie quería que quedaran guardadas. Sin cuenta y sin tarjeta, en 3 minutos.",
   openGraph: {
-    title: "El Pana Beto — Reportes de tu chat de grupo",
+    type: "website",
+    url: "https://elpanabeto.com",
+    title: "El Pana Beto — La IA que se lee el chat del grupo y suelta las verdades",
     description:
-      "Beto se lee todo tu chat y te dice las cosas como son.",
+      "Apodos, premios, banderas rojas y el ranking de aura de cada quien. Sin cuenta y sin tarjeta: en 3 minutos Beto opina de tu grupo.",
     locale: "es_PA",
     siteName: "El Pana Beto",
-    images: [{ url: "/beto.jpg", width: 900, height: 900, alt: "Beto" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "El Pana Beto — La IA que se lee el chat del grupo y suelta las verdades",
+    description:
+      "Apodos, premios, banderas rojas y el ranking de aura de cada quien. Sin cuenta y sin tarjeta: en 3 minutos Beto opina de tu grupo.",
   },
 };
 

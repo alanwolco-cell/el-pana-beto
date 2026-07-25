@@ -99,7 +99,7 @@ export function CancionDelGrupo({
   }
 
   return (
-    <div className="rounded-lg border border-line bg-card p-6">
+    <div className="rounded-xl border border-line bg-card p-5 shadow-card sm:p-6">
       {cargando ? (
         <div className="flex items-center gap-4 py-4">
           <div className="h-8 w-8 shrink-0 animate-spin rounded-full border-2 border-line border-t-accent" />
@@ -116,7 +116,7 @@ export function CancionDelGrupo({
           <a
             href={completaUrl}
             download
-            className="mt-3 inline-block text-sm font-medium text-accent underline"
+            className="mt-3 inline-block text-sm font-medium text-accent underline decoration-accent/40 underline-offset-4 transition-colors duration-200 hover:decoration-accent"
           >
             Descargar el himno del grupo ↓
           </a>
@@ -135,7 +135,7 @@ export function CancionDelGrupo({
               </p>
               <button
                 onClick={pagarCancion}
-                className="mt-3 w-full rounded-full bg-accent px-6 py-3 font-medium text-paper transition-transform hover:-translate-y-0.5"
+                className="mt-3 w-full rounded-full bg-accent px-6 py-3 font-medium text-paper shadow-boton transition-all duration-200 ease-suave hover:-translate-y-0.5 active:translate-y-0"
               >
                 Quiero la completa — ${precio.toFixed(2)}
               </button>
@@ -153,9 +153,10 @@ export function CancionDelGrupo({
               <button
                 key={g}
                 onClick={() => setGenero(g)}
-                className={`rounded-full border px-4 py-2.5 text-sm transition-colors ${
+                aria-pressed={genero === g}
+                className={`rounded-full border px-4 py-2.5 text-sm transition-all duration-200 ease-suave ${
                   genero === g
-                    ? "border-accent bg-paper font-medium"
+                    ? "border-ink bg-ink font-medium text-paper shadow-card"
                     : "border-line hover:border-muted"
                 }`}
               >
@@ -165,14 +166,14 @@ export function CancionDelGrupo({
           </div>
           <button
             onClick={generarPreview}
-            className="mt-5 w-full rounded-full bg-ink px-6 py-3 font-medium text-paper transition-colors hover:bg-accent sm:w-auto"
+            className="mt-5 w-full rounded-full bg-ink px-6 py-3 font-medium text-paper transition-all duration-200 ease-suave hover:-translate-y-0.5 hover:bg-accent active:translate-y-0 sm:w-auto"
           >
             🎵 Que Beto la componga
           </button>
         </>
       )}
       {error && (
-        <p className="mt-4 rounded-md border border-accent/40 bg-accent/5 px-4 py-3 text-sm text-accent">
+        <p className="mt-4 rounded-lg border border-accent/40 bg-accent/5 px-4 py-3 text-sm text-accent">
           {error}
         </p>
       )}

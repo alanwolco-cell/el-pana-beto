@@ -34,7 +34,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${guardado.reporte.titulo} — El Pana Beto`,
     description: guardado.reporte.veredicto.slice(0, 160),
+    // Fuera de Google (privacidad), pero los previews sociales siguen vivos.
+    robots: { index: false, follow: false },
   };
+}
+
+/* Separa el emoji inicial del título para tratarlo como ornamento, no como texto. */
+function separarEmoji(titulo: string): [string | null, string] {
+  const m = titulo.match(/^(\p{Extended_Pictographic}[\ufe0f\u20e3]*)\s+(.+)$/u);
+  return m ? [m[1], m[2]] : [null, titulo];
 }
 
 function Seccion({
@@ -44,11 +52,26 @@ function Seccion({
   titulo: string;
   children: React.ReactNode;
 }) {
+  const [emoji, texto] = separarEmoji(titulo);
   return (
-    <section className="mt-12 sm:mt-14">
-      <h2 className="font-display border-b border-line pb-3 text-2xl font-semibold sm:text-3xl">
-        {titulo}
-      </h2>
+    <section className="seccion mt-14 sm:mt-20">
+      <header>
+        <div className="flex items-center gap-3">
+          <span
+            aria-hidden
+            className="seccion-num font-display text-sm font-medium italic tracking-wide text-accent"
+          />
+          <span aria-hidden className="h-px flex-1 bg-line" />
+          {emoji && (
+            <span aria-hidden className="text-lg leading-none">
+              {emoji}
+            </span>
+          )}
+        </div>
+        <h2 className="font-display mt-3 text-[1.65rem] font-semibold leading-tight tracking-tight sm:text-3xl">
+          {texto}
+        </h2>
+      </header>
       <div className="mt-6">{children}</div>
     </section>
   );
@@ -121,21 +144,21 @@ export default async function PaginaReporte({ params }: Props) {
       },
     ];
     return (
-      <article className="mx-auto max-w-2xl px-6 py-10 sm:py-16">
-        <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
+      <article className="con-secciones mx-auto max-w-2xl px-6 py-10 sm:py-16">
+        <p className="aparecer text-xs font-medium uppercase tracking-[0.2em] text-accent">
           {etiquetaTipo} · {fecha}
           {statMensajes}
         </p>
-        <h1 className="font-display mt-4 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl md:text-5xl">
+        <h1 className="aparecer aparecer-1 font-display mt-4 text-[2.1rem] font-semibold leading-[1.08] tracking-tight sm:text-[2.75rem] md:text-[3.25rem]">
           {r.titulo}
         </h1>
-        <div className="mt-6 flex items-center gap-3 border-y border-line py-4">
+        <div className="aparecer aparecer-2 mt-7 flex items-center gap-3 border-y border-line py-4">
           <Image
             src="/beto.jpg"
             alt="Beto"
-            width={40}
-            height={40}
-            className="rounded-full border border-line object-cover"
+            width={44}
+            height={44}
+            className="rounded-full border border-line object-cover shadow-card"
           />
           <p className="text-sm text-muted">
             Por <span className="font-medium text-ink">Beto</span>, que se leyó
@@ -143,19 +166,18 @@ export default async function PaginaReporte({ params }: Props) {
           </p>
         </div>
 
-        <p className="mt-8 text-lg leading-relaxed">{r.veredicto}</p>
+        <p className="capitular mt-9 text-lg leading-8 text-ink-soft sm:text-[1.19rem] sm:leading-9">
+          {r.veredicto}
+        </p>
 
         {primerPerfil && (
-          <div className="mt-10">
-            <h2 className="font-display border-b border-line pb-3 text-2xl font-semibold">
-              👤 Beto arranca con este
-            </h2>
-            <div className="mt-6 rounded-lg border border-line bg-card p-5">
+          <Seccion titulo="👤 Beto arranca con este">
+            <div className="rounded-xl border border-line bg-card p-5 shadow-card sm:p-6">
               <div className="flex flex-wrap items-baseline gap-x-3">
                 <h3 className="font-display text-lg font-semibold">
                   {primerPerfil.nombre}
                 </h3>
-                <span className="text-sm italic text-accent">
+                <span className="font-display text-sm italic text-accent">
                   «{primerPerfil.apodo}»
                 </span>
               </div>
@@ -163,51 +185,48 @@ export default async function PaginaReporte({ params }: Props) {
                 {primerPerfil.descripcion}
               </p>
             </div>
-          </div>
+          </Seccion>
         )}
 
         {segundoPerfil && (
-          <div className="relative mt-4 overflow-hidden rounded-lg border border-line bg-card p-5">
+          <div className="relative mt-4 overflow-hidden rounded-xl border border-line bg-card p-5 shadow-card sm:p-6">
             <div className="flex flex-wrap items-baseline gap-x-3">
               <h3 className="font-display text-lg font-semibold">
                 {segundoPerfil.nombre}
               </h3>
-              <span className="text-sm italic text-accent">
+              <span className="font-display text-sm italic text-accent">
                 «{segundoPerfil.apodo}»
               </span>
             </div>
             <p className="mt-2 leading-relaxed text-muted">
-              {segundoPerfil.descripcion.slice(0, 90)}
+              {segundoPerfil.descripcion.slice(0, 90)}…
             </p>
-            <div className="absolute inset-0 flex items-end justify-center bg-gradient-to-b from-transparent via-card/60 to-card pb-4">
-              <p className="text-sm font-medium">
+            <div className="absolute inset-0 flex items-end justify-center bg-gradient-to-b from-transparent via-card/70 to-card pb-5">
+              <p className="rounded-full border border-line bg-paper px-4 py-1.5 text-sm font-medium shadow-card">
                 🔒 Y justo cuando se estaba poniendo bueno…
               </p>
             </div>
           </div>
         )}
         {r.perfiles.length > 2 && (
-          <p className="mt-3 text-sm text-muted">
+          <p className="mt-3 text-sm italic text-muted">
             …y {r.perfiles.length - 2} perfiles más esperando bajo llave.
           </p>
         )}
 
-        <div className="mt-10">
-          <h2 className="font-display border-b border-line pb-3 text-2xl font-semibold">
-            🔒 Lo que falta por desbloquear
-          </h2>
-          <ul className="mt-6 space-y-3">
+        <Seccion titulo="🔒 Lo que falta por desbloquear">
+          <ul>
             {bloqueado.map((b) => (
               <li
                 key={b.texto}
-                className="flex items-center gap-3 rounded-lg border border-line bg-card px-4 py-3"
+                className="flex items-center gap-3.5 border-b border-line py-3.5 text-ink-soft last:border-0"
               >
-                <span>{b.icono}</span>
+                <span aria-hidden>{b.icono}</span>
                 <span className="select-none blur-[1px]">{b.texto}</span>
               </li>
             ))}
           </ul>
-        </div>
+        </Seccion>
 
         <PanelDesbloqueo
           reporteId={id}
@@ -228,22 +247,22 @@ export default async function PaginaReporte({ params }: Props) {
   }
 
   return (
-    <article className="mx-auto max-w-2xl px-6 py-10 sm:py-16">
-      <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
+    <article className="con-secciones mx-auto max-w-2xl px-6 py-10 sm:py-16">
+      <p className="aparecer text-xs font-medium uppercase tracking-[0.2em] text-accent">
         {etiquetaTipo} · {fecha}
         {statMensajes}
       </p>
-      <h1 className="font-display mt-4 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl md:text-5xl">
+      <h1 className="aparecer aparecer-1 font-display mt-4 text-[2.1rem] font-semibold leading-[1.08] tracking-tight sm:text-[2.75rem] md:text-[3.25rem]">
         {r.titulo}
       </h1>
-      <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-y border-line py-4">
+      <div className="aparecer aparecer-2 mt-7 flex flex-wrap items-center justify-between gap-3 border-y border-line py-4">
         <div className="flex items-center gap-3">
           <Image
             src="/beto.jpg"
             alt="Beto"
-            width={40}
-            height={40}
-            className="rounded-full border border-line object-cover"
+            width={44}
+            height={44}
+            className="rounded-full border border-line object-cover shadow-card"
           />
           <p className="text-sm text-muted">
             Por <span className="font-medium text-ink">Beto</span>, que se leyó
@@ -257,18 +276,22 @@ export default async function PaginaReporte({ params }: Props) {
       </div>
 
       {guardado.fotoUrl && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={guardado.fotoUrl}
-          alt={`Foto del grupo ${guardado.grupo}`}
-          className="mt-8 max-h-80 w-full rounded-lg border border-line object-cover"
-        />
+        <figure className="mt-8 rounded-xl border border-line bg-card p-2 shadow-card">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={guardado.fotoUrl}
+            alt={`Foto del grupo ${guardado.grupo}`}
+            className="max-h-80 w-full rounded-lg object-cover"
+          />
+        </figure>
       )}
 
-      <p className="mt-10 text-lg leading-relaxed">{r.veredicto}</p>
+      <p className="capitular mt-10 text-lg leading-8 text-ink-soft sm:text-[1.19rem] sm:leading-9">
+        {r.veredicto}
+      </p>
 
       {pagos?.cupones && pagos.cupones.length > 0 && (
-        <div className="mt-8 rounded-lg border border-line bg-card p-5">
+        <div className="mt-9 rounded-xl border border-dashed border-accent/40 bg-card p-5 shadow-card">
           <p className="font-display font-semibold">
             🎟️ Tus códigos pa&rsquo;l próximo bochinche
           </p>
@@ -276,19 +299,32 @@ export default async function PaginaReporte({ params }: Props) {
             Cada uno desbloquea el reporte de otro chat. Úsalos en el botón
             «¿Tienes un código de Beto?».
           </p>
-          <p className="mt-3 font-mono text-sm">{pagos.cupones.join(" · ")}</p>
+          <div className="mt-3.5 flex flex-wrap gap-2">
+            {pagos.cupones.map((c) => (
+              <span
+                key={c}
+                className="rounded-md border border-line bg-paper px-2.5 py-1 font-mono text-sm tracking-wide"
+              >
+                {c}
+              </span>
+            ))}
+          </div>
         </div>
       )}
 
       {pagosConfigurados() && (
-        <div className="mt-8 rounded-lg border border-line bg-card p-5">
+        <div className="mt-5 rounded-xl border border-dashed border-accent/40 bg-card p-5 shadow-card">
           <p className="font-display font-semibold">🤝 Tu código de pana</p>
           <p className="mt-1 text-sm text-muted">
             Regala ${descuentoReferido().toFixed(2)} de descuento a cualquier
             otro grupo. Y cuando {USOS_PARA_CORTESIA} grupos lo usen, Beto te
             debe un reporte de cortesía. Te aparece aquí solito.
           </p>
-          <p className="mt-3 font-mono text-sm">{await obtenerCodigoPana(id)}</p>
+          <div className="mt-3.5">
+            <span className="rounded-md border border-line bg-paper px-2.5 py-1 font-mono text-sm tracking-wide">
+              {await obtenerCodigoPana(id)}
+            </span>
+          </div>
         </div>
       )}
 
@@ -308,13 +344,15 @@ export default async function PaginaReporte({ params }: Props) {
           {r.perfiles.map((p) => (
             <div
               key={p.nombre}
-              className="rounded-lg border border-line bg-card p-5"
+              className="rounded-xl border border-line bg-card p-5 shadow-card sm:p-6"
             >
               <div className="flex flex-wrap items-baseline gap-x-3">
                 <h3 className="font-display text-lg font-semibold">
                   {p.nombre}
                 </h3>
-                <span className="text-sm italic text-accent">«{p.apodo}»</span>
+                <span className="font-display text-sm italic text-accent">
+                  «{p.apodo}»
+                </span>
               </div>
               <p className="mt-2 leading-relaxed text-muted">{p.descripcion}</p>
             </div>
@@ -325,11 +363,14 @@ export default async function PaginaReporte({ params }: Props) {
       <Seccion titulo="🏆 Premios y reconocimientos">
         <ul className="space-y-4">
           {r.premios.map((p) => (
-            <li key={p.premio} className="border-b border-line pb-4">
+            <li key={p.premio} className="border-b border-line pb-4 last:border-0">
               <p className="font-medium">
-                {p.premio} — <span className="text-accent">{p.ganador}</span>
+                {p.premio} —{" "}
+                <span className="font-display italic text-accent">
+                  {p.ganador}
+                </span>
               </p>
-              <p className="mt-1 text-sm text-muted">{p.motivo}</p>
+              <p className="mt-1 text-sm leading-relaxed text-muted">{p.motivo}</p>
             </li>
           ))}
         </ul>
@@ -341,22 +382,26 @@ export default async function PaginaReporte({ params }: Props) {
             {r.aura.map((a, i) => (
               <li
                 key={a.nombre}
-                className="flex items-baseline gap-4 border-b border-line pb-4"
+                className="flex items-baseline gap-4 border-b border-line pb-4 last:border-0"
               >
-                <span className="font-display w-8 shrink-0 text-xl font-semibold text-muted">
+                <span
+                  className={`font-display w-9 shrink-0 text-xl font-semibold italic ${i === 0 ? "text-accent" : "text-muted"}`}
+                >
                   {i + 1}º
                 </span>
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-baseline justify-between gap-x-3">
                     <span className="font-medium">{a.nombre}</span>
                     <span
-                      className={`font-semibold ${a.puntos < 0 ? "text-accent" : "text-green-700"}`}
+                      className={`font-semibold tabular-nums ${a.puntos < 0 ? "text-accent" : "text-verde"}`}
                     >
                       {a.puntos >= 0 ? "+" : "−"}
                       {Math.abs(a.puntos).toLocaleString("es-PA")} aura
                     </span>
                   </div>
-                  <p className="mt-1 text-sm text-muted">{a.motivo}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-muted">
+                    {a.motivo}
+                  </p>
                 </div>
               </li>
             ))}
@@ -370,14 +415,18 @@ export default async function PaginaReporte({ params }: Props) {
             {r.peleas.map((p, i) => (
               <li
                 key={p.nombre}
-                className="flex items-baseline gap-4 border-b border-line pb-4"
+                className="flex items-baseline gap-4 border-b border-line pb-4 last:border-0"
               >
-                <span className="font-display w-8 shrink-0 text-xl font-semibold text-muted">
+                <span
+                  className={`font-display w-9 shrink-0 text-xl font-semibold italic ${i === 0 ? "text-accent" : "text-muted"}`}
+                >
                   {i + 1}º
                 </span>
                 <div className="min-w-0 flex-1">
                   <p className="font-medium">{p.nombre}</p>
-                  <p className="mt-1 text-sm text-muted">{p.motivo}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-muted">
+                    {p.motivo}
+                  </p>
                 </div>
               </li>
             ))}
@@ -390,7 +439,7 @@ export default async function PaginaReporte({ params }: Props) {
           <ol className="space-y-3">
             {lista.items.map((item, i) => (
               <li key={i} className="flex gap-3 leading-relaxed">
-                <span className="font-display font-semibold text-accent">
+                <span className="font-display w-5 shrink-0 font-semibold italic text-accent">
                   {i + 1}.
                 </span>
                 <span>{item}</span>
@@ -402,11 +451,18 @@ export default async function PaginaReporte({ params }: Props) {
 
       {r.vocabulario.length > 0 && (
         <Seccion titulo="🗣️ Diccionario del grupo">
-          <dl className="space-y-4">
+          <dl className="space-y-5">
             {r.vocabulario.map((v) => (
-              <div key={v.termino} className="flex flex-col gap-1">
-                <dt className="font-display font-semibold">{v.termino}</dt>
-                <dd className="text-muted">{v.definicion}</dd>
+              <div
+                key={v.termino}
+                className="border-b border-line pb-5 last:border-0 last:pb-0"
+              >
+                <dt className="font-display text-lg font-semibold">
+                  {v.termino}
+                </dt>
+                <dd className="mt-1 leading-relaxed text-muted">
+                  {v.definicion}
+                </dd>
               </div>
             ))}
           </dl>
@@ -414,28 +470,28 @@ export default async function PaginaReporte({ params }: Props) {
       )}
 
       <Seccion titulo="🚩 Banderas">
-        <div className="grid gap-6 sm:grid-cols-2">
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-widest text-green-700">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="rounded-xl border border-verde/25 bg-verde/[0.05] p-5">
+            <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-verde">
               Verdes
             </h3>
-            <ul className="mt-3 space-y-2">
+            <ul className="mt-4 space-y-2.5">
               {r.banderasVerdes.map((b) => (
-                <li key={b} className="flex gap-2 text-sm leading-relaxed">
-                  <span className="text-green-700">＋</span>
+                <li key={b} className="flex gap-2.5 text-sm leading-relaxed">
+                  <span className="shrink-0 text-verde">＋</span>
                   {b}
                 </li>
               ))}
             </ul>
           </div>
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-widest text-accent">
+          <div className="rounded-xl border border-accent/25 bg-accent/[0.05] p-5">
+            <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-accent">
               Rojas
             </h3>
-            <ul className="mt-3 space-y-2">
+            <ul className="mt-4 space-y-2.5">
               {r.banderasRojas.map((b) => (
-                <li key={b} className="flex gap-2 text-sm leading-relaxed">
-                  <span className="text-accent">－</span>
+                <li key={b} className="flex gap-2.5 text-sm leading-relaxed">
+                  <span className="shrink-0 text-accent">－</span>
                   {b}
                 </li>
               ))}
@@ -447,15 +503,18 @@ export default async function PaginaReporte({ params }: Props) {
       <Seccion titulo="🤯 Frases célebres">
         <div className="space-y-8">
           {r.frases.map((f) => (
-            <blockquote key={f.frase} className="border-l-2 border-accent pl-5">
-              <p className="font-display text-xl leading-snug">
+            <blockquote
+              key={f.frase}
+              className="border-l-2 border-accent pl-5 sm:pl-6"
+            >
+              <p className="font-display text-xl italic leading-snug sm:text-[1.4rem]">
                 «{f.frase}»
               </p>
               <footer className="mt-3">
                 <span className="text-sm font-medium text-ink">
-                  {f.autor}
+                  — {f.autor}
                 </span>
-                <span className="mt-0.5 block text-sm leading-relaxed text-muted">
+                <span className="mt-1 block text-sm leading-relaxed text-muted">
                   {f.contexto}
                 </span>
               </footer>
@@ -481,22 +540,25 @@ export default async function PaginaReporte({ params }: Props) {
         </Seccion>
       )}
 
-      <div className="mt-14 rounded-lg border border-line bg-card p-6 text-center sm:mt-16 sm:p-8">
-        <h2 className="font-display text-2xl font-semibold">
+      <div className="mt-16 rounded-2xl bg-ink px-6 py-10 text-center shadow-panel sm:mt-20 sm:px-10 sm:py-12">
+        <p className="text-xs font-medium uppercase tracking-[0.2em] text-paper/50">
+          El bochinche no se acaba aquí
+        </p>
+        <h2 className="font-display mt-3 text-3xl font-semibold text-paper">
           ¿Cuál chat sigue?
         </h2>
-        <p className="mt-2 text-muted">
+        <p className="mx-auto mt-2 max-w-md text-paper/65">
           El de la familia, el de la ex, el del trabajo… Beto los lee todos.
         </p>
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+        <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
           <Link
             href="/nuevo"
-            className="inline-block rounded-full bg-accent px-6 py-3 font-medium text-paper transition-transform hover:-translate-y-0.5"
+            className="inline-block rounded-full bg-accent px-6 py-3 font-medium text-paper shadow-boton transition-all duration-200 ease-suave hover:-translate-y-0.5 active:translate-y-0"
           >
             Pedir otro reporte
           </Link>
-          <BotonCompartir />
-          <BotonCompartirImagen reporteId={id} />
+          <BotonCompartir variante="oscuro" />
+          <BotonCompartirImagen reporteId={id} variante="oscuro" />
         </div>
       </div>
     </article>

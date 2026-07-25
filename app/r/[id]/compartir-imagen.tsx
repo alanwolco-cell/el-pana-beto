@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 
-export function BotonCompartirImagen({ reporteId }: { reporteId: string }) {
+type Props = { reporteId: string; variante?: "claro" | "oscuro" };
+
+export function BotonCompartirImagen({ reporteId, variante = "claro" }: Props) {
   const [estado, setEstado] = useState<
     "listo" | "generando" | "error"
   >("listo");
@@ -50,7 +52,11 @@ export function BotonCompartirImagen({ reporteId }: { reporteId: string }) {
     <button
       onClick={compartir}
       disabled={estado === "generando"}
-      className="rounded-full border border-ink px-4 py-2 text-sm font-medium transition-colors hover:bg-ink hover:text-paper disabled:opacity-60"
+      className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors duration-200 disabled:opacity-60 ${
+        variante === "oscuro"
+          ? "border-paper/30 text-paper hover:bg-paper hover:text-ink"
+          : "border-ink hover:bg-ink hover:text-paper"
+      }`}
     >
       {estado === "generando"
         ? "Preparando la tarjeta…"
