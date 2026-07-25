@@ -2,32 +2,12 @@ import { randomUUID } from "crypto";
 import { generateText, Output } from "ai";
 import { NextResponse } from "next/server";
 import { promptSistema } from "@/lib/beto";
+import { muestrearChat } from "@/lib/parse-chat";
 import { reporteSchema, type ReporteGuardado } from "@/lib/schema";
 import { guardarFoto, guardarReporte } from "@/lib/storage";
 import { enviarReporteWhatsApp, whatsappConfigurado } from "@/lib/whatsapp";
 
 export const maxDuration = 300;
-
-const MAX_CHARS = 400_000;
-
-function alSalto(texto: string, idx: number): number {
-  const salto = texto.indexOf("\n", idx);
-  return salto === -1 ? idx : salto + 1;
-}
-
-// Anti recency-bias: si el chat no cabe completo, se muestrea el inicio,
-// el medio y el final en vez de quedarse solo con lo más reciente.
-function muestrearChat(chat: string): string {
-  if (chat.length <= MAX_CHARS) return chat;
-  const tercio = Math.floor(MAX_CHARS / 3);
-  const inicio = chat.slice(0, alSalto(chat, tercio));
-  const desdeMedio = alSalto(chat, Math.floor(chat.length / 2));
-  const medio = chat.slice(desdeMedio, alSalto(chat, desdeMedio + tercio));
-  const fin = chat.slice(alSalto(chat, chat.length - tercio));
-  const corte =
-    "\n\n[NOTA: aquí se omitió un tramo del chat por longitud — considera igual las tres épocas]\n\n";
-  return inicio + corte + medio + corte + fin;
-}
 
 function contarMensajes(chat: string): number {
   const patron = /^\[?‎?\d{1,2}[\/.-]\d{1,2}[\/.-]\d{2,4}/gm;
@@ -46,6 +26,7 @@ export async function POST(req: Request) {
     nombreUsuario?: string;
     foto?: string;
     telefono?: string;
+    mensajes?: number;
   };
   try {
     cuerpo = await req.json();
@@ -96,7 +77,10 @@ export async function POST(req: Request) {
       grupo,
       tipo,
       creado: new Date().toISOString(),
-      mensajes: contarMensajes(chat),
+      mensajes:
+        Number.isFinite(cuerpo.mensajes) && cuerpo.mensajes! > 0
+          ? Math.trunc(cuerpo.mensajes!)
+          : contarMensajes(chat),
       fotoUrl,
       reporte: output,
     };

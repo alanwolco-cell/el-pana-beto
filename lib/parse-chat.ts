@@ -28,6 +28,28 @@ export function analizarChat(texto: string): {
   return { participantes, total };
 }
 
+const MAX_CHARS = 400_000;
+
+function alSalto(texto: string, idx: number): number {
+  const salto = texto.indexOf("\n", idx);
+  return salto === -1 ? idx : salto + 1;
+}
+
+// Anti recency-bias: si el chat no cabe completo, se muestrea el inicio,
+// el medio y el final en vez de quedarse solo con lo más reciente.
+// Se ejecuta en el navegador para que el envío nunca pese demasiado.
+export function muestrearChat(chat: string, max: number = MAX_CHARS): string {
+  if (chat.length <= max) return chat;
+  const tercio = Math.floor(max / 3);
+  const inicio = chat.slice(0, alSalto(chat, tercio));
+  const desdeMedio = alSalto(chat, Math.floor(chat.length / 2));
+  const medio = chat.slice(desdeMedio, alSalto(chat, desdeMedio + tercio));
+  const fin = chat.slice(alSalto(chat, chat.length - tercio));
+  const corte =
+    "\n\n[NOTA: aquí se omitió un tramo del chat por longitud — considera igual las tres épocas]\n\n";
+  return inicio + corte + medio + corte + fin;
+}
+
 export function nombreGrupoDesdeArchivo(nombre: string): string {
   return nombre
     .replace(/\.txt$/i, "")

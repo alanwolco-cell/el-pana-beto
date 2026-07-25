@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { ChatWhatsAppDark } from "@/app/chat-demo";
 import {
   analizarChat,
+  muestrearChat,
   nombreGrupoDesdeArchivo,
   type Participante,
 } from "@/lib/parse-chat";
@@ -157,7 +158,10 @@ export default function NuevoReporte() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           grupo,
-          chat,
+          // El recorte inteligente pasa aquí: el envío nunca supera ~1 MB
+          // aunque el chat tenga años de historia.
+          chat: muestrearChat(chat),
+          mensajes: totalMensajes || undefined,
           idioma,
           contexto,
           nota,
