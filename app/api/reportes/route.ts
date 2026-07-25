@@ -55,7 +55,11 @@ export async function POST(req: Request) {
   try {
     const opciones = {
       output: Output.object({ schema: reporteSchema }),
-      temperature: 1,
+      // 0.9 en vez de 1.0: sigue creativo pero mucho menos propenso a
+      // loops de repetición. maxRetries reintenta si la validación de
+      // longitud rechaza un campo desbordado (el bug del loop).
+      temperature: 0.9,
+      maxRetries: 2,
       system: promptSistema({
         tipo,
         idioma: (cuerpo.idioma ?? "").slice(0, 40),
@@ -65,7 +69,7 @@ export async function POST(req: Request) {
         pais: (cuerpo.pais ?? "").slice(0, 40),
       }),
       prompt: `Nombre del grupo: ${grupo || "(sin nombre)"}\n\nChat exportado:\n\n${texto}`,
-      maxOutputTokens: 16_000,
+      maxOutputTokens: 12_000,
     };
 
     // Opus para el mejor humor; si no hay créditos en el Gateway (tier gratis),
