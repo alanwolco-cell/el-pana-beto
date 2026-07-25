@@ -194,10 +194,9 @@ export default function Home() {
             </div>
             <p className="mt-6 max-w-xl rounded-lg border border-line bg-card px-4 py-3 text-sm text-muted">
               🔒 <span className="font-medium text-ink">Tu chat no se guarda.</span>{" "}
-              Se procesa una sola vez para escribir el reporte, se descarta y
-              nunca se usa para entrenar ningún modelo. Tratamos tus datos
-              conforme a la Ley 81 de 2019 de Protección de Datos Personales de
-              Panamá.
+              Se procesa una sola vez para escribir el reporte y se descarta.
+              Tratamos tus datos conforme a la Ley 81 de 2019 de Protección de
+              Datos Personales de Panamá.
             </p>
           </div>
           <Image
