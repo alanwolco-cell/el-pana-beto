@@ -50,7 +50,7 @@ export function BotonCompartirImagen({ reporteId }: { reporteId: string }) {
     <button
       onClick={compartir}
       disabled={estado === "generando"}
-      className="rounded-full border border-ink px-4 py-1.5 text-sm font-medium transition-colors hover:bg-ink hover:text-paper disabled:opacity-60"
+      className="rounded-full border border-ink px-4 py-2 text-sm font-medium transition-colors hover:bg-ink hover:text-paper disabled:opacity-60"
     >
       {estado === "generando"
         ? "Preparando la tarjeta…"

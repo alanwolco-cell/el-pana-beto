@@ -35,23 +35,25 @@ export default function RootLayout({
     <html lang="es">
       <body className={`${fraunces.variable} ${inter.variable}`}>
         <header className="border-b border-line">
-          <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+          <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-6 py-3 sm:py-4">
             <Link
               href="/"
-              className="font-display flex items-center gap-2.5 text-xl font-semibold tracking-tight"
+              className="font-display flex min-w-0 items-center gap-2 text-lg font-semibold tracking-tight sm:gap-2.5 sm:text-xl"
             >
               <Image
                 src="/beto.jpg"
                 alt=""
                 width={34}
                 height={34}
-                className="rounded-full border border-line object-cover"
+                className="h-8 w-8 shrink-0 rounded-full border border-line object-cover sm:h-[34px] sm:w-[34px]"
               />
-              El Pana Beto<span className="text-accent">.</span>
+              <span className="truncate">
+                El Pana Beto<span className="text-accent">.</span>
+              </span>
             </Link>
             <Link
               href="/nuevo"
-              className="rounded-full bg-ink px-4 py-2 text-sm font-medium text-paper transition-colors hover:bg-accent"
+              className="shrink-0 whitespace-nowrap rounded-full bg-ink px-4 py-2.5 text-sm font-medium text-paper transition-colors hover:bg-accent sm:py-2"
             >
               Pedir mi reporte
             </Link>

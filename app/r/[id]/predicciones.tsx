@@ -9,7 +9,7 @@ export function Predicciones({ items }: { items: Prediccion[] }) {
 
   if (!abierto) {
     return (
-      <div className="rounded-lg border border-line bg-card p-8 text-center">
+      <div className="rounded-lg border border-line bg-card p-6 text-center sm:p-8">
         <p className="font-display text-lg font-semibold">
           Beto ya sabe cómo va a reaccionar cada uno a este reporte.
         </p>
@@ -19,7 +19,7 @@ export function Predicciones({ items }: { items: Prediccion[] }) {
         </p>
         <button
           onClick={() => setAbierto(true)}
-          className="mt-5 rounded-full bg-ink px-6 py-3 font-medium text-paper transition-colors hover:bg-accent"
+          className="mt-5 w-full rounded-full bg-ink px-6 py-3 font-medium text-paper transition-colors hover:bg-accent sm:w-auto"
         >
           🔮 Revelar predicciones
         </button>

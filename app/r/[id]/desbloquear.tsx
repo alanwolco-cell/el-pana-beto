@@ -113,7 +113,7 @@ export function PanelDesbloqueo({
   }
 
   return (
-    <div className="mt-10 rounded-lg border border-line bg-card p-8">
+    <div className="mt-10 rounded-lg border border-line bg-card p-5 sm:p-8">
       <h2 className="font-display text-2xl font-semibold">
         Beto ya lo escribió todo. Está ahí, con el documento bocabajo,
         tomándose un café.
@@ -182,11 +182,11 @@ export function PanelDesbloqueo({
           <legend className="text-sm font-medium">
             ¿Pagas completo o hacen la vaca?
           </legend>
-          <div className="mt-2 grid grid-cols-4 gap-2">
+          <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4">
             {[1, 2, 3, 4].map((n) => (
               <label
                 key={n}
-                className={`cursor-pointer rounded-md border px-2 py-2 text-center text-sm transition-colors ${
+                className={`cursor-pointer rounded-md border px-2 py-2.5 text-center text-sm transition-colors ${
                   partes === n
                     ? "border-accent bg-paper font-medium"
                     : "border-line hover:border-muted"
@@ -253,16 +253,16 @@ export function PanelDesbloqueo({
         <p className="text-xs text-muted">
           Pago seguro con tarjeta vía PagueloFacil.
         </p>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setMostrarCodigo((v) => !v)}
-            className="rounded-full border border-line px-4 py-1.5 text-xs font-medium text-muted transition-colors hover:border-muted"
+            className="rounded-full border border-line px-4 py-2 text-xs font-medium text-muted transition-colors hover:border-muted"
           >
             ¿Tienes un código de Beto?
           </button>
           <button
             onClick={copiarLink}
-            className="rounded-full border border-ink px-4 py-1.5 text-xs font-medium transition-colors hover:bg-ink hover:text-paper"
+            className="rounded-full border border-ink px-4 py-2 text-xs font-medium transition-colors hover:bg-ink hover:text-paper"
           >
             {copiado ? "¡Copiado!" : "Mandar el link al grupo"}
           </button>
@@ -276,7 +276,7 @@ export function PanelDesbloqueo({
             value={codigo}
             onChange={(e) => setCodigo(e.target.value)}
             placeholder="BETO-XXXXXXXX"
-            className="w-full rounded-md border border-line bg-paper px-4 py-2.5 text-sm uppercase outline-none transition-colors focus:border-accent"
+            className="w-full rounded-md border border-line bg-paper px-4 py-2.5 text-base uppercase outline-none transition-colors focus:border-accent sm:text-sm"
           />
           <button
             onClick={canjear}

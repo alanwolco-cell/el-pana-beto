@@ -23,7 +23,7 @@ export function BotonCompartir() {
   return (
     <button
       onClick={compartir}
-      className="rounded-full border border-ink px-4 py-1.5 text-sm font-medium transition-colors hover:bg-ink hover:text-paper"
+      className="rounded-full border border-ink px-4 py-2 text-sm font-medium transition-colors hover:bg-ink hover:text-paper"
     >
       {copiado ? "¡Enlace copiado!" : "Compartir"}
     </button>

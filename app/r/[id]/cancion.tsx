@@ -153,7 +153,7 @@ export function CancionDelGrupo({
               <button
                 key={g}
                 onClick={() => setGenero(g)}
-                className={`rounded-full border px-4 py-2 text-sm transition-colors ${
+                className={`rounded-full border px-4 py-2.5 text-sm transition-colors ${
                   genero === g
                     ? "border-accent bg-paper font-medium"
                     : "border-line hover:border-muted"
@@ -165,7 +165,7 @@ export function CancionDelGrupo({
           </div>
           <button
             onClick={generarPreview}
-            className="mt-5 rounded-full bg-ink px-6 py-3 font-medium text-paper transition-colors hover:bg-accent"
+            className="mt-5 w-full rounded-full bg-ink px-6 py-3 font-medium text-paper transition-colors hover:bg-accent sm:w-auto"
           >
             🎵 Que Beto la componga
           </button>

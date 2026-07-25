@@ -45,7 +45,7 @@ function Seccion({
   children: React.ReactNode;
 }) {
   return (
-    <section className="mt-14">
+    <section className="mt-12 sm:mt-14">
       <h2 className="font-display border-b border-line pb-3 text-2xl font-semibold sm:text-3xl">
         {titulo}
       </h2>
@@ -66,7 +66,11 @@ export default async function PaginaReporte({ params }: Props) {
   });
 
   const etiquetaTipo =
-    guardado.tipo === "profundo" ? "Reporte profundo" : "Reporte clásico";
+    guardado.tipo === "profundo"
+      ? "Reporte profundo"
+      : guardado.tipo === "yeye"
+        ? "Reporte yeye"
+        : "Reporte clásico";
   const statMensajes = guardado.mensajes
     ? ` · Beto leyó ${guardado.mensajes.toLocaleString("es-PA")} mensajes`
     : "";
@@ -117,12 +121,12 @@ export default async function PaginaReporte({ params }: Props) {
       },
     ];
     return (
-      <article className="mx-auto max-w-2xl px-6 py-16">
+      <article className="mx-auto max-w-2xl px-6 py-10 sm:py-16">
         <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
           {etiquetaTipo} · {fecha}
           {statMensajes}
         </p>
-        <h1 className="font-display mt-4 text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
+        <h1 className="font-display mt-4 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl md:text-5xl">
           {r.titulo}
         </h1>
         <div className="mt-6 flex items-center gap-3 border-y border-line py-4">
@@ -224,15 +228,15 @@ export default async function PaginaReporte({ params }: Props) {
   }
 
   return (
-    <article className="mx-auto max-w-2xl px-6 py-16">
+    <article className="mx-auto max-w-2xl px-6 py-10 sm:py-16">
       <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
         {etiquetaTipo} · {fecha}
         {statMensajes}
       </p>
-      <h1 className="font-display mt-4 text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
+      <h1 className="font-display mt-4 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl md:text-5xl">
         {r.titulo}
       </h1>
-      <div className="mt-6 flex items-center justify-between border-y border-line py-4">
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-y border-line py-4">
         <div className="flex items-center gap-3">
           <Image
             src="/beto.jpg"
@@ -477,7 +481,7 @@ export default async function PaginaReporte({ params }: Props) {
         </Seccion>
       )}
 
-      <div className="mt-16 rounded-lg border border-line bg-card p-8 text-center">
+      <div className="mt-14 rounded-lg border border-line bg-card p-6 text-center sm:mt-16 sm:p-8">
         <h2 className="font-display text-2xl font-semibold">
           ¿Cuál chat sigue?
         </h2>

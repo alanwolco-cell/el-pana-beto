@@ -217,7 +217,7 @@ export default function NuevoReporte() {
 
   if (cargando) {
     return (
-      <div className="mx-auto flex max-w-xl flex-col items-center px-6 py-32 text-center">
+      <div className="mx-auto flex max-w-xl flex-col items-center px-6 py-24 text-center sm:py-32">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/beto.jpg"
@@ -236,13 +236,17 @@ export default function NuevoReporte() {
   }
 
   const botonPrimario =
-    "rounded-full bg-ink px-6 py-3 font-medium text-paper transition-colors hover:bg-accent disabled:opacity-40 disabled:hover:bg-ink";
+    "w-full rounded-full bg-ink px-6 py-3.5 text-center font-medium text-paper transition-colors hover:bg-accent disabled:opacity-40 disabled:hover:bg-ink sm:w-auto sm:py-3";
 
   return (
-    <div className="mx-auto max-w-2xl px-6 py-12">
+    <div className="mx-auto max-w-2xl px-6 py-8 sm:py-12">
       <div className="flex items-center justify-between text-sm text-muted">
         {paso > 1 ? (
-          <button onClick={retroceder} aria-label="Volver" className="text-xl">
+          <button
+            onClick={retroceder}
+            aria-label="Volver"
+            className="-ml-3 flex h-10 w-10 items-center justify-center rounded-full text-xl transition-colors hover:bg-card"
+          >
             ←
           </button>
         ) : (
@@ -263,7 +267,7 @@ export default function NuevoReporte() {
               <button
                 key={i}
                 onClick={() => setIdioma(i)}
-                className={`rounded-full border px-4 py-2 text-sm transition-colors ${
+                className={`rounded-full border px-4 py-2.5 text-sm transition-colors ${
                   idioma === i
                     ? "border-accent bg-card font-medium"
                     : "border-line hover:border-muted"
@@ -438,7 +442,7 @@ export default function NuevoReporte() {
               }}
               placeholder="…o pega la conversación aquí"
               rows={6}
-              className="w-full rounded-md border border-line bg-card px-4 py-3 text-sm outline-none transition-colors focus:border-accent"
+              className="w-full rounded-md border border-line bg-card px-4 py-3 text-base outline-none transition-colors focus:border-accent sm:text-sm"
               disabled={!!archivo}
             />
           </div>
@@ -531,7 +535,7 @@ export default function NuevoReporte() {
                 <button
                   key={p.nombre}
                   onClick={() => setNombreUsuario(p.nombre)}
-                  className={`rounded-full border px-3 py-1.5 text-sm transition-colors ${
+                  className={`rounded-full border px-3.5 py-2 text-sm transition-colors ${
                     nombreUsuario === p.nombre
                       ? "border-accent bg-card font-medium"
                       : "border-line hover:border-muted"
@@ -677,7 +681,7 @@ export default function NuevoReporte() {
           )}
           <button
             onClick={enviar}
-            className={`${botonPrimario} mt-8 w-full bg-accent`}
+            className="mt-8 w-full rounded-full bg-accent px-6 py-4 text-center font-medium text-paper transition-colors hover:bg-ink disabled:opacity-40"
           >
             Que Beto lo lea →
           </button>

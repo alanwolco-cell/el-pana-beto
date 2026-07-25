@@ -225,24 +225,24 @@ const telefonos = [
 export default function Home() {
   return (
     <>
-      <section className="mx-auto max-w-5xl px-6 pb-20 pt-16 sm:pt-20">
+      <section className="mx-auto max-w-5xl px-6 pb-16 pt-10 sm:pb-20 sm:pt-20">
         <div className="grid items-center gap-10 sm:grid-cols-[3fr_2fr]">
           <div>
-            <p className="mb-6 text-xs font-medium uppercase tracking-[0.2em] text-accent">
+            <p className="mb-5 text-xs font-medium uppercase tracking-[0.2em] text-accent sm:mb-6">
               ¿Qué xopá? · Reportes de chats de grupo
             </p>
-            <h1 className="font-display text-5xl font-semibold leading-[1.05] tracking-tight sm:text-6xl">
+            <h1 className="font-display text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl sm:leading-[1.05] lg:text-6xl">
               Pásale el chat a Beto. Él se lee todo el bochinche y te dice
               las cosas como son.
             </h1>
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">
+            <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted sm:mt-6">
               Subes cualquier chat de WhatsApp, Beto se lee cada mensaje y te
               tira un reporte con su opinión real de todos ustedes. Sin filtro.
             </p>
-            <div className="mt-10 flex flex-wrap items-center gap-4">
+            <div className="mt-8 flex flex-col items-stretch gap-4 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center">
               <Link
                 href="/nuevo"
-                className="rounded-full bg-accent px-6 py-3 font-medium text-paper transition-transform hover:-translate-y-0.5"
+                className="rounded-full bg-accent px-6 py-3.5 text-center font-medium text-paper transition-transform hover:-translate-y-0.5 sm:py-3"
               >
                 Pedir mi reporte
               </Link>
@@ -272,7 +272,7 @@ export default function Home() {
       </section>
 
       <section className="border-y border-line bg-card">
-        <div className="mx-auto max-w-5xl px-6 py-20">
+        <div className="mx-auto max-w-5xl px-6 py-14 sm:py-20">
           <h2 className="font-display text-3xl font-semibold sm:text-4xl">
             Lo que pasa cuando sueltas el link
           </h2>
@@ -280,7 +280,7 @@ export default function Home() {
             El chat no se calla en una semana. Esto es real: la gente
             reaccionando a su propio reporte.
           </p>
-          <div className="mt-12 grid items-start gap-8 sm:grid-cols-2">
+          <div className="mt-10 grid items-start gap-12 sm:mt-12 sm:grid-cols-2 sm:gap-8">
             <div className="flotar-a">
               <Image
                 src="/wa-panas.png"
@@ -312,8 +312,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-5xl px-6 py-20">
-        <div className="grid gap-10 sm:grid-cols-3">
+      <section className="mx-auto max-w-5xl px-6 py-14 sm:py-20">
+        <div className="grid gap-8 sm:grid-cols-3 sm:gap-10">
           {pasos.map((p) => (
             <div key={p.numero}>
               <p className="text-sm font-semibold text-accent">{p.numero}</p>
@@ -326,7 +326,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="border-y border-line bg-card py-16">
+      <section className="border-y border-line bg-card py-14 sm:py-16">
         <div className="mx-auto max-w-5xl px-6">
           <h2 className="font-display text-3xl font-semibold sm:text-4xl">
             Familia, frenes o el grupo de la U
@@ -344,7 +344,7 @@ export default function Home() {
                 alt={r.alt}
                 width={300}
                 height={640}
-                className="w-56 shrink-0 rounded-[1.75rem] border border-line shadow-xl"
+                className="w-48 shrink-0 rounded-[1.75rem] border border-line shadow-xl sm:w-56"
               />
             ))}
           </div>
@@ -352,7 +352,7 @@ export default function Home() {
       </section>
 
       <section className="border-t border-line">
-        <div className="mx-auto grid max-w-5xl items-center gap-10 px-6 py-20 sm:grid-cols-2">
+        <div className="mx-auto grid max-w-5xl items-center gap-10 px-6 py-14 sm:grid-cols-2 sm:py-20">
           <div>
             <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
               No solo pa&rsquo; reír
@@ -368,7 +368,7 @@ export default function Home() {
             </p>
             <Link
               href="/nuevo"
-              className="mt-6 inline-block rounded-full bg-accent px-6 py-3 font-medium text-paper transition-transform hover:-translate-y-0.5"
+              className="mt-6 inline-block w-full rounded-full bg-accent px-6 py-3.5 text-center font-medium text-paper transition-transform hover:-translate-y-0.5 sm:w-auto sm:py-3"
             >
               Leer nuestra relación
             </Link>
@@ -411,7 +411,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-5xl px-6 py-20">
+      <section className="mx-auto max-w-5xl px-6 py-14 sm:py-20">
         <h2 className="font-display text-3xl font-semibold sm:text-4xl">
           Qué trae el reporte
         </h2>
@@ -419,7 +419,7 @@ export default function Home() {
           La opinión completa de un pana que se leyó todo tu chat y tiene
           demasiado que decir.
         </p>
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid gap-4 sm:mt-10 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
           {contenido.map((c) => (
             <article
               key={c.titulo}
@@ -437,9 +437,9 @@ export default function Home() {
 
 
       <section className="border-t border-line bg-card">
-        <div className="mx-auto grid max-w-5xl gap-10 px-6 py-20 sm:grid-cols-[2fr_3fr] sm:items-center">
+        <div className="mx-auto grid max-w-5xl gap-8 px-6 py-14 sm:grid-cols-[2fr_3fr] sm:items-center sm:gap-10 sm:py-20">
           <div className="flex justify-center">
-            <div className="flex h-40 w-40 items-center justify-center rounded-full border border-line bg-paper text-6xl shadow-sm">
+            <div className="flex h-32 w-32 items-center justify-center rounded-full border border-line bg-paper text-5xl shadow-sm sm:h-40 sm:w-40 sm:text-6xl">
               🎵
             </div>
           </div>
@@ -458,7 +458,7 @@ export default function Home() {
             </p>
             <Link
               href="/nuevo"
-              className="mt-6 inline-block rounded-full bg-accent px-6 py-3 font-medium text-paper transition-transform hover:-translate-y-0.5"
+              className="mt-6 inline-block w-full rounded-full bg-accent px-6 py-3.5 text-center font-medium text-paper transition-transform hover:-translate-y-0.5 sm:w-auto sm:py-3"
             >
               Que Beto nos componga
             </Link>
@@ -467,7 +467,7 @@ export default function Home() {
       </section>
 
       <section className="border-t border-line">
-        <div className="mx-auto max-w-3xl px-6 py-20">
+        <div className="mx-auto max-w-3xl px-6 py-14 sm:py-20">
           <h2 className="font-display text-3xl font-semibold sm:text-4xl">
             Preguntas que todo el mundo hace
           </h2>
@@ -488,7 +488,7 @@ export default function Home() {
       </section>
 
       <section className="border-t border-line bg-card">
-        <div className="mx-auto max-w-5xl px-6 py-20 text-center">
+        <div className="mx-auto max-w-5xl px-6 py-14 text-center sm:py-20">
           <Image
             src="/beto.jpg"
             alt="Beto"
@@ -504,7 +504,7 @@ export default function Home() {
               (c) => (
                 <span
                   key={c}
-                  className="rounded-full border border-line bg-paper px-4 py-1.5 text-sm"
+                  className="rounded-full border border-line bg-paper px-4 py-2 text-sm"
                 >
                   {c}
                 </span>
@@ -513,7 +513,7 @@ export default function Home() {
           </div>
           <Link
             href="/nuevo"
-            className="mt-10 inline-block rounded-full bg-accent px-8 py-4 font-medium text-paper transition-transform hover:-translate-y-0.5"
+            className="mt-8 inline-block w-full rounded-full bg-accent px-8 py-4 text-center font-medium text-paper transition-transform hover:-translate-y-0.5 sm:mt-10 sm:w-auto"
           >
             Pedir mi reporte
           </Link>

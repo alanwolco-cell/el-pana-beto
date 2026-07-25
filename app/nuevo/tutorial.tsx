@@ -349,7 +349,7 @@ export function TutorialExportar() {
             type="button"
             onClick={() => elegir(activo - 1)}
             aria-label="Paso anterior"
-            className="flex h-8 w-8 items-center justify-center rounded-full border border-line text-lg text-muted"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-line text-lg text-muted"
           >
             ‹
           </button>
@@ -360,7 +360,7 @@ export function TutorialExportar() {
               onClick={() => elegir(i)}
               aria-label={`Paso ${i + 1}`}
               aria-current={i === activo ? "step" : undefined}
-              className={`h-8 w-8 rounded-full text-sm font-semibold transition ${
+              className={`h-10 w-10 rounded-full text-sm font-semibold transition ${
                 i === activo
                   ? "bg-accent text-paper"
                   : "border border-line bg-paper text-muted"
@@ -373,7 +373,7 @@ export function TutorialExportar() {
             type="button"
             onClick={() => elegir(activo + 1)}
             aria-label="Paso siguiente"
-            className="flex h-8 w-8 items-center justify-center rounded-full border border-line text-lg text-muted"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-line text-lg text-muted"
           >
             ›
           </button>

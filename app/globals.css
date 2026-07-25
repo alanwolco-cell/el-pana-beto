@@ -20,6 +20,14 @@ body {
   color: var(--color-ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  /* Nada debe provocar scroll horizontal en móvil (marquee, imágenes rotadas). */
+  overflow-x: clip;
+  -webkit-tap-highlight-color: transparent;
+}
+
+h1,
+h2 {
+  text-wrap: balance;
 }
 
 ::selection {
