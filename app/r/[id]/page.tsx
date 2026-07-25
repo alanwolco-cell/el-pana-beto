@@ -393,15 +393,19 @@ export default async function PaginaReporte({ params }: Props) {
       </Seccion>
 
       <Seccion titulo="🤯 Frases célebres">
-        <div className="space-y-6">
+        <div className="space-y-8">
           {r.frases.map((f) => (
-            <blockquote
-              key={f.frase}
-              className="border-l-2 border-accent pl-5"
-            >
-              <p className="font-display text-lg">«{f.frase}»</p>
-              <footer className="mt-2 text-sm text-muted">
-                — {f.autor}. {f.contexto}
+            <blockquote key={f.frase} className="border-l-2 border-accent pl-5">
+              <p className="font-display text-xl leading-snug">
+                «{f.frase}»
+              </p>
+              <footer className="mt-3">
+                <span className="text-sm font-medium text-ink">
+                  {f.autor}
+                </span>
+                <span className="mt-0.5 block text-sm leading-relaxed text-muted">
+                  {f.contexto}
+                </span>
               </footer>
             </blockquote>
           ))}
