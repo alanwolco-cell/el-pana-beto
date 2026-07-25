@@ -12,10 +12,34 @@ import {
 } from "@/lib/parse-chat";
 import { TutorialExportar } from "./tutorial";
 
+// Lee los bytes del archivo de forma robusta. El navegador a veces "vence"
+// la referencia (archivo movido, screenshot temporal, iCloud sin bajar);
+// se reintenta con FileReader y, si falla, se lanza un mensaje claro.
+async function leerBytes(f: File): Promise<Uint8Array> {
+  try {
+    return new Uint8Array(await f.arrayBuffer());
+  } catch {
+    try {
+      const buf = await new Promise<ArrayBuffer>((resolve, reject) => {
+        const fr = new FileReader();
+        fr.onload = () => resolve(fr.result as ArrayBuffer);
+        fr.onerror = () => reject(fr.error);
+        fr.readAsArrayBuffer(f);
+      });
+      return new Uint8Array(buf);
+    } catch {
+      throw new Error(
+        "No pudimos leer ese archivo. Puede que lo hayas movido o venga de iCloud sin descargar. Bájalo a tu computadora y vuelve a subirlo.",
+      );
+    }
+  }
+}
+
 // WhatsApp a veces exporta un .zip con el _chat.txt adentro.
 async function extraerTexto(f: File): Promise<string> {
+  const bytes = await leerBytes(f);
   if (f.name.toLowerCase().endsWith(".zip") || f.type === "application/zip") {
-    const datos = unzipSync(new Uint8Array(await f.arrayBuffer()));
+    const datos = unzipSync(bytes);
     const txts = Object.entries(datos).filter(([n]) =>
       n.toLowerCase().endsWith(".txt"),
     );
@@ -24,7 +48,7 @@ async function extraerTexto(f: File): Promise<string> {
     txts.sort((a, b) => b[1].length - a[1].length);
     return strFromU8(txts[0][1]);
   }
-  return f.text();
+  return new TextDecoder("utf-8").decode(bytes);
 }
 
 // Reduce y convierte cualquier imagen a JPEG liviano antes de enviarla.
