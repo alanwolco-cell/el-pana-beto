@@ -2,6 +2,7 @@ import { randomUUID } from "crypto";
 import { generateText, Output } from "ai";
 import { NextResponse } from "next/server";
 import { promptSistema } from "@/lib/beto";
+import { incrementarContador } from "@/lib/contador";
 import { muestrearChat } from "@/lib/parse-chat";
 import { reporteSchema, type ReporteGuardado } from "@/lib/schema";
 import { guardarFoto, guardarReporte } from "@/lib/storage";
@@ -107,6 +108,12 @@ export async function POST(req: Request) {
       reporte: output,
     };
     await guardarReporte(guardado);
+
+    try {
+      await incrementarContador();
+    } catch (e) {
+      console.error("Contador falló (no bloquea el reporte):", e);
+    }
 
     if (cuerpo.telefono && whatsappConfigurado()) {
       const base = process.env.VERCEL_PROJECT_PRODUCTION_URL

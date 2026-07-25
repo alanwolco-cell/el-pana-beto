@@ -1,6 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ChatWhatsAppDark, VeredictoBeto } from "./chat-demo";
+import ContadorReportes from "./contador-reportes";
+
+export const revalidate = 300; // ISR: refresca el contador cada 5 min
 
 const pasos = [
   {
@@ -53,7 +56,7 @@ const preguntas = [
   },
   {
     p: "¿Es seguro compartir mi chat?",
-    r: "El chat se procesa una sola vez para escribir el reporte, se descarta y nunca se usa para entrenar ningún modelo. El reporte vive en un link privado con código imposible de adivinar, que solo tiene tu grupo. Tratamos tus datos conforme a la Ley 81 de 2019 de Panamá.",
+    r: "El chat se procesa una sola vez para escribir el reporte y se descarta. El reporte queda en un link con código imposible de adivinar: solo lo abre quien tenga ese link, o sea, tu grupo. Tratamos tus datos conforme a la Ley 81 de 2019 de Panamá.",
   },
   {
     p: "¿Cómo comparto el reporte?",
@@ -243,9 +246,12 @@ export default function Home() {
               >
                 Pedir mi reporte
               </Link>
-              <p className="text-sm text-muted">
-                Sin cuenta y sin tarjeta · 3 min pa&rsquo;l reporte
-              </p>
+              <div>
+                <ContadorReportes />
+                <p className="text-sm text-muted">
+                  Sin cuenta y sin tarjeta · 3 min pa&rsquo;l reporte
+                </p>
+              </div>
             </div>
             <p className="mt-6 max-w-xl rounded-lg border border-line bg-card px-4 py-3 text-sm text-muted">
               🔒 <span className="font-medium text-ink">Tu chat no se guarda.</span>{" "}

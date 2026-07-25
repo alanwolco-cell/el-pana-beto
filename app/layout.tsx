@@ -63,8 +63,14 @@ export default function RootLayout({
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <p>© 2026 El Pana Beto. Todos los derechos reservados.</p>
               <p>
-                Tu chat no se guarda: se procesa una vez, se descarta y nunca
-                entrena ningún modelo. Ley 81 de 2019 (Panamá).
+                Tu chat no se guarda: se procesa una vez y se descarta.{" "}
+                <Link
+                  href="/privacidad"
+                  className="underline transition-colors hover:text-accent"
+                >
+                  Política de Privacidad
+                </Link>{" "}
+                · Ley 81 de 2019 (Panamá).
               </p>
             </div>
             <p>
