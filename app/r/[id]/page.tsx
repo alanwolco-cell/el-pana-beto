@@ -411,26 +411,65 @@ export default async function PaginaReporte({ params }: Props) {
 
       {r.peleas && r.peleas.length > 0 && (
         <Seccion titulo="🥊 Quién ganaría una pelea">
-          <ol className="space-y-4">
-            {r.peleas.map((p, i) => (
-              <li
-                key={p.nombre}
-                className="flex items-baseline gap-4 border-b border-line pb-4 last:border-0"
-              >
-                <span
-                  className={`font-display w-9 shrink-0 text-xl font-semibold italic ${i === 0 ? "text-accent" : "text-muted"}`}
-                >
-                  {i + 1}º
-                </span>
-                <div className="min-w-0 flex-1">
-                  <p className="font-medium">{p.nombre}</p>
-                  <p className="mt-1 text-sm leading-relaxed text-muted">
-                    {p.motivo}
+          {(() => {
+            const campeon = r.peleas[0];
+            const ultimo =
+              r.peleas.length > 1 ? r.peleas[r.peleas.length - 1] : null;
+            const medio = r.peleas.slice(1, ultimo ? -1 : undefined);
+            return (
+              <div className="space-y-4">
+                {/* Campeón — el más peligroso, destacado */}
+                <div className="rounded-2xl border-2 border-accent bg-accent/[0.06] p-5 shadow-card">
+                  <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-accent">
+                    <span className="text-lg">🏆</span> El más peligroso
+                  </div>
+                  <p className="font-display mt-2 text-2xl font-semibold">
+                    {campeon.nombre}
+                  </p>
+                  <p className="mt-1.5 leading-relaxed text-ink-soft">
+                    {campeon.motivo}
                   </p>
                 </div>
-              </li>
-            ))}
-          </ol>
+
+                {/* El montón — tarjetas compactas con su puesto */}
+                {medio.length > 0 && (
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {medio.map((p, i) => (
+                      <div
+                        key={p.nombre}
+                        className="rounded-xl border border-line bg-card p-4 shadow-card"
+                      >
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-display text-lg font-semibold italic text-muted">
+                            #{i + 2}
+                          </span>
+                          <p className="font-medium">{p.nombre}</p>
+                        </div>
+                        <p className="mt-1 text-sm leading-relaxed text-muted">
+                          {p.motivo}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* El que cae de primero — el remate */}
+                {ultimo && (
+                  <div className="rounded-2xl border border-dashed border-line bg-paper p-5">
+                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-muted">
+                      <span className="text-lg">💀</span> Cae de primero
+                    </div>
+                    <p className="font-display mt-2 text-xl font-semibold text-muted line-through decoration-accent/60 decoration-2">
+                      {ultimo.nombre}
+                    </p>
+                    <p className="mt-1.5 leading-relaxed text-ink-soft">
+                      {ultimo.motivo}
+                    </p>
+                  </div>
+                )}
+              </div>
+            );
+          })()}
         </Seccion>
       )}
 
