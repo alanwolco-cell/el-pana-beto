@@ -64,6 +64,10 @@ const preguntas = [
     r: "WhatsApp, que es donde está el bochinche de verdad. Exportas el chat con la opción «Sin archivos» y te genera un .txt listo para subir.",
   },
   {
+    p: "No me deja exportar el chat, ¿qué hago?",
+    r: "Casi siempre es porque el grupo tiene activada la «Privacidad avanzada del chat» de WhatsApp, que bloquea la exportación. Un admin del grupo la apaga en: info del grupo → Privacidad avanzada del chat → desactivar. Después ya te deja exportar normal.",
+  },
+  {
     p: "¿Beto solo funciona pa' Panamá?",
     r: "No, qué va. Le dices de dónde es el grupo y Beto adapta la jerga, las referencias y los chistes a tu país: México, Colombia, Argentina, España, donde sea. Si no le dices nada, tira panameño clásico.",
   },

@@ -410,6 +410,12 @@ export function TutorialExportar() {
       <p className="border-t border-line bg-paper/60 px-5 py-3 text-xs text-muted">
         📱 En Android es casi igual: el menú ⋮ → «Más» → «Exportar chat».
       </p>
+      <p className="border-t border-line bg-accent/[0.06] px-5 py-3 text-xs text-muted">
+        ⚠️ ¿No te aparece «Exportar chat» o sale bloqueado? El grupo tiene
+        activada la <span className="font-medium text-ink">Privacidad avanzada
+        del chat</span> de WhatsApp. Un admin la apaga en: info del grupo →
+        Privacidad avanzada del chat → desactivar. Ahí ya te deja exportar.
+      </p>
     </div>
   );
 }
