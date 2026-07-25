@@ -23,6 +23,7 @@ import { BotonCompartirImagen } from "./compartir-imagen";
 import { PanelDesbloqueo } from "./desbloquear";
 import { Predicciones } from "./predicciones";
 import { EstadisticasGrupo } from "./stats";
+import { GenerandoReporte } from "./generando";
 
 export const dynamic = "force-dynamic";
 
@@ -32,6 +33,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const guardado = await leerReporte(id);
   if (!guardado) return { title: "Reporte no encontrado — El Pana Beto" };
+  if (!guardado.reporte)
+    return { title: "Beto está escribiendo tu reporte… — El Pana Beto" };
   // El gancho es la frase más intrigante; si no existe (reportes viejos),
   // cae al veredicto. Es lo que sale en el preview de WhatsApp.
   const preview = (
@@ -88,6 +91,8 @@ export default async function PaginaReporte({ params }: Props) {
   const { id } = await params;
   const guardado = await leerReporte(id);
   if (!guardado) notFound();
+  // Reporte aún generándose en background: mostrar la espera con polling.
+  if (!guardado.reporte) return <GenerandoReporte id={id} />;
   const r = guardado.reporte;
   const fecha = new Date(guardado.creado).toLocaleDateString("es-PA", {
     day: "numeric",
@@ -111,8 +116,21 @@ export default async function PaginaReporte({ params }: Props) {
   if (!estaDesbloqueado(pagos)) {
     const precio = pagos?.precio ?? precioDesbloqueo();
     const pagado = pagos ? totalPagado(pagos) : 0;
-    const primerPerfil = r.perfiles[0];
-    const segundoPerfil = r.perfiles[1];
+    // El teaser corta a la mitad el perfil de QUIEN pidió el reporte, para
+    // que quede más picado con lo suyo. Los otros 2 se muestran completos.
+    const creador = guardado.nombreUsuario?.trim().toLowerCase();
+    const perfilCreador = creador
+      ? r.perfiles.find(
+          (p) =>
+            p.nombre.toLowerCase().includes(creador) ||
+            creador.includes(p.nombre.toLowerCase()),
+        )
+      : undefined;
+    const otros = r.perfiles.filter((p) => p !== perfilCreador);
+    const completos = otros.slice(0, 2);
+    const teaser = perfilCreador ?? r.perfiles[completos.length] ?? null;
+    const esCreador = !!perfilCreador;
+    const restantes = r.perfiles.length - completos.length - (teaser ? 1 : 0);
     const bloqueado = [
       { icono: "🔥", texto: `${r.temas.length} temas que dominan el grupo` },
       {
@@ -138,7 +156,7 @@ export default async function PaginaReporte({ params }: Props) {
       },
       {
         icono: "🚩",
-        texto: `${r.banderasVerdes.length} banderas verdes y ${r.banderasRojas.length} rojas`,
+        texto: `${r.banderasVerdes.length} flags verdes y ${r.banderasRojas.length} rojos`,
       },
       { icono: "🤯", texto: `${r.frases.length} frases célebres, con contexto` },
       {
@@ -159,6 +177,13 @@ export default async function PaginaReporte({ params }: Props) {
         <h1 className="aparecer aparecer-1 font-display mt-4 text-[2.1rem] font-semibold leading-[1.08] tracking-tight sm:text-[2.75rem] md:text-[3.25rem]">
           {r.titulo}
         </h1>
+
+        {r.gancho && (
+          <p className="aparecer aparecer-1 mt-4 font-display text-xl italic leading-snug text-accent sm:text-2xl">
+            {r.gancho}
+          </p>
+        )}
+
         <div className="aparecer aparecer-2 mt-7 flex items-center gap-3 border-y border-line py-4">
           <Image
             src="/beto.jpg"
@@ -177,50 +202,68 @@ export default async function PaginaReporte({ params }: Props) {
           {r.veredicto}
         </p>
 
-        {primerPerfil && (
-          <Seccion titulo="👤 Beto arranca con este">
-            <div className="rounded-xl border border-line bg-card p-5 shadow-card sm:p-6">
-              <div className="flex flex-wrap items-baseline gap-x-3">
-                <h3 className="font-display text-lg font-semibold">
-                  {primerPerfil.nombre}
-                </h3>
-                <span className="font-display text-sm italic text-accent">
-                  «{primerPerfil.apodo}»
-                </span>
-              </div>
-              <p className="mt-2 leading-relaxed text-muted">
-                {primerPerfil.descripcion}
-              </p>
+        {completos.length > 0 && (
+          <Seccion titulo="👤 Los integrantes, según Beto">
+            <div className="space-y-4">
+              {completos.map((p) => (
+                <div
+                  key={p.nombre}
+                  className="rounded-xl border border-line bg-card p-5 shadow-card sm:p-6"
+                >
+                  <div className="flex flex-wrap items-baseline gap-x-3">
+                    <h3 className="font-display text-lg font-semibold">
+                      {p.nombre}
+                    </h3>
+                    <span className="font-display text-sm italic text-accent">
+                      «{p.apodo}»
+                    </span>
+                  </div>
+                  <p className="mt-2 leading-relaxed text-muted">
+                    {p.descripcion}
+                  </p>
+                </div>
+              ))}
             </div>
           </Seccion>
         )}
 
-        {segundoPerfil && (
+        {teaser && (
           <div className="relative mt-4 overflow-hidden rounded-xl border border-line bg-card p-5 shadow-card sm:p-6">
             <div className="flex flex-wrap items-baseline gap-x-3">
               <h3 className="font-display text-lg font-semibold">
-                {segundoPerfil.nombre}
+                {teaser.nombre}
               </h3>
               <span className="font-display text-sm italic text-accent">
-                «{segundoPerfil.apodo}»
+                «{teaser.apodo}»
               </span>
             </div>
             <p className="mt-2 leading-relaxed text-muted">
-              {segundoPerfil.descripcion.slice(0, 90)}…
+              {teaser.descripcion.slice(0, Math.ceil(teaser.descripcion.length / 2))}
+              …
             </p>
-            <div className="absolute inset-0 flex items-end justify-center bg-gradient-to-b from-transparent via-card/70 to-card pb-5">
-              <p className="rounded-full border border-line bg-paper px-4 py-1.5 text-sm font-medium shadow-card">
-                🔒 Y justo cuando se estaba poniendo bueno…
+            <div className="absolute inset-0 flex flex-col items-center justify-end gap-2.5 bg-gradient-to-b from-transparent via-card/60 to-card pb-5">
+              <p className="rounded-full border border-line bg-paper px-4 py-1.5 text-center text-sm font-medium shadow-card">
+                {esCreador
+                  ? "🔒 Sí, esto es lo que Beto dijo de TI"
+                  : "🔒 Y justo cuando se estaba poniendo bueno…"}
               </p>
+              <a
+                href="#desbloquear"
+                className="rounded-full bg-accent px-5 py-2 text-sm font-medium text-paper shadow-boton transition-transform hover:-translate-y-0.5"
+              >
+                Ver el reporte completo →
+              </a>
             </div>
           </div>
         )}
-        {r.perfiles.length > 2 && (
+        {restantes > 0 && (
           <p className="mt-3 text-sm italic text-muted">
-            …y {r.perfiles.length - 2} perfiles más esperando bajo llave.
+            …y {restantes} perfil{restantes > 1 ? "es" : ""} más esperando bajo
+            llave.
           </p>
         )}
 
+        <div id="desbloquear" />
         <Seccion titulo="🔒 Lo que falta por desbloquear">
           <ul>
             {bloqueado.map((b) => (
@@ -590,11 +633,11 @@ export default async function PaginaReporte({ params }: Props) {
         </Seccion>
       )}
 
-      <Seccion titulo="🚩 Banderas">
+      <Seccion titulo="🚩 Flags">
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="rounded-xl border border-verde/25 bg-verde/[0.05] p-5">
             <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-verde">
-              Verdes
+              Flags verdes
             </h3>
             <ul className="mt-4 space-y-2.5">
               {r.banderasVerdes.map((b) => (
@@ -607,7 +650,7 @@ export default async function PaginaReporte({ params }: Props) {
           </div>
           <div className="rounded-xl border border-accent/25 bg-accent/[0.05] p-5">
             <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-accent">
-              Rojas
+              Flags rojos
             </h3>
             <ul className="mt-4 space-y-2.5">
               {r.banderasRojas.map((b) => (

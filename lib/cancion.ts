@@ -72,6 +72,7 @@ export async function generarLetra(
   genero: string,
 ): Promise<string> {
   const r = guardado.reporte;
+  if (!r) throw new Error("El reporte todavía no está listo.");
   const material = [
     `Nombre del grupo: ${guardado.grupo || "el grupo"}`,
     `De qué se trata el grupo: ${r.veredicto}`,

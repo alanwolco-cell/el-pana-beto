@@ -77,7 +77,7 @@ export async function GET(
 ) {
   const { id } = await params;
   const guardado = await leerReporte(id);
-  if (!guardado) {
+  if (!guardado || !guardado.reporte) {
     return new Response("Reporte no encontrado", { status: 404 });
   }
 

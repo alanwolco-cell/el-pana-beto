@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@vercel/blob": "^2.6.1",
+    "@vercel/functions": "^3.7.6",
     "ai": "^6.0.235",
     "fflate": "^0.8.3",
     "next": "16.2.11",

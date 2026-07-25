@@ -22,7 +22,7 @@ const pasos = [
     numero: "03",
     titulo: "Recibe el veredicto",
     texto:
-      "A los 3 minutos Beto te suelta el reporte: apodos, premios, banderas rojas y las frases que nadie quería que quedaran guardadas.",
+      "A los 3 minutos Beto te suelta el reporte: apodos, premios, flags rojos y las frases que nadie quería que quedaran guardadas.",
   },
 ];
 
@@ -111,7 +111,7 @@ export default function Home() {
             </h1>
             <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted sm:mt-6">
               Subes cualquier chat de WhatsApp y Beto se lee cada mensaje. Te
-              tira un reporte con apodos, premios, banderas rojas y su opinión
+              tira un reporte con apodos, premios, flags rojos y su opinión
               real de todos ustedes. Sin filtro.
             </p>
             <div className="mt-8 flex flex-col items-stretch gap-4 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center">

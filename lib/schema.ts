@@ -112,6 +112,7 @@ export type ReporteGuardado = {
   tipo: "clasico" | "profundo" | "yeye";
   creado: string;
   mensajes?: number;
+  nombreUsuario?: string;
   participantes?: { nombre: string; mensajes: number }[];
   stats?: {
     porHora: number[];
@@ -123,5 +124,8 @@ export type ReporteGuardado = {
     total: number;
   };
   fotoUrl?: string;
-  reporte: Reporte;
+  // "generando" = marcador mientras el servidor escribe el reporte en
+  // background; "error" = falló; ausente/"listo" = reporte completo.
+  estado?: "generando" | "listo" | "error";
+  reporte?: Reporte;
 };
