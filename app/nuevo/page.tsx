@@ -87,6 +87,30 @@ const tiposChat = [
   { emoji: "🤷", nombre: "Otro", desc: "Cualquier chat que te dé curiosidad…" },
 ];
 
+const paises = [
+  "🇵🇦 Panamá",
+  "🇲🇽 México",
+  "🇨🇴 Colombia",
+  "🇦🇷 Argentina",
+  "🇨🇱 Chile",
+  "🇵🇪 Perú",
+  "🇻🇪 Venezuela",
+  "🇪🇨 Ecuador",
+  "🇬🇹 Guatemala",
+  "🇨🇺 Cuba",
+  "🇧🇴 Bolivia",
+  "🇩🇴 República Dominicana",
+  "🇭🇳 Honduras",
+  "🇵🇾 Paraguay",
+  "🇸🇻 El Salvador",
+  "🇳🇮 Nicaragua",
+  "🇨🇷 Costa Rica",
+  "🇺🇾 Uruguay",
+  "🇵🇷 Puerto Rico",
+  "🇪🇸 España",
+  "🇺🇸 Estados Unidos (latinos)",
+];
+
 const mensajesEspera = [
   "Beto está abriendo el chat…",
   "Leyendo el bochinche completo…",
@@ -583,13 +607,22 @@ export default function NuevoReporte() {
             Así Beto se pone en tu tono y usa la jerga de tu país. Si lo dejas
             vacío, tira panameño.
           </p>
-          <input
-            type="text"
+          <select
             value={pais}
             onChange={(e) => setPais(e.target.value)}
-            placeholder="Ej: México, Colombia, Argentina, Panamá…"
-            className="mt-3 w-full rounded-md border border-line bg-card px-4 py-3 outline-none transition-colors focus:border-accent"
-          />
+            className="mt-3 w-full appearance-none rounded-md border border-line bg-card px-4 py-3 text-base outline-none transition-colors focus:border-accent"
+          >
+            <option value="">Elige el país…</option>
+            {paises.map((p) => {
+              // El emoji es solo visual; a Beto le llega el nombre limpio.
+              const nombre = p.replace(/^[^\p{L}]+/u, "").trim();
+              return (
+                <option key={p} value={nombre}>
+                  {p}
+                </option>
+              );
+            })}
+          </select>
 
           <h2 className="font-display mt-10 text-2xl font-semibold">
             ¿En qué tono lo quieres?
