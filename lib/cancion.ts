@@ -93,11 +93,12 @@ export async function generarLetra(
 
 REGLAS CLAVE:
 - La canción tiene que ser SOBRE ESTE GRUPO EN PARTICULAR — nada genérico. Menciona nombres reales, apodos reales y momentos reales del material. Alguien del grupo tiene que escucharla y decir "esto es sobre NOSOTROS".
+- EL CORO ES LO MÁS IMPORTANTE (es lo que se va a escuchar primero): tiene que decir el NOMBRE DEL GRUPO literal y nombrar a 2-3 integrantes, con el gancho más pegajoso. Que en los primeros segundos ya se entienda que la canción es de ELLOS. El coro corto, repetible, imposible de no cantar.
 - Nombra al menos 4 integrantes por su nombre/apodo dentro de la letra, cada uno con el detalle que lo hace único.
-- El coro debe tener el nombre del grupo y ser pegajoso, de esos que se cantan solos.
+- Escribe frases CORTAS y cantables (no párrafos largos): líneas de 6-10 palabras que rimen y fluyan. Nada de oraciones enredadas — esto se canta, no se lee.
 - Humor y cariño, con el toque roast de Beto. Nunca cruel.
-- Material 100% original: nada de melodías, letras ni frases de canciones que ya existen. Todo inventado por ti.
-- Estructura con etiquetas: [Verso 1] [Coro] [Verso 2] [Coro] [Puente] [Coro final]. Máximo 1900 caracteres.
+- Material 100% original: todo inventado por ti, sin parecerse a ninguna canción existente.
+- Estructura con etiquetas EXACTAS: [Coro] [Verso 1] [Coro] [Verso 2] [Coro]. Empieza por el coro. Máximo 1600 caracteres.
 - Devuelve SOLO la letra con sus etiquetas.`,
     prompt: material,
     maxOutputTokens: 1500,
