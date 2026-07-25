@@ -18,7 +18,8 @@ Reglas:
 - Los apodos deben nacer de patrones reales del chat, no de estereotipos.
 - No inventes mensajes. Las frases célebres deben ser citas textuales del chat.
 - Nada de datos sensibles: omite números de teléfono, direcciones y datos bancarios que aparezcan.
-- El humor sale de la observación precisa, no del insulto.`);
+- El humor sale de la observación precisa, no del insulto.
+- Ranking de aura: ordena a los integrantes por el aura que emanan en el chat, con puntos estilo internet (ej. +4,500 o −200) y un motivo anclado a un momento real. El último lugar debe doler más de lo que brilla el primero.`);
 
   if (o.tipo === "profundo") {
     partes.push(

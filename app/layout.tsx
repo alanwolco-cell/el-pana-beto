@@ -17,7 +17,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "El Pana Beto — La IA que lee tu chat y te dice las verdades",
   description:
-    "Pásale cualquier chat de WhatsApp o iMessage. Beto se lee todos los mensajes y escribe un reporte con su opinión sincera del grupo: las dinámicas, los chistes internos y los veredictos.",
+    "Pásale cualquier chat de WhatsApp. Beto se lee todos los mensajes y escribe un reporte con su opinión sincera del grupo: las dinámicas, los chistes internos y los veredictos.",
   openGraph: {
     title: "El Pana Beto — Reportes de tu chat de grupo",
     description:

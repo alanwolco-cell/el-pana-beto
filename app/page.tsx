@@ -1,17 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import {
-  ChatIMessage,
-  ChatWhatsAppDark,
-  VeredictoBeto,
-} from "./chat-demo";
+import { ChatWhatsAppDark, VeredictoBeto } from "./chat-demo";
 
 const pasos = [
   {
     numero: "01",
     titulo: "Exporta tu chat",
     texto:
-      "En WhatsApp: abre el grupo → toca el nombre → Exportar chat → Sin archivos. Te genera un .txt en segundos. En iMessage también sirve.",
+      "En WhatsApp: abre el grupo → toca el nombre → Exportar chat → Sin archivos. Te genera un .txt en segundos.",
   },
   {
     numero: "02",
@@ -31,6 +27,7 @@ const contenido = [
   { emoji: "🔥", titulo: "Los temas del grupo", desc: "Las obsesiones que ustedes creen normales." },
   { emoji: "👤", titulo: "Un perfil por cabeza", desc: "Con el apodo que cada uno se ganó a pulso." },
   { emoji: "🏆", titulo: "Los premios", desc: "Al que más habla, al que solo aparece en los cumpleaños." },
+  { emoji: "✨", titulo: "El ranking de aura", desc: "Quién tiene aura infinita y quién quedó debiendo." },
   { emoji: "🗣️", titulo: "El diccionario", desc: "Su jerga interna, traducida al español." },
   { emoji: "🚩", titulo: "Las banderas", desc: "Verdes y rojas, con evidencia citada." },
   { emoji: "🤯", titulo: "Frases célebres", desc: "Textuales, con contexto y sin piedad." },
@@ -48,7 +45,7 @@ const preguntas = [
   },
   {
     p: "¿Qué apps soporta?",
-    r: "WhatsApp y iMessage. En WhatsApp exportas el chat con la opción «Sin archivos» y te genera un .txt listo para subir.",
+    r: "WhatsApp — que es donde vive el bochinche de verdad. Exportas el chat con la opción «Sin archivos» y te genera un .txt listo para subir.",
   },
   {
     p: "¿Cuánto tarda?",
@@ -68,12 +65,14 @@ const telefonos = [
   {
     titulo: "Los Panas del Kilo",
     miembros: "Kike, Nando, Chino, Tavo y 8 más",
+    avatar: "🍺",
     mensajes: [
       { linkCard: true, texto: "Reporte completo señores", hora: "5:38 p.m.", propia: true },
       { texto: "Vale la pena leerlo", hora: "5:38 p.m.", propia: true },
       {
         de: "Kike",
         colorDe: "text-[#53bdeb]",
+        avatar: "🧢",
         texto: "¿QUIÉN LE DIO NUESTRO CHAT A ESE SEÑOR?",
         hora: "5:39 p.m.",
         reaccion: "😂 3",
@@ -81,6 +80,7 @@ const telefonos = [
       {
         de: "Nando",
         colorDe: "text-[#e77f51]",
+        avatar: "😎",
         citando: { de: "Tú", texto: "Reporte completo señores" },
         texto: "el apodo que me puso no me lo merezco",
         hora: "5:40 p.m.",
@@ -88,6 +88,7 @@ const telefonos = [
       {
         de: "Chino",
         colorDe: "text-[#25d366]",
+        avatar: "🕶️",
         texto: "sí te lo mereces",
         hora: "5:40 p.m.",
         reaccion: "❤️ 5",
@@ -98,10 +99,12 @@ const telefonos = [
   {
     titulo: "Familia Unida 🙏",
     miembros: "Mamá, Tía Mirna, Papo y 9 más",
+    avatar: "🙏",
     mensajes: [
       {
         de: "Papo",
         colorDe: "text-[#53bdeb]",
+        avatar: "🧔🏽",
         tarjeta:
           "Banderas verdes: aquí hay amor del bueno. Cuando Papo por fin consiguió trabajo, el grupo celebró como si Panamá hubiera clasificado al Mundial.",
         hora: "8:12 p.m.",
@@ -109,12 +112,14 @@ const telefonos = [
       {
         de: "Mamá",
         colorDe: "text-[#a78bfa]",
+        avatar: "👩🏽‍🦱",
         texto: "JAJAJAJAJAJA",
         hora: "8:13 p.m.",
       },
       {
         de: "Tía Mirna",
         colorDe: "text-[#f472b6]",
+        avatar: "👵🏽",
         texto: "¿Quién es este señor Beto y por qué sabe todo? 🙏",
         hora: "8:14 p.m.",
         reaccion: "😂 4",
@@ -123,6 +128,7 @@ const telefonos = [
       {
         de: "Mamá",
         colorDe: "text-[#a78bfa]",
+        avatar: "👩🏽‍🦱",
         texto: "Tres veces. Y lo reenvié.",
         hora: "8:15 p.m.",
       },
@@ -131,10 +137,12 @@ const telefonos = [
   {
     titulo: "La Junta 🍻",
     miembros: "Moncho, Yeyo, Lalo y 5 más",
+    avatar: "🎱",
     mensajes: [
       {
         de: "Yeyo",
         colorDe: "text-[#25d366]",
+        avatar: "🧉",
         tarjeta:
           "Predicción: Moncho va a decir que él no es así. Moncho es exactamente así.",
         hora: "10:02 p.m.",
@@ -142,6 +150,7 @@ const telefonos = [
       {
         de: "Moncho",
         colorDe: "text-[#e77f51]",
+        avatar: "🐻",
         texto: "yo no soy así",
         hora: "10:03 p.m.",
         reaccion: "💀 6",
@@ -149,6 +158,7 @@ const telefonos = [
       {
         de: "Lalo",
         colorDe: "text-[#53bdeb]",
+        avatar: "🎧",
         texto: "JAJAJAJA lo clavó",
         hora: "10:03 p.m.",
       },
@@ -156,6 +166,7 @@ const telefonos = [
       {
         de: "Yeyo",
         colorDe: "text-[#25d366]",
+        avatar: "🧉",
         texto: "Beto ya sabe más de nosotros que nosotros",
         hora: "10:05 p.m.",
       },
@@ -177,9 +188,8 @@ export default function Home() {
               nadie se atreve.
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">
-              Sube cualquier conversación de WhatsApp o iMessage. Beto se lee
-              cada mensaje y escribe un reporte con su opinión sincera de todos
-              ustedes.
+              Sube cualquier chat de WhatsApp. Beto se lee cada mensaje y
+              escribe un reporte con su opinión sincera de todos ustedes.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-4">
               <Link
@@ -220,10 +230,13 @@ export default function Home() {
               <ChatWhatsAppDark
                 titulo="Familia Quintero 🇵🇦"
                 miembros="Mamá, Tía Mirna, Papo y tú"
+                avatar="🏠"
                 mensajes={[
+                  { fecha: "Hoy" },
                   {
                     de: "Tía Mirna",
                     colorDe: "text-[#f472b6]",
+                    avatar: "👵🏽",
                     texto:
                       "Buenos días familia 🌹🙏 El que no reenvíe esta oración no quiere a su madre",
                     hora: "6:02 a.m.",
@@ -231,6 +244,7 @@ export default function Home() {
                   {
                     de: "Mamá",
                     colorDe: "text-[#a78bfa]",
+                    avatar: "👩🏽‍🦱",
                     texto:
                       "¿QUIÉN se comió el arroz con pollo que era PARA EL DOMINGO?",
                     hora: "9:14 a.m.",
@@ -238,12 +252,14 @@ export default function Home() {
                   {
                     de: "Papo",
                     colorDe: "text-[#53bdeb]",
+                    avatar: "🧔🏽",
                     texto: "yo no fui, yo estaba en el gym",
                     hora: "9:20 a.m.",
                   },
                   {
                     de: "Mamá",
                     colorDe: "text-[#a78bfa]",
+                    avatar: "👩🏽‍🦱",
                     texto: "Papo tú no tienes gym",
                     hora: "9:21 a.m.",
                   },
@@ -255,6 +271,7 @@ export default function Home() {
                   {
                     de: "Papo",
                     colorDe: "text-[#53bdeb]",
+                    avatar: "🧔🏽",
                     texto: "sapo",
                     hora: "9:31 a.m.",
                     reaccion: "😂 8",
@@ -269,21 +286,55 @@ export default function Home() {
               </VeredictoBeto>
             </div>
             <div className="flotar-b">
-              <ChatIMessage
+              <ChatWhatsAppDark
                 titulo="Los Frenes 🍻"
+                miembros="Kike, Nando, Chino y tú"
+                avatar="🍻"
                 mensajes={[
-                  { fecha: "Miércoles 8:03 p. m." },
-                  { de: "Kike", texto: "fren SERIO este sábado playa sí o sí" },
-                  { de: "Nando", texto: "confirmo 🔥" },
-                  { de: "Chino", texto: "confirmadísimo" },
-                  { texto: "ok, yo alquilo el carro", propia: true },
-                  { fecha: "Sábado 7:14 a. m." },
-                  { de: "Kike", texto: "fren amanecí malito 🤧" },
+                  { fecha: "Miércoles" },
+                  {
+                    de: "Kike",
+                    colorDe: "text-[#53bdeb]",
+                    avatar: "🧢",
+                    texto: "fren SERIO este sábado playa sí o sí",
+                    hora: "8:03 p.m.",
+                  },
                   {
                     de: "Nando",
-                    texto: "me salió un cumple que se me había olvidado",
+                    colorDe: "text-[#e77f51]",
+                    avatar: "😎",
+                    texto: "confirmo 🔥",
+                    hora: "8:04 p.m.",
                   },
-                  { texto: "ya pagué el carro.", propia: true },
+                  {
+                    de: "Chino",
+                    colorDe: "text-[#25d366]",
+                    avatar: "🕶️",
+                    texto: "confirmadísimo",
+                    hora: "8:04 p.m.",
+                  },
+                  { texto: "ok, yo alquilo el carro", hora: "8:05 p.m.", propia: true },
+                  { fecha: "Sábado" },
+                  {
+                    de: "Kike",
+                    colorDe: "text-[#53bdeb]",
+                    avatar: "🧢",
+                    texto: "fren amanecí malito 🤧",
+                    hora: "7:14 a.m.",
+                  },
+                  {
+                    de: "Nando",
+                    colorDe: "text-[#e77f51]",
+                    avatar: "😎",
+                    texto: "me salió un cumple que se me había olvidado",
+                    hora: "7:20 a.m.",
+                  },
+                  {
+                    texto: "ya pagué el carro.",
+                    hora: "7:21 a.m.",
+                    propia: true,
+                    reaccion: "💀 2",
+                  },
                 ]}
               />
               <VeredictoBeto>

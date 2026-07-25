@@ -16,6 +16,7 @@ import {
 import { leerReporte } from "@/lib/storage";
 import { BotonCompartir } from "./compartir";
 import { PanelDesbloqueo } from "./desbloquear";
+import { Predicciones } from "./predicciones";
 
 export const dynamic = "force-dynamic";
 
@@ -78,6 +79,10 @@ export default async function PaginaReporte({ params }: Props) {
         texto: `${r.perfiles.length} perfiles con apodo — incluido el tuyo`,
       },
       { icono: "🏆", texto: `${r.premios.length} premios y reconocimientos` },
+      {
+        icono: "✨",
+        texto: `El ranking de aura — quién tiene y quién quedó debiendo`,
+      },
       {
         icono: "🗣️",
         texto: `Diccionario del grupo (${r.vocabulario.length} términos)`,
@@ -304,6 +309,35 @@ export default async function PaginaReporte({ params }: Props) {
         </ul>
       </Seccion>
 
+      {r.aura && r.aura.length > 0 && (
+        <Seccion titulo="✨ El ranking de aura">
+          <ol className="space-y-4">
+            {r.aura.map((a, i) => (
+              <li
+                key={a.nombre}
+                className="flex items-baseline gap-4 border-b border-line pb-4"
+              >
+                <span className="font-display w-8 shrink-0 text-xl font-semibold text-muted">
+                  {i + 1}º
+                </span>
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-3">
+                    <span className="font-medium">{a.nombre}</span>
+                    <span
+                      className={`font-semibold ${a.puntos < 0 ? "text-accent" : "text-green-700"}`}
+                    >
+                      {a.puntos >= 0 ? "+" : "−"}
+                      {Math.abs(a.puntos).toLocaleString("es-PA")} aura
+                    </span>
+                  </div>
+                  <p className="mt-1 text-sm text-muted">{a.motivo}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </Seccion>
+      )}
+
       {r.vocabulario.length > 0 && (
         <Seccion titulo="🗣️ Diccionario del grupo">
           <dl className="space-y-4">
@@ -365,14 +399,7 @@ export default async function PaginaReporte({ params }: Props) {
       </Seccion>
 
       <Seccion titulo="🔮 Cómo van a reaccionar a este reporte">
-        <ul className="space-y-3">
-          {r.predicciones.map((p) => (
-            <li key={p.nombre} className="flex gap-3 leading-relaxed">
-              <span className="font-medium">{p.nombre}:</span>
-              <span className="text-muted">{p.reaccion}</span>
-            </li>
-          ))}
-        </ul>
+        <Predicciones items={r.predicciones} />
       </Seccion>
 
       <div className="mt-16 rounded-lg border border-line bg-card p-8 text-center">

@@ -33,6 +33,15 @@ export const reporteSchema = z.object({
       motivo: z.string(),
     }),
   ),
+  aura: z
+    .array(
+      z.object({
+        nombre: z.string(),
+        puntos: z.number().describe("Puntos de aura, puede ser negativo (ej. 4500 o -200)"),
+        motivo: z.string().describe("Por qué, basado en un momento real del chat"),
+      }),
+    )
+    .describe("Ranking de aura de los integrantes, de mayor a menor"),
   vocabulario: z
     .array(
       z.object({

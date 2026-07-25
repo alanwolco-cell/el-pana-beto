@@ -9,7 +9,7 @@ import {
   type Participante,
 } from "@/lib/parse-chat";
 
-const TOTAL_PASOS = 9;
+const TOTAL_PASOS = 8;
 
 const idiomas = ["Español", "English", "Português", "Français", "Italiano"];
 
@@ -39,7 +39,6 @@ export default function NuevoReporte() {
   const [idioma, setIdioma] = useState("Español");
   const [contexto, setContexto] = useState("");
   const [nota, setNota] = useState("");
-  const [origen, setOrigen] = useState<"WhatsApp" | "iMessage">("WhatsApp");
   const [chat, setChat] = useState("");
   const [archivo, setArchivo] = useState("");
   const [participantes, setParticipantes] = useState<Participante[]>([]);
@@ -233,37 +232,6 @@ export default function NuevoReporte() {
       {paso === 4 && (
         <section className="mt-10">
           <h1 className="font-display text-3xl font-semibold">
-            ¿De dónde sale tu chat?
-          </h1>
-          <div className="mt-6 space-y-3">
-            {(["WhatsApp", "iMessage"] as const).map((o) => (
-              <button
-                key={o}
-                onClick={() => {
-                  setOrigen(o);
-                  avanzar();
-                }}
-                className={`w-full rounded-lg border p-4 text-left transition-colors ${
-                  origen === o
-                    ? "border-accent bg-card"
-                    : "border-line hover:border-muted"
-                }`}
-              >
-                <span className="block font-medium">{o}</span>
-                <span className="block text-sm text-muted">
-                  {o === "WhatsApp"
-                    ? "Exporta el chat directo desde la app."
-                    : "Copia la conversación desde tu Mac o iPhone."}
-                </span>
-              </button>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {paso === 5 && (
-        <section className="mt-10">
-          <h1 className="font-display text-3xl font-semibold">
             Compartirlo es la mejor parte.
           </h1>
           <p className="mt-2 text-muted">
@@ -302,25 +270,17 @@ export default function NuevoReporte() {
         </section>
       )}
 
-      {paso === 6 && (
+      {paso === 5 && (
         <section className="mt-10">
           <h1 className="font-display text-3xl font-semibold">
             Exporta y sube tu conversación
           </h1>
-          {origen === "WhatsApp" ? (
-            <ol className="mt-6 space-y-2 text-muted">
-              <li>1. Abre el chat y toca el nombre del grupo.</li>
-              <li>2. Baja hasta «Exportar chat».</li>
-              <li>3. Elige «Sin archivos».</li>
-              <li>4. Guárdalo y sube aquí el .txt que te genera.</li>
-            </ol>
-          ) : (
-            <ol className="mt-6 space-y-2 text-muted">
-              <li>1. Abre la conversación en Mensajes.</li>
-              <li>2. Selecciona y copia los mensajes (Cmd+A, Cmd+C en Mac).</li>
-              <li>3. Pégalos acá abajo. Así de simple.</li>
-            </ol>
-          )}
+          <ol className="mt-6 space-y-2 text-muted">
+            <li>1. Abre el chat en WhatsApp y toca el nombre del grupo.</li>
+            <li>2. Baja hasta «Exportar chat».</li>
+            <li>3. Elige «Sin archivos».</li>
+            <li>4. Guárdalo y sube aquí el .txt que te genera.</li>
+          </ol>
           <div className="mt-8 space-y-3">
             <button
               type="button"
@@ -379,7 +339,7 @@ export default function NuevoReporte() {
         </section>
       )}
 
-      {paso === 7 && (
+      {paso === 6 && (
         <section className="mt-10">
           <h1 className="font-display text-3xl font-semibold">
             {participantes.length >= 2
@@ -427,7 +387,7 @@ export default function NuevoReporte() {
         </section>
       )}
 
-      {paso === 8 && (
+      {paso === 7 && (
         <section className="mt-10">
           <h1 className="font-display text-3xl font-semibold">
             Beto va a usar estos nombres
@@ -479,7 +439,7 @@ export default function NuevoReporte() {
         </section>
       )}
 
-      {paso === 9 && (
+      {paso === 8 && (
         <section className="mt-10">
           <h1 className="font-display text-3xl font-semibold">
             Ponle una foto al reporte
