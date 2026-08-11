@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { aperturaDeMd, tituloDeMd } from "@/lib/reporte-md";
 import { leerReporte } from "@/lib/storage";
 
 export const dynamic = "force-dynamic";
@@ -77,11 +78,42 @@ export async function GET(
 ) {
   const { id } = await params;
   const guardado = await leerReporte(id);
-  if (!guardado || !guardado.reporte) {
+  if (
+    !guardado ||
+    (!guardado.reporte && !guardado.reporte2 && !guardado.reporteMd)
+  ) {
     return new Response("Reporte no encontrado", { status: 404 });
   }
 
-  const r = guardado.reporte;
+  // La tarjeta funciona con ambos formatos: v2 se mapea al shape mínimo usado.
+  const v2 = guardado.reporte2;
+  type MiniReporte = {
+    titulo: string;
+    veredicto: string;
+    aura?: { nombre: string; puntos: number; motivo: string }[];
+    perfiles: { nombre: string; apodo: string; descripcion: string }[];
+    premios?: { premio: string; ganador: string; motivo: string }[];
+  };
+  const md = guardado.reporteMd;
+  const r: MiniReporte = md
+    ? {
+        titulo: tituloDeMd(md),
+        veredicto: aperturaDeMd(md).replace(/\*\*/g, "").replace(/^>\s?/gm, "").split("\n")[0] ?? "",
+        aura: [],
+        perfiles: [],
+        premios: [],
+      }
+    : guardado.reporte ?? {
+    titulo: v2!.titulo,
+    veredicto: v2!.apertura.replace(/\*\*/g, "").split("\n")[0] ?? "",
+    aura: [],
+    perfiles: v2!.perfiles.map((p) => ({
+      nombre: p.nombre,
+      apodo: p.apodo ?? "",
+      descripcion: p.cuerpo,
+    })),
+    premios: v2!.premios,
+  };
   const [fuentes, fotoBeto] = await Promise.all([
     cargarFuentes(),
     fetch(new URL("/beto.jpg", req.url))
@@ -231,7 +263,7 @@ export async function GET(
                 color: MUTED,
               }}
             >
-              {`«${veredicto}»`}
+              {`“${veredicto}”`}
             </div>
 
             {auraTop ? (
@@ -293,7 +325,7 @@ export async function GET(
                       color: ACENTO,
                     }}
                   >
-                    {`«${recortar(apodoTop, 60)}»`}
+                    {`“${recortar(apodoTop, 60)}”`}
                   </div>
                 )}
               </div>

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import {
+  comisionPagueloFacil,
   descuentoReferido,
   hostPagueloFacil,
   pagosConfigurados,
@@ -62,7 +63,13 @@ export async function POST(req: Request) {
       codigoDescuento = limpio;
     }
   }
-  const monto = Math.max(1, Math.round((precio / partes) * 100) / 100);
+  // En la vaca (partes > 1) cada quien cubre su parte + su comisión de
+  // PagueloFacil, así el precio del reporte le llega completo a Wolco.
+  const base = precio / partes;
+  const monto =
+    partes > 1
+      ? Math.max(1, Math.round((base + comisionPagueloFacil(base)) * 100) / 100)
+      : Math.max(1, Math.round(base * 100) / 100);
 
   const descripcion = esCancion
     ? `El Pana Beto — La Canción del Grupo · ${guardado.grupo || "chat sin nombre"}`

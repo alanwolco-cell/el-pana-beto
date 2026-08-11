@@ -1,4 +1,6 @@
+import { waitUntil } from "@vercel/functions";
 import { NextResponse } from "next/server";
+import { ejecutarGeneracion } from "@/lib/generar-reporte";
 import {
   crearCupones,
   descuentoReferido,
@@ -9,6 +11,11 @@ import {
   verificarTransaccion,
   type Plan,
 } from "@/lib/pagos";
+
+// El pago registrado dispara la generación del reporte con waitUntil (flujo
+// v2: la IA escribe solo cuando entró la plata). waitUntil vive hasta
+// maxDuration — con menos de 300s la generación moriría a mitad.
+export const maxDuration = 300;
 
 // RETURN_URL de PagueloFacil: llega por GET con los datos de la transacción.
 // Los nombres de parámetros varían entre versiones del gateway, así que
@@ -86,7 +93,7 @@ export async function GET(req: Request) {
 
   const { nuevo } = await registrarPago(
     reporteId,
-    { oper, monto: total, nombre, fecha: new Date().toISOString() },
+    { oper, monto: total, nombre, fecha: new Date().toISOString(), plan },
     umbral,
   );
 
@@ -96,6 +103,14 @@ export async function GET(req: Request) {
   if (nuevo && codigoDescuento) {
     await registrarUsoReferido(codigoDescuento);
   }
+
+  // Pago registrado → Beto arranca a escribir. Idempotente: si el reporte ya
+  // existe o hay otra corrida viva, no hace nada; si la vaca aún no completa
+  // el monto, el gate de pago lo deja "pendiente" sin gastar IA.
+  const base = process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : new URL(req.url).origin;
+  waitUntil(ejecutarGeneracion(reporteId, base, { pagoConfirmado: true }));
 
   return destino("ok");
 }

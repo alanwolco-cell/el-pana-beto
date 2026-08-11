@@ -47,7 +47,12 @@ export async function POST(req: Request) {
   }
 
   try {
-    const audio = await generarAudio(cancion.genero, cancion.letra, 150_000);
+    const audio = await generarAudio(
+      cancion.genero,
+      cancion.letra,
+      150_000,
+      cancion.nota,
+    );
     // Sufijo aleatorio: que nadie adivine la URL sin pagar.
     const completaUrl = await guardarAudio(
       `canciones/${reporteId}-completa-${randomUUID().slice(0, 8)}.mp3`,

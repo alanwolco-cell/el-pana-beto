@@ -8,14 +8,14 @@ const PASOS = [
     detalle: "Abre el chat y toca el nombre del grupo, arriba del todo.",
   },
   {
-    titulo: "Dale a «Exportar chat»",
+    titulo: "Dale a “Exportar chat”",
     detalle:
-      "En la info del grupo, toca los ⋯ de arriba a la derecha y elige «Exportar chat».",
+      "En la info del grupo, toca los ⋯ de arriba a la derecha y elige “Exportar chat”.",
   },
   {
-    titulo: "Elige «Sin archivos»",
+    titulo: "Elige “Sin archivos”",
     detalle:
-      "Cuando pregunte si quieres incluir los archivos, elige «Sin archivos». Pesa menos y va más rápido.",
+      "Cuando pregunte si quieres incluir los archivos, elige “Sin archivos”. Pesa menos y va más rápido.",
   },
   {
     titulo: "Sube el .txt aquí",
@@ -152,7 +152,7 @@ function MockPaso1() {
   );
 }
 
-// Paso 2 — info del grupo, con el menú ⋯ abierto y «Exportar chat» resaltado.
+// Paso 2 — info del grupo, con el menú ⋯ abierto y “Exportar chat” resaltado.
 function MockPaso2() {
   return (
     <Marco>
@@ -195,7 +195,7 @@ function MockPaso2() {
   );
 }
 
-// Paso 3 — hoja de acción con «Sin archivos» resaltado.
+// Paso 3 — hoja de acción con “Sin archivos” resaltado.
 function MockPaso3() {
   return (
     <Marco>
@@ -408,10 +408,10 @@ export function TutorialExportar() {
       </div>
 
       <p className="border-t border-line bg-paper/60 px-5 py-3 text-xs text-muted">
-        📱 En Android es casi igual: el menú ⋮ → «Más» → «Exportar chat».
+        📱 En Android es casi igual: el menú ⋮ → “Más” → “Exportar chat”.
       </p>
       <p className="border-t border-line bg-accent/[0.06] px-5 py-3 text-xs text-muted">
-        ⚠️ ¿No te aparece «Exportar chat» o sale bloqueado? El grupo tiene
+        ⚠️ ¿No te aparece “Exportar chat” o sale bloqueado? El grupo tiene
         activada la <span className="font-medium text-ink">Privacidad avanzada
         del chat</span> de WhatsApp. Un admin la apaga en: info del grupo →
         Privacidad avanzada del chat → desactivar. Ahí ya te deja exportar.

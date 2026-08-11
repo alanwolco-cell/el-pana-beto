@@ -1,14 +1,13 @@
 import { randomUUID } from "crypto";
-import { generateText, Output } from "ai";
 import { NextResponse } from "next/server";
-import { promptSistema } from "@/lib/beto";
-import { incrementarContador } from "@/lib/contador";
-import { muestrearChat, resumenStats } from "@/lib/parse-chat";
-import { reporteSchema, type ReporteGuardado } from "@/lib/schema";
+import { muestrearChat } from "@/lib/parse-chat";
+import { type ReporteGuardado } from "@/lib/schema";
 import { guardarFoto, guardarReporte } from "@/lib/storage";
-import { enviarReporteWhatsApp, whatsappConfigurado } from "@/lib/whatsapp";
 
-export const maxDuration = 300;
+// CREAR (flujo v2): guarda el "trabajo" y responde {id} en ~1s. La generación
+// con IA arranca DESPUÉS del pago (retorno/canjear la disparan); este route ya
+// no genera nada, así que no necesita ventana larga.
+export const maxDuration = 60;
 
 function contarMensajes(chat: string): number {
   const patron = /^\[?‎?\d{1,2}[\/.-]\d{1,2}[\/.-]\d{2,4}/gm;
@@ -53,124 +52,81 @@ export async function POST(req: Request) {
     );
   }
 
-  const texto = muestrearChat(chat);
+  const id = randomUUID();
+
+  let fotoUrl: string | undefined;
+  if (cuerpo.foto) {
+    try {
+      fotoUrl = await guardarFoto(id, cuerpo.foto);
+    } catch {
+      fotoUrl = undefined;
+    }
+  }
+
+  const intensidad: "suave" | "normal" | "salvaje" =
+    cuerpo.intensidad === "suave" || cuerpo.intensidad === "salvaje"
+      ? cuerpo.intensidad
+      : "normal";
+
+  const guardado: ReporteGuardado = {
+    id,
+    grupo,
+    tipo,
+    creado: new Date().toISOString(),
+    mensajes:
+      Number.isFinite(cuerpo.mensajes) && cuerpo.mensajes! > 0
+        ? Math.trunc(cuerpo.mensajes!)
+        : contarMensajes(chat),
+    nombreUsuario: (cuerpo.nombreUsuario ?? "").slice(0, 40) || undefined,
+    contexto: (cuerpo.contexto ?? "").slice(0, 60) || undefined,
+    participantes: Array.isArray(cuerpo.participantes)
+      ? cuerpo.participantes
+          .filter(
+            (p) =>
+              p && typeof p.nombre === "string" && Number.isFinite(p.mensajes),
+          )
+          .slice(0, 15)
+          .map((p) => ({
+            nombre: p.nombre.slice(0, 40),
+            mensajes: Math.trunc(p.mensajes),
+          }))
+      : undefined,
+    stats:
+      cuerpo.stats &&
+      Array.isArray(cuerpo.stats.porHora) &&
+      cuerpo.stats.total > 0
+        ? cuerpo.stats
+        : undefined,
+    fotoUrl,
+    // Flujo v2: el job queda PENDIENTE y la IA no escribe nada todavía.
+    // La generación (que es lo que cuesta plata) arranca cuando el pago
+    // se registra (retorno de PagueloFacil o canje de código).
+    estado: "pendiente",
+    inputs: {
+      // Se recorta de nuevo por seguridad aunque el cliente ya lo mande recortado.
+      // Completo hasta 4M chars: el pipeline de 2 pasadas lo lee entero.
+      chat: muestrearChat(chat, 4_000_000),
+      idioma: (cuerpo.idioma ?? "").slice(0, 40) || undefined,
+      nota: (cuerpo.nota ?? "").slice(0, 1000) || undefined,
+      pais: (cuerpo.pais ?? "").slice(0, 40) || undefined,
+      intensidad,
+      telefono: (cuerpo.telefono ?? "").slice(0, 30) || undefined,
+    },
+  };
 
   try {
-    const opciones = {
-      output: Output.object({ schema: reporteSchema }),
-      temperature: 0.9,
-      maxRetries: 2,
-      system: promptSistema({
-        tipo,
-        idioma: (cuerpo.idioma ?? "").slice(0, 40),
-        contexto: (cuerpo.contexto ?? "").slice(0, 60),
-        nota: (cuerpo.nota ?? "").slice(0, 1000),
-        nombreUsuario: (cuerpo.nombreUsuario ?? "").slice(0, 40),
-        pais: (cuerpo.pais ?? "").slice(0, 40),
-        intensidad:
-          cuerpo.intensidad === "suave" || cuerpo.intensidad === "salvaje"
-            ? cuerpo.intensidad
-            : "normal",
-      }),
-      prompt:
-        `Nombre del grupo: ${grupo || "(sin nombre)"}\n\n` +
-        (cuerpo.stats
-          ? `Estadísticas reales del grupo (ya calculadas, úsalas para uno o dos chistes: quién escribe a esas horas, qué dice de ellos el día/mes pico): ${resumenStats(cuerpo.stats)}\n\n`
-          : "") +
-        `Chat exportado:\n\n${texto}`,
-      maxOutputTokens: 9_000,
-    };
-
-    // opus-5-fast: mismo Opus 5 (misma calidad) pero más rápido. Si no hay
-    // créditos en el Gateway, cae a Sonnet automáticamente.
-    const preferido =
-      process.env.MODELO_REPORTE ?? "anthropic/claude-opus-5-fast";
-    let output;
-    try {
-      ({ output } = await generateText({ model: preferido, ...opciones }));
-    } catch (e) {
-      if (/sonnet/.test(preferido)) throw e;
-      console.warn(
-        "Falló el modelo preferido; usando Sonnet:",
-        e instanceof Error ? e.message : String(e),
-      );
-      ({ output } = await generateText({
-        model: "anthropic/claude-sonnet-5",
-        ...opciones,
-      }));
-    }
-
-    const id = randomUUID();
-    let fotoUrl: string | undefined;
-    if (cuerpo.foto) {
-      try {
-        fotoUrl = await guardarFoto(id, cuerpo.foto);
-      } catch {
-        fotoUrl = undefined;
-      }
-    }
-
-    const guardado: ReporteGuardado = {
-      id,
-      grupo,
-      tipo,
-      creado: new Date().toISOString(),
-      mensajes:
-        Number.isFinite(cuerpo.mensajes) && cuerpo.mensajes! > 0
-          ? Math.trunc(cuerpo.mensajes!)
-          : contarMensajes(chat),
-      nombreUsuario: (cuerpo.nombreUsuario ?? "").slice(0, 40) || undefined,
-      participantes: Array.isArray(cuerpo.participantes)
-        ? cuerpo.participantes
-            .filter(
-              (p) =>
-                p && typeof p.nombre === "string" && Number.isFinite(p.mensajes),
-            )
-            .slice(0, 15)
-            .map((p) => ({
-              nombre: p.nombre.slice(0, 40),
-              mensajes: Math.trunc(p.mensajes),
-            }))
-        : undefined,
-      stats:
-        cuerpo.stats &&
-        Array.isArray(cuerpo.stats.porHora) &&
-        cuerpo.stats.total > 0
-          ? cuerpo.stats
-          : undefined,
-      fotoUrl,
-      estado: "listo",
-      reporte: output,
-    };
     await guardarReporte(guardado);
-
-    try {
-      await incrementarContador();
-    } catch (e) {
-      console.error("Contador falló (no bloquea el reporte):", e);
-    }
-
-    if (cuerpo.telefono && whatsappConfigurado()) {
-      const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
-        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-        : new URL(req.url).origin;
-      try {
-        await enviarReporteWhatsApp(
-          cuerpo.telefono,
-          output.titulo,
-          `${baseUrl}/r/${id}`,
-        );
-      } catch (e) {
-        console.error("WhatsApp falló (no bloquea el reporte):", e);
-      }
-    }
-
-    return NextResponse.json({ id });
   } catch (e) {
-    console.error("Error generando reporte:", e);
+    console.error("No se pudo crear el reporte:", e);
     return NextResponse.json(
-      { error: "Beto tuvo un problema leyendo el chat. Intenta de nuevo." },
+      { error: "Beto no pudo guardar el reporte. Intenta de nuevo." },
       { status: 500 },
     );
   }
+
+  // Flujo v2: aquí NO se genera nada — el job queda pendiente y la página
+  // muestra el teaser con estadísticas reales ($0). La generación arranca
+  // cuando el pago se registra (retorno/canjear la disparan con waitUntil, y
+  // ejecutarGeneracion verifica el pago antes de gastar un centavo de IA).
+  return NextResponse.json({ id });
 }

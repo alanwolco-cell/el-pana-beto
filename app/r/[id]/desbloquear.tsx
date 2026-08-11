@@ -1,13 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import { BotonWhatsApp } from "./compartir-wa";
 
 type Props = {
   reporteId: string;
   precio: number;
   precios: { basico: number; doblete: number; expediente: number };
+  contexto?: string;
+  miembros?: number;
+  comision: { pct: number; fija: number };
+  descuentoRef: number;
   pagado: number;
   pagos: { nombre: string; monto: number }[];
+  // Flujo v2: el reporte aún no se escribe — al desbloquear, Beto arranca.
+  // Cambia el copy de expectativa (no "ver el reporte" sino "que lo escriba").
+  porGenerar?: boolean;
 };
 
 const planes = [
@@ -15,35 +23,63 @@ const planes = [
     id: "basico" as const,
     nombre: "1 Reporte",
     tag: "Este chat",
-    desc: "El reporte completo de este grupo. Pueden hacer la vaca entre 4.",
+    desc: "El expediente completo de este chat. Un solo link y lo lee todo el grupo.",
   },
   {
     id: "doblete" as const,
-    nombre: "2 Reportes",
-    tag: "Ahorra un poco",
-    desc: "Este reporte + un código para leerle el chat a otro grupo. El de la familia ya está pidiendo turno.",
+    nombre: "Combo Beto",
+    tag: "Todo de una",
+    desc: "El reporte completo + la canción original sobre este chat, en una sola compra.",
   },
   {
     id: "expediente" as const,
-    nombre: "3 Reportes",
-    tag: "El mejor precio",
-    desc: "Este reporte + 2 códigos más. La familia, los frenes, la ex: nadie se salva.",
+    nombre: "Modo Leyenda",
+    tag: "Nadie se salva",
+    desc: "Reporte + canción + un código para leerle el chat a OTRO grupo. La familia, la oficina, la ex: siguiente turno.",
   },
 ];
+
+// El copy de venta se adapta al tipo de chat elegido en el wizard: no es lo
+// mismo destapar a los panas que a la familia, la oficina o la pareja.
+function vozGrupo(contexto?: string): {
+  enGrupo: string;
+  sujeto: string;
+  puedeGrupo: boolean;
+  boton: string;
+} {
+  switch (contexto) {
+    case "Familia":
+      return { enGrupo: "en tu familia", sujeto: "tu familia", puedeGrupo: true, boton: "Exponer a la familia" };
+    case "Trabajo":
+      return { enGrupo: "en la oficina", sujeto: "tus compañeros", puedeGrupo: true, boton: "Delatar a la oficina" };
+    case "Grupo de panas":
+      return { enGrupo: "en tu grupo", sujeto: "tus panas", puedeGrupo: true, boton: "Destapar a mis panas" };
+    case "Pareja o crush":
+      return { enGrupo: "", sujeto: "lo suyo", puedeGrupo: false, boton: "Ver qué dice Beto" };
+    case "Mejor amig@":
+      return { enGrupo: "", sujeto: "tu mejor amig@", puedeGrupo: false, boton: "Exponerlo(a) ya" };
+    default:
+      return { enGrupo: "en el grupo", sujeto: "el grupo", puedeGrupo: true, boton: "Ver el reporte completo" };
+  }
+}
 
 export function PanelDesbloqueo({
   reporteId,
   precio,
   precios,
+  contexto,
+  miembros,
+  comision,
+  descuentoRef,
   pagado,
   pagos,
+  porGenerar,
 }: Props) {
   const [plan, setPlan] = useState<"basico" | "doblete" | "expediente">("basico");
   const [nombre, setNombre] = useState("");
   const [partes, setPartes] = useState(1);
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(false);
-  const [copiado, setCopiado] = useState(false);
   const [mostrarCodigo, setMostrarCodigo] = useState(false);
   const [codigo, setCodigo] = useState("");
   const [descuento, setDescuento] = useState(0);
@@ -51,10 +87,39 @@ export function PanelDesbloqueo({
 
   const falta = Math.max(0, precio - pagado);
   const precioBasico = Math.max(1, precios.basico - descuento);
-  const cuota =
-    plan === "basico"
-      ? Math.max(1, Math.round((precioBasico / partes) * 100) / 100)
-      : precios[plan];
+  // En la vaca cada quien suma su parte de la comisión de PagueloFacil.
+  const conComision = (base: number) =>
+    Math.round((base + base * comision.pct + comision.fija) * 100) / 100;
+  const cuotaVaca = (n: number) =>
+    n > 1
+      ? Math.max(1, conComision(precioBasico / n))
+      : Math.max(1, Math.round(precioBasico * 100) / 100);
+  const cuota = plan === "basico" ? cuotaVaca(partes) : precios[plan];
+
+  const voz = vozGrupo(contexto);
+  const esGrupo = voz.puedeGrupo && (miembros ?? 0) >= 3;
+  const porCabeza = esGrupo ? precioBasico / (miembros as number) : 0;
+  // Idea 1 (costo por cabeza) para grupos; idea 3 (menos que una fría) para
+  // chats de dos. Se personaliza con el número real de integrantes.
+  const incentivo = esGrupo
+    ? `Son ${miembros} ${voz.enGrupo}, fren. Sale a $${porCabeza.toFixed(2)} por cabeza destaparlos a TODOS. Hasta el raspao’ cuesta más.`
+    : `Esto cuesta menos que una fría. Y la fría no le escribe una canción a ${voz.sujeto}.`;
+  // Idea 6 (FOMO interno): solo aplica cuando de verdad es un grupo.
+  const fomo = esGrupo
+    ? `Y ojo: ${voz.enGrupo} siempre hay uno a punto de comprarlo primero. ¿Vas a dejar que ÉL maneje el roast?`
+    : "";
+  // Idea 2 (Beto roastea la duda): junto al nombre, en el punto de fricción.
+  const dudaLinea = `¿Titubeando? Ese titubeo ya te ganó un apodo ${voz.enGrupo || "acá adentro"}.`;
+  // Botón por plan; en básico usa la voz del tipo de grupo.
+  const botonPlanBasico =
+    // Con el reporte aún por escribir, "Ver el reporte" mentiría.
+    porGenerar && /^Ver/.test(voz.boton) ? "Soltar a Beto ya" : voz.boton;
+  const botonBase =
+    plan === "doblete"
+      ? "Que empiece el caos"
+      : plan === "expediente"
+        ? "Hacerlo leyenda"
+        : botonPlanBasico;
 
   async function pagar() {
     setError("");
@@ -99,27 +164,29 @@ export function PanelDesbloqueo({
         setCargando(false);
         return;
       }
-      window.location.reload();
+      // Redirigir con ?pago=ok (no reload pelado): el server, al ver ese
+      // param, reintenta la lectura de pagos unos segundos — sin esto, el lag
+      // del blob re-mostraba el paywall con el cupón ya quemado.
+      const u = new URL(window.location.href);
+      u.searchParams.set("pago", "ok");
+      window.location.replace(u.toString());
     } catch (e) {
       setError(e instanceof Error ? e.message : "Error inesperado");
       setCargando(false);
     }
   }
 
-  async function copiarLink() {
-    await navigator.clipboard.writeText(window.location.href);
-    setCopiado(true);
-    setTimeout(() => setCopiado(false), 2000);
-  }
-
   return (
     <div className="mt-12 rounded-2xl border border-line bg-card p-5 shadow-panel sm:p-8">
       <h2 className="font-display text-2xl font-semibold leading-snug tracking-tight sm:text-[1.65rem]">
-        Beto ya lo escribió todo. Está ahí, con el documento bocabajo,
-        tomándose un café.
+        {porGenerar
+          ? "Beto ya leyó el chat. Tiene el lápiz en la mano y está esperando la señal."
+          : "Beto ya lo escribió todo. Está ahí, con el documento bocabajo, tomándose un café."}
       </h2>
       <p className="mt-2 text-muted">
-        El reporte completo se abre para todo el grupo con el mismo link.
+        {porGenerar
+          ? "Al desbloquear, Beto se sienta a escribir el expediente completo: tarda unos minutos y esta misma página se actualiza sola. El link es el mismo para todo el grupo."
+          : "El reporte completo se abre para todo el grupo con el mismo link."}
       </p>
 
       {pagado > 0 && (
@@ -220,12 +287,18 @@ export function PanelDesbloqueo({
                 />
                 {n === 1 ? "Completo" : `Entre ${n}`}
                 <span className="block text-xs text-muted">
-                  ${Math.max(1, Math.round((precioBasico / n) * 100) / 100).toFixed(2)}
+                  ${cuotaVaca(n).toFixed(2)}
                   {n > 1 && " c/u"}
                 </span>
               </label>
             ))}
           </div>
+          {partes > 1 && (
+            <p className="mt-2 text-xs text-muted">
+              Cada quien cubre su parte + la comisión del pago, así el reporte le
+              llega completo a Beto.
+            </p>
+          )}
         </fieldset>
       )}
 
@@ -241,6 +314,7 @@ export function PanelDesbloqueo({
           placeholder="Ej: Karla"
           className="mt-2 w-full rounded-lg border border-line bg-paper px-4 py-3 outline-none transition-colors duration-200 focus:border-accent"
         />
+        <p className="mt-2 text-xs italic text-muted">{dudaLinea}</p>
       </div>
 
       {descuento > 0 && (
@@ -256,21 +330,43 @@ export function PanelDesbloqueo({
         </p>
       )}
 
+      <div className="mt-6 rounded-xl border border-accent/25 bg-accent/[0.05] px-4 py-3">
+        <p className="text-sm font-medium leading-relaxed text-ink">
+          {incentivo}
+        </p>
+        {fomo && (
+          <p className="mt-1.5 text-xs leading-relaxed text-muted">{fomo}</p>
+        )}
+      </div>
+
       <button
         onClick={pagar}
         disabled={cargando}
-        className="mt-6 w-full rounded-full bg-accent px-6 py-4 font-medium text-paper shadow-boton transition-all duration-200 ease-suave hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60"
+        className="mt-4 w-full rounded-full bg-accent px-6 py-4 font-medium text-paper shadow-boton transition-all duration-200 ease-suave hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60"
       >
         {cargando
           ? "Abriendo la caja registradora de Beto…"
           : plan === "basico" && partes > 1
-            ? `Poner mi parte ($${cuota.toFixed(2)})`
-            : `Desbloquear por $${cuota.toFixed(2)}`}
+            ? `Poner mi parte — $${cuota.toFixed(2)}`
+            : `${botonBase} — $${cuota.toFixed(2)}`}
       </button>
+
+      {plan === "basico" && descuento === 0 && descuentoRef > 0 && (
+        <button
+          onClick={() => setMostrarCodigo(true)}
+          className="mt-3 w-full rounded-lg border border-dashed border-accent/45 bg-accent/[0.05] px-4 py-2.5 text-center text-sm leading-relaxed text-ink transition-colors duration-200 hover:border-accent/80"
+        >
+          🤝 ¿Algún pana ya usó a Beto? Métele su código y pagas{" "}
+          <b>${Math.max(1, precios.basico - descuentoRef).toFixed(2)}</b> en vez
+          de ${precios.basico.toFixed(2)}.
+        </button>
+      )}
 
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
         <p className="text-xs text-muted">
-          Pago seguro con tarjeta vía PagueloFacil.
+          {porGenerar
+            ? "Pago seguro con tarjeta. Beto arranca a escribir al segundo de confirmarse."
+            : "Pago seguro con tarjeta. Lo que Beto ya escribió, no lo borra nadie."}
         </p>
         <div className="flex flex-wrap gap-2">
           <button
@@ -279,12 +375,7 @@ export function PanelDesbloqueo({
           >
             ¿Tienes un código de Beto?
           </button>
-          <button
-            onClick={copiarLink}
-            className="rounded-full border border-ink px-4 py-2.5 text-xs font-medium transition-colors duration-200 hover:bg-ink hover:text-paper"
-          >
-            {copiado ? "¡Copiado!" : "Mandar el link al grupo"}
-          </button>
+          <BotonWhatsApp mensaje="“Llegó el expediente del grupo. Recomiendo sentarse.” — El Pana Beto 💀" />
         </div>
       </div>
 

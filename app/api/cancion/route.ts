@@ -3,7 +3,6 @@ import {
   cancionConfigurada,
   generarAudio,
   generarLetra,
-  GENEROS,
   guardarAudio,
   guardarCancion,
   leerCancion,
@@ -20,7 +19,7 @@ export async function POST(req: Request) {
     );
   }
 
-  let cuerpo: { reporteId?: string; genero?: string };
+  let cuerpo: { reporteId?: string; genero?: string; nota?: string };
   try {
     cuerpo = await req.json();
   } catch {
@@ -39,18 +38,27 @@ export async function POST(req: Request) {
     return NextResponse.json({ previewUrl: existente.previewUrl });
   }
 
-  const genero = GENEROS.find((g) => g === cuerpo.genero) ?? "Plena";
+  // Género libre: el usuario puede pedir literalmente lo que quiera
+  // (k-pop, tango, villancico…). Solo se sanea y se acota el largo.
+  const genero =
+    (cuerpo.genero ?? "").replace(/[\r\n]+/g, " ").trim().slice(0, 60) ||
+    "Plena";
+  // Petición libre (voz, vibe, dedicatoria…): se captura ANTES de generar para
+  // que el primer disparo pegue — regenerar cuesta créditos.
+  const nota =
+    (cuerpo.nota ?? "").replace(/[\r\n]+/g, " ").trim().slice(0, 200) ||
+    undefined;
 
   try {
-    const letra = await generarLetra(guardado, genero);
+    const letra = await generarLetra(guardado, genero, nota);
     // Preview: primeras secciones de la letra, 30 segundos de audio.
     const letraPreview = letra.split(/\n(?=\[)/).slice(0, 2).join("\n");
-    const audio = await generarAudio(genero, letraPreview, 30_000);
+    const audio = await generarAudio(genero, letraPreview, 30_000, nota);
     const previewUrl = await guardarAudio(
       `canciones/${reporteId}-preview.mp3`,
       audio,
     );
-    await guardarCancion({ reporteId, genero, letra, previewUrl });
+    await guardarCancion({ reporteId, genero, letra, nota, previewUrl });
     return NextResponse.json({ previewUrl });
   } catch (e) {
     console.error("Error generando canción:", e);

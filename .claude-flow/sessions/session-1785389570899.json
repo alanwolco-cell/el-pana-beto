@@ -1,0 +1,14 @@
+{
+  "id": "session-1785389570899",
+  "startedAt": "2026-07-30T05:32:50.899Z",
+  "cwd": "/Users/wolco/Development/mi-nuevo-website",
+  "context": {},
+  "metrics": {
+    "edits": 17,
+    "commands": 0,
+    "tasks": 0,
+    "errors": 0
+  },
+  "endedAt": "2026-07-30T19:53:03.374Z",
+  "duration": 51612481
+}

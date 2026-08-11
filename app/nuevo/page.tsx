@@ -46,7 +46,7 @@ async function extraerTexto(f: File): Promise<string> {
       n.toLowerCase().endsWith(".txt"),
     );
     if (!txts.length)
-      throw new Error("Ese zip no trae ningún .txt adentro. Exporta de nuevo con «Sin archivos».");
+      throw new Error("Ese zip no trae ningún .txt adentro. Exporta de nuevo con “Sin archivos”.");
     txts.sort((a, b) => b[1].length - a[1].length);
     return strFromU8(txts[0][1]);
   }
@@ -114,14 +114,10 @@ const paises = [
 ];
 
 const mensajesEspera = [
-  "Beto está abriendo el chat…",
-  "Leyendo el bochinche completo, no skip…",
-  "Uy, Beto encontró un chisme…",
-  "Anotando los apodos y el aura de cada uno…",
-  "Beto se está riendo solo, real…",
-  "Sacando los red flags, brace yourself…",
-  "Beto fue por un raspao, ya viene…",
-  "Escribiendo el veredicto, esto va a estar heavy…",
+  "Beto está recibiendo el chat…",
+  "Contando los mensajes, aguanta…",
+  "Armando el expediente…",
+  "Poniendo el chat sobre la mesa…",
 ];
 
 export default function NuevoReporte() {
@@ -133,6 +129,10 @@ export default function NuevoReporte() {
   const [chat, setChat] = useState("");
   const [archivo, setArchivo] = useState("");
   const [participantes, setParticipantes] = useState<Participante[]>([]);
+  // Renombres: {nombre original en el chat -> nombre corregido}. Útil cuando el
+  // usuario tiene a la gente guardada distinto ("Mami ❤️" → "Rosa").
+  const [alias, setAlias] = useState<Record<string, string>>({});
+  const [editarNombres, setEditarNombres] = useState(false);
   const [totalMensajes, setTotalMensajes] = useState(0);
   const [nombreUsuario, setNombreUsuario] = useState("");
   const [grupo, setGrupo] = useState("");
@@ -273,26 +273,44 @@ export default function NuevoReporte() {
     setError("");
     setCargando(true);
     try {
+      // Renombres del usuario: se aplican al chat completo (formato iOS "] X:"
+      // y Android "- X:"), a la lista de participantes y a su propio nombre,
+      // para que Beto y el reporte usen los nombres que el grupo entiende.
+      const cambios = Object.entries(alias)
+        .map(([o, n]) => [o, n.trim()] as [string, string])
+        .filter(([o, n]) => n && n !== o);
+      let chatFinal = chat;
+      for (const [o, n] of cambios) {
+        chatFinal = chatFinal
+          .split(`] ${o}:`)
+          .join(`] ${n}:`)
+          .split(`- ${o}:`)
+          .join(`- ${n}:`);
+      }
+      const mapa = Object.fromEntries(cambios);
       const res = await fetch("/api/reportes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           grupo,
           tipo: tono,
-          // El recorte inteligente pasa aquí: el envío nunca supera ~1 MB
-          // aunque el chat tenga años de historia.
-          chat: muestrearChat(chat),
+          // El chat viaja COMPLETO (hasta ~4 MB): el server lo lee entero por
+          // tramos con el pipeline de 2 pasadas. Solo chats monstruosos se
+          // muestrean por encima de ese tope.
+          chat: muestrearChat(chatFinal, 4_000_000),
           mensajes: totalMensajes || undefined,
           idioma,
           contexto,
           nota,
-          nombreUsuario,
+          nombreUsuario: mapa[nombreUsuario] ?? nombreUsuario,
           foto,
           telefono,
           pais,
           intensidad,
-          participantes: participantes.slice(0, 15),
-          stats: analizarStats(chat),
+          participantes: participantes
+            .slice(0, 15)
+            .map((p) => ({ ...p, nombre: mapa[p.nombre] ?? p.nombre })),
+          stats: analizarStats(chatFinal),
         }),
       });
       const texto = await res.text();
@@ -332,11 +350,7 @@ export default function NuevoReporte() {
           {mensajesEspera[mensajeIdx]}
         </h1>
         <p className="mt-4 text-muted">
-          Dale un ratito, Beto está en eso.
-        </p>
-        <p className="mt-3 rounded-lg border border-accent/30 bg-accent/[0.06] px-4 py-3 text-sm text-ink-soft">
-          📱 No cierres ni cambies de app: quédate aquí hasta que Beto termine,
-          o se corta y hay que empezar de nuevo.
+          Un segundito: Beto está recibiendo el chat y armando el expediente.
         </p>
       </div>
     );
@@ -426,16 +440,17 @@ export default function NuevoReporte() {
       {paso === 3 && (
         <section className="mt-10">
           <h1 className="font-display text-3xl font-semibold">
-            ¿Algo que Beto deba saber?
+            ¿Le pides algo especial a Beto?
           </h1>
           <p className="mt-2 text-muted">
-            Cuéntale lo que quieras que tenga en cuenta. Si le pides algo,
-            Beto te hace caso.
+            Aquí puedes pedirle algo puntual: que se ensañe con alguien por un
+            tema específico, que saque cierta historia, o que baje el tono con
+            alguna persona. Beto te hace caso.
           </p>
           <textarea
             value={nota}
             onChange={(e) => setNota(e.target.value)}
-            placeholder="Ej: somos amigos del colegio · quiero que hable de la época del viaje a Bocas · no seas tan duro con mi mamá"
+            placeholder="Ej: jódele durísimo a Juan con lo del gym · expón a la que siempre deja en visto · saca lo del viaje a Bocas · no seas tan duro con mi mamá"
             rows={5}
             className="mt-6 w-full rounded-md border border-line bg-card px-4 py-3 outline-none transition-colors focus:border-accent"
           />
@@ -554,8 +569,9 @@ export default function NuevoReporte() {
             />
           </div>
           <p className="mt-4 text-xs text-muted">
-            🔒 Tu chat no se guarda: se procesa una sola vez para escribir el
-            reporte y se descarta. Nunca se usa para entrenar ningún modelo.
+            🔒 Tu chat se usa una sola vez para escribir el reporte y se borra
+            apenas Beto termina (y si nunca pides el reporte, se borra solo a
+            los 7 días). Nunca se usa para entrenar ningún modelo.
           </p>
           {error && (
             <p className="mt-4 rounded-md border border-accent/40 bg-accent/5 px-4 py-3 text-sm text-accent">
@@ -660,6 +676,43 @@ export default function NuevoReporte() {
             placeholder="Tu nombre en el chat"
             className="mt-4 w-full rounded-md border border-line bg-card px-4 py-3 outline-none transition-colors focus:border-accent"
           />
+          {participantes.length >= 2 && (
+            <div className="mt-5">
+              <button
+                type="button"
+                onClick={() => setEditarNombres((v) => !v)}
+                className="text-sm font-medium text-accent underline transition-colors hover:text-ink"
+              >
+                ✏️ ¿Algún nombre sale raro? Corrígelo aquí
+              </button>
+              {editarNombres && (
+                <div className="mt-3 space-y-2 rounded-xl border border-line bg-card p-4">
+                  <p className="text-xs text-muted">
+                    Si tienes a la gente guardada distinto (&laquo;Mami ❤️&raquo;,
+                    &laquo;El bro&raquo;), pon aquí el nombre con el que TODO el
+                    grupo los conoce — así en el reporte se entiende quién es
+                    quién.
+                  </p>
+                  {participantes.slice(0, 15).map((p) => (
+                    <div key={p.nombre} className="flex items-center gap-2">
+                      <span className="w-1/2 truncate text-sm text-muted">
+                        {p.nombre}
+                      </span>
+                      <input
+                        type="text"
+                        value={alias[p.nombre] ?? ""}
+                        onChange={(e) =>
+                          setAlias((a) => ({ ...a, [p.nombre]: e.target.value }))
+                        }
+                        placeholder="Dejar igual"
+                        className="w-1/2 rounded-md border border-line bg-paper px-3 py-2 text-sm outline-none transition-colors focus:border-accent"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
           <div className="mt-6">
             <label htmlFor="grupo" className="block text-sm font-medium">
               Nombre del grupo
@@ -889,7 +942,8 @@ export default function NuevoReporte() {
             Que Beto lo lea →
           </button>
           <p className="mt-3 text-center text-xs text-muted">
-            Sin cuenta y sin tarjeta. En menos de un minuto Beto te da su veredicto.
+            Sin cuenta y sin instalar nada. En segundos ves el expediente armado
+            y tú decides cuándo Beto lo escribe.
           </p>
         </section>
       )}

@@ -194,11 +194,19 @@ export function muestrearChat(chat: string, max: number = MAX_CHARS): string {
   return partes.join(corte);
 }
 
+// Limpia el nombre del export de WhatsApp para dejar SOLO el nombre del grupo:
+// "Chat de WhatsApp con Los Panas (1).zip" → "Los Panas".
 export function nombreGrupoDesdeArchivo(nombre: string): string {
-  return nombre
-    .replace(/\.txt$/i, "")
-    .replace(/^Chat de WhatsApp con /i, "")
-    .replace(/^WhatsApp Chat (with|-) /i, "")
+  const limpio = nombre
+    .replace(/\.(zip|txt)$/i, "")
+    .replace(/\s*\(\d+\)$/, "") // "(1)", "(2)" de descargas repetidas
+    .replace(/^Chat de WhatsApp (con|de|-)\s*/i, "")
+    .replace(/^WhatsApp Chat (with|-|de|con)\s*/i, "")
+    .replace(/^Chat WhatsApp (con|de|-)\s*/i, "")
+    .replace(/_chat$/i, "")
     .replace(/^_?chat$/i, "")
     .trim();
+  // Si solo quedó basura genérica, mejor nada (que el usuario escriba).
+  if (/^(whatsapp|chat|export|archivo)?$/i.test(limpio)) return "";
+  return limpio;
 }

@@ -3,6 +3,7 @@ import { Fraunces, Inter } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 import "./globals.css";
+import { HeaderMenu } from "./header-menu";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -22,13 +23,13 @@ export const metadata: Metadata = {
     template: "%s · El Pana Beto",
   },
   description:
-    "Sube el chat del grupo y Beto te escribe un reporte sin filtro: apodos, premios, flags rojos, ranking de aura y las frases que nadie quería que quedaran guardadas. Sin cuenta y sin tarjeta, en menos de un minuto.",
+    "Sube el chat del grupo y Beto te escribe un reporte sin filtro: apodos, premios, red flags, ranking de aura y las frases que nadie quería que quedaran guardadas. Sin cuenta y sin tarjeta, en menos de un minuto.",
   openGraph: {
     type: "website",
     url: "https://elpanabeto.com",
     title: "El Pana Beto — La IA que se lee el chat del grupo y suelta las verdades",
     description:
-      "Apodos, premios, flags rojos y el ranking de aura de cada quien. Sin cuenta y sin tarjeta: en menos de un minuto Beto opina de tu grupo.",
+      "Apodos, premios, red flags y el ranking de aura de cada quien. Sin cuenta y sin tarjeta: en menos de un minuto Beto opina de tu grupo.",
     locale: "es_PA",
     siteName: "El Pana Beto",
   },
@@ -36,7 +37,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "El Pana Beto — La IA que se lee el chat del grupo y suelta las verdades",
     description:
-      "Apodos, premios, flags rojos y el ranking de aura de cada quien. Sin cuenta y sin tarjeta: en menos de un minuto Beto opina de tu grupo.",
+      "Apodos, premios, red flags y el ranking de aura de cada quien. Sin cuenta y sin tarjeta: en menos de un minuto Beto opina de tu grupo.",
   },
 };
 
@@ -50,7 +51,7 @@ export default function RootLayout({
           <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-6 py-3 sm:py-4">
             <Link
               href="/"
-              className="font-display flex min-w-0 items-center gap-2 text-lg font-semibold tracking-tight sm:gap-2.5 sm:text-xl"
+              className="font-display flex items-center gap-2 text-lg font-semibold tracking-tight sm:gap-2.5 sm:text-xl"
             >
               <Image
                 src="/beto.jpg"
@@ -59,24 +60,11 @@ export default function RootLayout({
                 height={34}
                 className="h-8 w-8 shrink-0 rounded-full border border-line object-cover sm:h-[34px] sm:w-[34px]"
               />
-              <span className="truncate">
+              <span className="whitespace-nowrap">
                 El Pana Beto<span className="text-accent">.</span>
               </span>
             </Link>
-            <div className="flex shrink-0 items-center gap-3">
-              <Link
-                href="/mis-reportes"
-                className="whitespace-nowrap text-sm font-medium text-muted transition-colors hover:text-accent"
-              >
-                Mis reportes
-              </Link>
-              <Link
-                href="/nuevo"
-                className="whitespace-nowrap rounded-full bg-ink px-4 py-2.5 text-sm font-medium text-paper transition-colors hover:bg-accent sm:py-2"
-              >
-                Pedir mi reporte
-              </Link>
-            </div>
+            <HeaderMenu />
           </div>
         </header>
         <main>{children}</main>

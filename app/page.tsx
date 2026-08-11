@@ -1,9 +1,24 @@
+import { existsSync } from "fs";
+import path from "path";
 import Image from "next/image";
 import Link from "next/link";
 import { ChatWhatsAppDark, VeredictoBeto } from "./chat-demo";
 import ContadorReportes from "./contador-reportes";
+import { ReaccionesVideo } from "./reacciones-video";
+import { VideoBeto } from "./video-beto";
 
 export const revalidate = 300; // ISR: refresca el contador cada 5 min
+
+// Video-nota de Beto (generada con IA vía el Gateway). Si el archivo no está
+// en /public, el hero muestra la foto de siempre — cero cambios.
+const hayVideoBeto = existsSync(
+  path.join(process.cwd(), "public", "beto-video.mp4"),
+);
+
+// Clips de reacciones (dramatización, generados con IA): solo los que existan.
+const clipsReaccion = [1, 2, 3, 4]
+  .map((n) => `/reaccion-${n}.mp4`)
+  .filter((r) => existsSync(path.join(process.cwd(), "public", r)));
 
 const pasos = [
   {
@@ -22,7 +37,7 @@ const pasos = [
     numero: "03",
     titulo: "Recibe el veredicto",
     texto:
-      "En menos de un minuto Beto te suelta el reporte: apodos, premios, flags rojos y las frases que nadie quería que quedaran guardadas.",
+      "Desbloqueas y en unos minutos Beto te suelta el reporte: apodos, premios, red flags y las frases que nadie quería que quedaran guardadas.",
   },
 ];
 
@@ -61,11 +76,11 @@ const preguntas = [
   },
   {
     p: "¿Qué apps soporta?",
-    r: "WhatsApp, que es donde está el bochinche de verdad. Exportas el chat con la opción «Sin archivos» y te genera un .txt listo para subir.",
+    r: "WhatsApp, que es donde está el bochinche de verdad. Exportas el chat con la opción “Sin archivos” y te genera un .txt listo para subir.",
   },
   {
     p: "No me deja exportar el chat, ¿qué hago?",
-    r: "Casi siempre es porque el grupo tiene activada la «Privacidad avanzada del chat» de WhatsApp, que bloquea la exportación. Un admin del grupo la apaga en: info del grupo → Privacidad avanzada del chat → desactivar. Después ya te deja exportar normal.",
+    r: "Casi siempre es porque el grupo tiene activada la “Privacidad avanzada del chat” de WhatsApp, que bloquea la exportación. Un admin del grupo la apaga en: info del grupo → Privacidad avanzada del chat → desactivar. Después ya te deja exportar normal.",
   },
   {
     p: "¿Beto solo funciona pa' Panamá?",
@@ -73,11 +88,11 @@ const preguntas = [
   },
   {
     p: "¿Cuánto tarda?",
-    r: "Buco rápido: unos minutos exportando de tu lado, y menos de un minuto mientras Beto lee todo y escribe.",
+    r: "Buco rápido: unos minutos exportando de tu lado, el expediente aparece en segundos, y cuando lo desbloqueas Beto lee todo y escribe en unos minutos (los chats gigantes tardan un poquito más).",
   },
   {
     p: "¿Es seguro compartir mi chat?",
-    r: "El chat se procesa una sola vez para escribir el reporte y se descarta. El reporte queda en un link con código imposible de adivinar: solo lo abre quien tenga ese link, o sea, tu grupo. Tratamos tus datos conforme a la Ley 81 de 2019 de Panamá.",
+    r: "El chat se usa una sola vez para escribir el reporte y se borra al terminar; si nunca pides el reporte, se borra solo a los 7 días. El reporte queda en un link con código imposible de adivinar: solo lo abre quien tenga ese link, o sea, tu grupo. Tratamos tus datos conforme a la Ley 81 de 2019 de Panamá.",
   },
   {
     p: "¿Cómo comparto el reporte?",
@@ -111,7 +126,7 @@ export default function Home() {
             </h1>
             <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted sm:mt-6">
               Subes cualquier chat de WhatsApp y Beto se lee cada mensaje. Te
-              tira un reporte con apodos, premios, flags rojos y su opinión
+              tira un reporte con apodos, premios, red flags y su opinión
               real de todos ustedes. Sin filtro.
             </p>
             <div className="mt-8 flex flex-col items-stretch gap-4 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center">
@@ -124,26 +139,30 @@ export default function Home() {
               <div>
                 <ContadorReportes />
                 <p className="text-sm text-muted">
-                  Sin cuenta y sin tarjeta · 1 min pa&rsquo;l reporte
+                  Sin cuenta y sin instalar nada · el expediente en segundos
                 </p>
               </div>
             </div>
             <p className="mt-6 max-w-xl rounded-lg border border-line bg-card px-4 py-3 text-sm text-muted">
-              🔒 <span className="font-medium text-ink">Tu chat no se guarda.</span>{" "}
-              Se procesa una sola vez para escribir el reporte y se descarta.
-              Tratamos tus datos conforme a la Ley 81 de 2019 de Protección de
-              Datos Personales de Panamá.
+              🔒 <span className="font-medium text-ink">Tu chat no es de nadie más.</span>{" "}
+              Se usa una sola vez para escribir el reporte y se borra al
+              terminar. Tratamos tus datos conforme a la Ley 81 de 2019 de
+              Protección de Datos Personales de Panamá.
             </p>
           </div>
           <div>
-            <Image
-              src="/beto.jpg"
-              alt="Beto: un señor panameño sonriente con sombrero pintado y guayabera"
-              width={450}
-              height={450}
-              priority
-              className="mx-auto w-full max-w-xs rounded-2xl border border-line shadow-sm sm:max-w-none"
-            />
+            {hayVideoBeto ? (
+              <VideoBeto src="/beto-video.mp4" poster="/beto.jpg" />
+            ) : (
+              <Image
+                src="/beto.jpg"
+                alt="Beto: un señor panameño sonriente con sombrero pintado y guayabera"
+                width={450}
+                height={450}
+                priority
+                className="mx-auto w-full max-w-xs rounded-2xl border border-line shadow-sm sm:max-w-none"
+              />
+            )}
             <VeredictoBeto>
               Me leí 3 años de este grupo en un minuto. Ya sé quién deja en
               visto, quién revive el chat a la 1 a.m. y quién sigue debiendo
@@ -160,8 +179,12 @@ export default function Home() {
             Lo que pasa cuando sueltas el link
           </h2>
           <p className="mt-3 max-w-xl text-muted">
-            El chat no se calla en una semana. Esto es real: la gente
-            reaccionando a su propio reporte.
+            El chat no se calla en una semana.
+          </p>
+          <ReaccionesVideo clips={clipsReaccion} />
+          <p className="mt-12 max-w-xl text-muted">
+            Y esto sí es real: pantallazos de grupos reaccionando a su propio
+            reporte.
           </p>
           <div className="mt-10 grid items-start gap-12 sm:mt-12 sm:grid-cols-2 sm:gap-8">
             <div className="flotar-a">
@@ -174,7 +197,7 @@ export default function Home() {
               />
               <VeredictoBeto>
                 Cuando el link cae en el grupo, lo primero que preguntan es
-                «¿quién le dio nuestro chat a este man?». Después lo leen
+                “¿quién le dio nuestro chat a este man?”. Después lo leen
                 tres veces.
               </VeredictoBeto>
             </div>
@@ -187,7 +210,7 @@ export default function Home() {
                 className="mx-auto w-full max-w-[300px] rounded-[2rem] border border-line shadow-2xl"
               />
               <VeredictoBeto>
-                En la familia hasta la abuela pregunta «¿qué es esto?». Y mamá
+                En la familia hasta la abuela pregunta “¿qué es esto?”. Y mamá
                 ya lo reenvió a otros cuatro grupos.
               </VeredictoBeto>
             </div>
@@ -386,7 +409,7 @@ export default function Home() {
               ]}
             />
             <VeredictoBeto>
-              Ese «sí» tardó 18 minutos y vino con punto final. Eso es una
+              Ese “sí” tardó 18 minutos y vino con punto final. Eso es una
               citación, Andrés. Aquí uno persigue y el otro contesta con
               emoji, y Beto ya sabe quién es quién.
             </VeredictoBeto>
@@ -475,7 +498,7 @@ export default function Home() {
           <div className="mt-4 flex flex-col items-center gap-1">
             <ContadorReportes />
             <p className="text-sm text-muted">
-              Sin cuenta y sin tarjeta · 1 min pa&rsquo;l reporte
+              Sin cuenta y sin instalar nada · el expediente en segundos
             </p>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import { promises as fs } from "fs";
 import path from "path";
+import { guardar, hayPostgres, seleccionar } from "./datos";
 
 export type Pago = {
   oper: string;
@@ -18,9 +19,9 @@ export type EstadoPagos = {
 };
 
 export const PLANES = {
-  basico: { nombre: "1 Reporte", precioBase: 4.99, cupones: 0 },
-  doblete: { nombre: "2 Reportes", precioBase: 7.99, cupones: 1 },
-  expediente: { nombre: "3 Reportes", precioBase: 9.99, cupones: 2 },
+  basico: { nombre: "1 Reporte", precioBase: 4.99, cupones: 0, cancion: false },
+  doblete: { nombre: "Combo Beto", precioBase: 7.99, cupones: 0, cancion: true },
+  expediente: { nombre: "Modo Leyenda", precioBase: 9.99, cupones: 1, cancion: true },
 } as const;
 
 export type Plan = keyof typeof PLANES;
@@ -40,6 +41,29 @@ export const USOS_PARA_CORTESIA = 3;
 
 export function pagosConfigurados(): boolean {
   return !!process.env.PF_CCLW;
+}
+
+// Código maestro de cortesía (solo para el dueño): desbloquea cualquier
+// reporte gratis y es REUTILIZABLE. Vive en env (CODIGO_CORTESIA) para que no
+// quede en el repo. Devuelve "" si no está configurado.
+export function codigoCortesia(): string {
+  return (process.env.CODIGO_CORTESIA ?? "").trim().toUpperCase();
+}
+
+// Comisión de PagueloFacil (configurable por env). En la vaca, cada persona
+// cubre su parte para que a Wolco le llegue completo el precio del reporte.
+export function comisionConfig(): { pct: number; fija: number } {
+  const pct = Number(process.env.PF_COMISION_PORC);
+  const fija = Number(process.env.PF_COMISION_FIJA);
+  return {
+    pct: Number.isFinite(pct) && pct >= 0 ? pct : 0.05,
+    fija: Number.isFinite(fija) && fija >= 0 ? fija : 0.35,
+  };
+}
+
+export function comisionPagueloFacil(monto: number): number {
+  const { pct, fija } = comisionConfig();
+  return Math.round((monto * pct + fija) * 100) / 100;
 }
 
 export function precioPlan(plan: Plan): number {
@@ -114,12 +138,19 @@ export function totalPagado(estado: EstadoPagos): number {
 
 export function precioCancion(): number {
   const p = Number(process.env.PRECIO_CANCION);
-  return Number.isFinite(p) && p >= 1 ? p : 4.99;
+  return Number.isFinite(p) && p >= 1 ? p : 3.49;
+}
+
+// El Combo Beto y el Modo Leyenda ya traen la canción incluida.
+export function planIncluyeCancion(plan?: string): boolean {
+  return !!plan && plan in PLANES && PLANES[plan as Plan].cancion;
 }
 
 export function cancionComprada(estado: EstadoPagos | null): boolean {
   if (!pagosConfigurados()) return true;
-  return !!estado?.pagos.some((p) => p.plan === "cancion");
+  return !!estado?.pagos.some(
+    (p) => p.plan === "cancion" || planIncluyeCancion(p.plan),
+  );
 }
 
 export function estaDesbloqueado(estado: EstadoPagos | null): boolean {
@@ -129,14 +160,56 @@ export function estaDesbloqueado(estado: EstadoPagos | null): boolean {
   return totalPagado(estado) >= estado.precio - 0.05;
 }
 
+// Mapa de prefijo -> tabla de Postgres. Los que no estan en el mapa siguen
+// por el camino viejo (Blob o disco): asi se migra lo que tiene datos de
+// clientes sin tocar el resto.
+const TABLAS: Record<string, { tabla: string; pk: string }> = {
+  pagos: { tabla: "pagos", pk: "reporte_id" },
+  referidos: { tabla: "referidos", pk: "codigo" },
+};
+
+// Fila de Postgres -> la forma que el resto del archivo espera, y al reves.
+const desdeFila = (prefijo: string, f: Record<string, unknown>) =>
+  prefijo === "pagos"
+    ? { reporteId: f.reporte_id, precio: Number(f.precio), pagos: f.pagos ?? [], codigoPana: f.codigo_pana ?? undefined }
+    : { origen: f.origen ?? undefined, usos: Number(f.usos) || 0 };
+
+const haciaFila = (prefijo: string, clave: string, v: Record<string, unknown>) =>
+  prefijo === "pagos"
+    ? { reporte_id: clave, precio: v.precio ?? 0, pagos: v.pagos ?? [], codigo_pana: v.codigoPana ?? null }
+    : { codigo: clave, origen: v.origen ?? null, usos: v.usos ?? 0 };
+
 async function leerJson<T>(prefijo: string, dir: string, clave: string): Promise<T | null> {
+  const destino = TABLAS[prefijo];
+  if (destino && hayPostgres()) {
+    try {
+      const filas = await seleccionar<Record<string, unknown>>(
+        destino.tabla,
+        `select=*&${destino.pk}=eq.${encodeURIComponent(clave)}&limit=1`,
+      );
+      return filas[0] ? (desdeFila(prefijo, filas[0]) as T) : null;
+    } catch (e) {
+      console.error(`[pagos] leer ${prefijo}:`, (e as Error).message);
+      return null;
+    }
+  }
   if (usaBlob) {
-    const { list } = await import("@vercel/blob");
-    const { blobs } = await list({ prefix: `${prefijo}/${clave}.json`, limit: 1 });
-    if (!blobs.length) return null;
-    const res = await fetch(blobs[0].url);
-    if (!res.ok) return null;
-    return (await res.json()) as T;
+    // CLAVE: get({useCache:false}) lee directo del ORIGEN. Antes se usaba
+    // list()+fetch de la URL pública: list es eventualmente consistente para
+    // blobs nuevos y el fetch venía del CDN — el gate de generación podía ver
+    // "no pagado" un buen rato después de pagar, y un cupón marcado usado
+    // seguía apareciendo como libre. Mismo bug (y mismo fix) que storage.ts.
+    const { get } = await import("@vercel/blob");
+    const res = await get(`${prefijo}/${clave}.json`, {
+      access: "public",
+      useCache: false,
+    });
+    if (!res || res.statusCode !== 200 || !res.stream) return null;
+    try {
+      return JSON.parse(await new Response(res.stream).text()) as T;
+    } catch {
+      return null;
+    }
   }
   try {
     return JSON.parse(await fs.readFile(path.join(dir, `${clave}.json`), "utf8")) as T;
@@ -146,6 +219,17 @@ async function leerJson<T>(prefijo: string, dir: string, clave: string): Promise
 }
 
 async function guardarJson(prefijo: string, dir: string, clave: string, valor: unknown): Promise<void> {
+  const destino = TABLAS[prefijo];
+  if (destino && hayPostgres()) {
+    // Sin try/catch a proposito: si un pago no se guarda, quien llama tiene
+    // que enterarse. Tragarse este error significa cobrar y no registrarlo.
+    await guardar(
+      destino.tabla,
+      haciaFila(prefijo, clave, valor as Record<string, unknown>),
+      destino.pk,
+    );
+    return;
+  }
   const cuerpo = JSON.stringify(valor);
   if (usaBlob) {
     const { put } = await import("@vercel/blob");
@@ -154,6 +238,9 @@ async function guardarJson(prefijo: string, dir: string, clave: string, valor: u
       addRandomSuffix: false,
       contentType: "application/json",
       allowOverwrite: true,
+      // Blobs MUTABLES (pagos que suman, cupones que se marcan usados): sin
+      // esto el CDN los cachea ~1 mes y las lecturas públicas ven el pasado.
+      cacheControlMaxAge: 60,
     });
     return;
   }

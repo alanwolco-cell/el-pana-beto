@@ -7,6 +7,9 @@ export type EstadoCancion = {
   reporteId: string;
   genero: string;
   letra: string;
+  // Petición libre del usuario (voz, vibe, dedicatoria…). Se aplica a la letra
+  // y al audio para que el primer disparo pegue (regenerar cuesta créditos).
+  nota?: string;
   previewUrl?: string;
   completaUrl?: string;
 };
@@ -70,23 +73,64 @@ export async function guardarCancion(estado: EstadoCancion): Promise<void> {
 export async function generarLetra(
   guardado: ReporteGuardado,
   genero: string,
+  nota?: string,
 ): Promise<string> {
   const r = guardado.reporte;
-  if (!r) throw new Error("El reporte todavía no está listo.");
+  const r2 = guardado.reporte2;
+  const md = guardado.reporteMd;
+  if (!r && !r2 && !md) throw new Error("El reporte todavía no está listo.");
+  if (md && !r && !r2) {
+    // v3: el reporte es markdown libre — va directo como material.
+    const materialMd =
+      `Nombre del grupo: ${guardado.grupo || "el grupo"}\n\n` +
+      `REPORTE DE BETO SOBRE EL GRUPO (usa los nombres, apodos y momentos TAL CUAL):\n${md.slice(0, 6000)}` +
+      (nota ? `\n\nPETICIÓN ESPECIAL de quien pidió la canción: ${nota}` : "");
+    return generarLetraDesdeMaterial(materialMd, genero);
+  }
+  // Material normalizado desde cualquiera de los dos formatos de reporte.
+  const limpiar = (s: string) => s.replace(/\*\*/g, "").replace(/^>\s?/gm, "“") ;
+  const veredicto = r?.veredicto ?? limpiar(r2!.apertura);
+  const perfiles = r
+    ? r.perfiles.map((p) => `  - ${p.nombre} “${p.apodo}”: ${p.descripcion}`)
+    : r2!.perfiles.map(
+        (p) => `  - ${p.nombre}${p.apodo ? ` “${p.apodo}”` : ""}: ${limpiar(p.cuerpo)}`,
+      );
+  const temas = r
+    ? r.temas.map((t) => `${t.titulo} (${t.descripcion})`).join(" · ")
+    : (r2!.secciones ?? [])
+        .map((s) => `${s.titulo}: ${limpiar(s.cuerpo).slice(0, 300)}`)
+        .join(" · ") ||
+      `${r2!.temaTitulo ?? ""}: ${limpiar(r2!.tema ?? "")}`;
+  const premios = (r?.premios ?? r2!.premios)
+    .map((p) => `${p.premio} → ${p.ganador}: ${p.motivo}`)
+    .join(" · ");
+  const frases = r?.frases?.length
+    ? r.frases.map((f) => `"${f.frase}" (${f.autor})`).join(" · ")
+    : r2
+      ? `"${r2.lineaMasLoca.cita}" (${r2.lineaMasLoca.autor})`
+      : "";
   const material = [
     `Nombre del grupo: ${guardado.grupo || "el grupo"}`,
-    `De qué se trata el grupo: ${r.veredicto}`,
+    `De qué se trata el grupo: ${veredicto}`,
     `Los personajes (usa estos nombres y apodos TAL CUAL en la letra):`,
-    ...r.perfiles.map((p) => `  - ${p.nombre} «${p.apodo}»: ${p.descripcion}`),
-    `Temas/obsesiones del grupo: ${r.temas.map((t) => `${t.titulo} (${t.descripcion})`).join(" · ")}`,
-    `Premios: ${r.premios.map((p) => `${p.premio} → ${p.ganador}: ${p.motivo}`).join(" · ")}`,
-    r.frases?.length
-      ? `Frases célebres del grupo: ${r.frases.map((f) => `"${f.frase}" (${f.autor})`).join(" · ")}`
+    ...perfiles,
+    `Temas/obsesiones del grupo: ${temas}`,
+    `Premios: ${premios}`,
+    frases ? `Frases célebres del grupo: ${frases}` : "",
+    nota
+      ? `PETICIÓN ESPECIAL de quien pidió la canción (cúmplela en lo que toque a la letra, sin romper las reglas): ${nota}`
       : "",
   ]
     .filter(Boolean)
     .join("\n");
 
+  return generarLetraDesdeMaterial(material, genero);
+}
+
+async function generarLetraDesdeMaterial(
+  material: string,
+  genero: string,
+): Promise<string> {
   const { text } = await generateText({
     model: "anthropic/claude-sonnet-5",
     system: `Eres Beto, el pana panameño que leyó todo el chat de ESTE grupo específico. Escribe la LETRA de una canción 100% ORIGINAL y ESPECÍFICA sobre ellos, estilo ${genero}, español con sabor panameño.
@@ -111,6 +155,7 @@ export async function generarAudio(
   genero: string,
   letra: string,
   duracionMs: number,
+  nota?: string,
 ): Promise<Buffer> {
   const res = await fetch("https://api.elevenlabs.io/v1/music", {
     method: "POST",
@@ -119,9 +164,13 @@ export async function generarAudio(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      // La letra manda: la música debe CANTAR exactamente estas palabras.
-      prompt: `Estilo ${genero}, español latino con sabor panameño. Voz masculina carismática, potente y MUY CLARA (que se entienda cada palabra, nombre y apodo). Canta EXACTAMENTE la letra provista, sin cambiar ni improvisar. Empieza FUERTE con el coro: hook pegajoso, energía alta desde el segundo uno, un buen drop/beat que enganche. Producción moderna, limpia y radiofónica, mezcla nítida (voz al frente, sin saturar). Que los primeros segundos hagan querer subir el volumen.`,
-      lyrics_text: letra,
+      // OJO (bug real): la API de ElevenLabs Music NO tiene campo de letras
+      // (`lyrics_text` no existe y lo ignoraba en silencio → canciones
+      // genéricas sin nada del chat). La letra VA DENTRO del prompt.
+      prompt:
+        `Estilo ${genero}, español latino con sabor panameño. Voz masculina carismática, potente y MUY CLARA (que se entienda cada palabra, nombre y apodo). Empieza FUERTE con el coro: hook pegajoso, energía alta desde el segundo uno, un buen drop/beat que enganche. Producción moderna, limpia y radiofónica, mezcla nítida (voz al frente, sin saturar).` +
+        (nota ? `\nPetición del cliente (respétala en el estilo/voz): ${nota}.` : "") +
+        `\n\nCANTA EXACTAMENTE ESTA LETRA, tal cual, sin cambiar ni inventar palabras (los nombres y apodos deben oírse claritos):\n\n${letra}`,
       music_length_ms: duracionMs,
     }),
   });
