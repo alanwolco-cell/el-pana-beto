@@ -246,14 +246,42 @@ export default function NuevoReporte() {
     paso,
   ]);
 
+  // Sincronizacion con el historial del navegador: cada avance agrega una
+  // entrada (#paso-N) para que el boton atras del navegador regrese al paso
+  // anterior en vez de sacar al usuario del sitio. El handler de popstate
+  // solo lee el hash y actualiza el estado; nunca vuelve a hacer pushState,
+  // asi no se generan loops.
+  useEffect(() => {
+    function alNavegarHistorial() {
+      const m = window.location.hash.match(/^#paso-(\d+)$/);
+      const p = m ? Number(m[1]) : 1;
+      setError("");
+      setPaso(Math.min(Math.max(p, 1), TOTAL_PASOS));
+    }
+    window.addEventListener("popstate", alNavegarHistorial);
+    return () => window.removeEventListener("popstate", alNavegarHistorial);
+  }, []);
+
   function avanzar() {
     setError("");
-    setPaso((p) => Math.min(p + 1, TOTAL_PASOS));
+    const sig = Math.min(paso + 1, TOTAL_PASOS);
+    if (sig === paso) return;
+    window.history.pushState(null, "", `#paso-${sig}`);
+    setPaso(sig);
   }
 
   function retroceder() {
     setError("");
-    setPaso((p) => Math.max(p - 1, 1));
+    if (paso <= 1) return;
+    if (window.location.hash === `#paso-${paso}`) {
+      // La entrada actual la agregamos nosotros: dejar que popstate
+      // haga el cambio de paso al volver.
+      window.history.back();
+      return;
+    }
+    // Sin entrada propia en el historial (por ejemplo, borrador restaurado):
+    // retroceder directo sin tocar el historial.
+    setPaso(paso - 1);
   }
 
   function procesarTexto(texto: string, nombreArchivo?: string) {

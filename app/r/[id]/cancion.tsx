@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const GENEROS = [
   "Plena",
@@ -85,6 +85,25 @@ export function CancionDelGrupo({
   const [cargando, setCargando] = useState(false);
   const [esperaIdx, setEsperaIdx] = useState(0);
   const [error, setError] = useState("");
+  // Guarda el preview generado en esta sesion para poder restaurarlo si el
+  // usuario navega con los botones atras/adelante del navegador.
+  const previewGenerado = useRef<string | undefined>(undefined);
+
+  // Sincronizacion con el historial: al generar el preview se agrega una
+  // entrada (#cancion-preview) para que el boton atras regrese al formulario
+  // de la cancion en vez de sacar al usuario del reporte. El handler solo
+  // lee el hash y actualiza el estado; nunca hace pushState (sin loops).
+  useEffect(() => {
+    function alNavegarHistorial() {
+      if (window.location.hash === "#cancion-preview") {
+        if (previewGenerado.current) setPreviewUrl(previewGenerado.current);
+      } else if (previewGenerado.current) {
+        setPreviewUrl(previewInicial);
+      }
+    }
+    window.addEventListener("popstate", alNavegarHistorial);
+    return () => window.removeEventListener("popstate", alNavegarHistorial);
+  }, [previewInicial]);
 
   useEffect(() => {
     if (!cargando) return;
@@ -129,7 +148,11 @@ export function CancionDelGrupo({
       genero: generoFinal,
       nota: notaCancion.trim() || undefined,
     });
-    if (data?.previewUrl) setPreviewUrl(data.previewUrl);
+    if (data?.previewUrl) {
+      previewGenerado.current = data.previewUrl;
+      window.history.pushState(null, "", "#cancion-preview");
+      setPreviewUrl(data.previewUrl);
+    }
   }
 
   async function generarCompleta() {
