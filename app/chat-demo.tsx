@@ -9,11 +9,11 @@ function Checks() {
   );
 }
 
-// Patrón de doodles de WhatsApp (dark) — SVG embebido, sutil.
+// Patrón de doodles de WhatsApp (dark): SVG embebido, sutil.
 const DOODLE =
   "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='0.03' stroke-width='1.4'%3E%3Ccircle cx='22' cy='24' r='7'/%3E%3Cpath d='M52 18h14v12H52z'/%3E%3Cpath d='M96 14l6 10-12 0z'/%3E%3Cpath d='M118 30c4-4 10-2 10 3'/%3E%3Cpath d='M14 60c3-5 9-5 12 0'/%3E%3Ccircle cx='60' cy='64' r='5'/%3E%3Cpath d='M92 56h16M100 56v14'/%3E%3Cpath d='M124 66l7 7-7 7'/%3E%3Cpath d='M20 98l6-6 6 6-6 6z'/%3E%3Cpath d='M54 96c0 6 5 10 11 8'/%3E%3Ccircle cx='98' cy='100' r='6'/%3E%3Cpath d='M126 104h8v10h-8z'/%3E%3Cpath d='M40 126c4-3 9-1 9 4'/%3E%3Cpath d='M74 128l5-8 5 8z'/%3E%3C/g%3E%3C/svg%3E\")";
 
-// Barra de estado iOS — hora + señal/wifi/batería.
+// Barra de estado iOS: hora, señal, wifi y batería.
 function StatusBariOS() {
   return (
     <div className="flex items-center justify-between bg-[#1f2c34] px-6 pb-1 pt-2 text-white">
@@ -182,7 +182,7 @@ export function ChatWhatsAppDark({
                     <div className="mt-1 flex items-center gap-2 rounded-md bg-black/25 p-2">
                       <div className="min-w-0 flex-1">
                         <p className="text-[12px] font-semibold leading-snug text-white">
-                          El Pana Beto — El reporte del grupo
+                          El Pana Beto · El reporte del grupo
                         </p>
                         <p className="text-[11px] text-[#8696a0]">
                           elpanabeto.com
@@ -260,7 +260,7 @@ export function VeredictoBeto({ children }: { children: React.ReactNode }) {
       <blockquote className="rounded-lg rounded-tl-none border border-line bg-card px-4 py-3 text-sm leading-relaxed">
         {children}
         <footer className="mt-1.5 text-xs font-medium text-accent">
-          — Beto, después de leerlo todo
+          Beto, después de leerlo todo
         </footer>
       </blockquote>
     </div>

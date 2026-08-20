@@ -29,7 +29,7 @@ export function aperturaDeMd(md: string): string {
   return (idx === -1 ? cuerpo : cuerpo.slice(0, idx)).trim();
 }
 
-// Títulos de las secciones (## …) — para el teaser del paywall.
+// Títulos de las secciones (## …), para el teaser del paywall.
 export function seccionesDeMd(md: string): string[] {
   return [...md.matchAll(/^##\s+(.+)$/gm)].map((m) => m[1].trim());
 }

@@ -110,7 +110,7 @@ function AvatarGrupo({ tam }: { tam: string }) {
   );
 }
 
-// Paso 1 — el chat, con el nombre del grupo resaltado.
+// Paso 1: el chat, con el nombre del grupo resaltado.
 function MockPaso1() {
   return (
     <Marco>
@@ -152,7 +152,7 @@ function MockPaso1() {
   );
 }
 
-// Paso 2 — info del grupo, con el menú ⋯ abierto y “Exportar chat” resaltado.
+// Paso 2: info del grupo, con el menú ⋯ abierto y “Exportar chat” resaltado.
 function MockPaso2() {
   return (
     <Marco>
@@ -195,7 +195,7 @@ function MockPaso2() {
   );
 }
 
-// Paso 3 — hoja de acción con “Sin archivos” resaltado.
+// Paso 3: hoja de acción con “Sin archivos” resaltado.
 function MockPaso3() {
   return (
     <Marco>
@@ -227,7 +227,7 @@ function MockPaso3() {
   );
 }
 
-// Paso 4 — el .txt guardado y la zona de subida del sitio.
+// Paso 4: el .txt guardado y la zona de subida del sitio.
 function MockPaso4() {
   return (
     <Marco>
@@ -302,7 +302,7 @@ export function TutorialExportar() {
       </div>
 
       <div className="grid gap-5 p-5 sm:grid-cols-[1fr_236px] sm:items-center sm:gap-6">
-        {/* Lista de pasos — desktop */}
+        {/* Lista de pasos: desktop */}
         <div className="hidden sm:flex sm:flex-col sm:gap-1.5">
           {PASOS.map((p, i) => (
             <button
@@ -343,7 +343,7 @@ export function TutorialExportar() {
           ))}
         </div>
 
-        {/* Controles — móvil */}
+        {/* Controles: móvil */}
         <div className="flex items-center justify-center gap-2 sm:hidden">
           <button
             type="button"
@@ -396,7 +396,7 @@ export function TutorialExportar() {
           ))}
         </div>
 
-        {/* Texto del paso activo — móvil */}
+        {/* Texto del paso activo: móvil */}
         <div className="text-center sm:hidden">
           <p className="text-sm font-semibold">
             {activo + 1}. {PASOS[activo].titulo}

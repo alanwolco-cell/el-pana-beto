@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 // Video-nota de Beto estilo WhatsApp: burbuja circular que arranca sola (en
 // silencio) cuando entra en pantalla; un toque activa el sonido y reinicia,
 // otro toque pausa. El archivo se genera fuera (Higgsfield: foto de Beto +
-// lipsync) y vive en /public — si no existe, la página ni renderiza esto.
+// lipsync) y vive en /public: si no existe, la página ni renderiza esto.
 export function VideoBeto({ src, poster }: { src: string; poster?: string }) {
   const ref = useRef<HTMLVideoElement>(null);
   const [conSonido, setConSonido] = useState(false);

@@ -29,7 +29,7 @@ export function BotonCompartirImagen({ reporteId, variante = "claro" }: Props) {
           setEstado("listo");
           return;
         } catch {
-          // el usuario canceló — no forzar la descarga
+          // el usuario canceló: no forzar la descarga
           setEstado("listo");
           return;
         }

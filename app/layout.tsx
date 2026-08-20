@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://elpanabeto.com"),
   title: {
     default:
-      "El Pana Beto — La IA que se lee tu chat de WhatsApp y te dice las verdades",
+      "El Pana Beto · La IA que se lee tu chat de WhatsApp y te dice las verdades",
     template: "%s · El Pana Beto",
   },
   description:
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: "https://elpanabeto.com",
-    title: "El Pana Beto — La IA que se lee el chat del grupo y suelta las verdades",
+    title: "El Pana Beto · La IA que se lee el chat del grupo y suelta las verdades",
     description:
       "Apodos, premios, red flags y el ranking de aura de cada quien. Sin cuenta y sin tarjeta: en menos de un minuto Beto opina de tu grupo.",
     locale: "es_PA",
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "El Pana Beto — La IA que se lee el chat del grupo y suelta las verdades",
+    title: "El Pana Beto · La IA que se lee el chat del grupo y suelta las verdades",
     description:
       "Apodos, premios, red flags y el ranking de aura de cada quien. Sin cuenta y sin tarjeta: en menos de un minuto Beto opina de tu grupo.",
   },

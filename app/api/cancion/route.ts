@@ -44,7 +44,7 @@ export async function POST(req: Request) {
     (cuerpo.genero ?? "").replace(/[\r\n]+/g, " ").trim().slice(0, 60) ||
     "Plena";
   // Petición libre (voz, vibe, dedicatoria…): se captura ANTES de generar para
-  // que el primer disparo pegue — regenerar cuesta créditos.
+  // que el primer disparo pegue: regenerar cuesta créditos.
   const nota =
     (cuerpo.nota ?? "").replace(/[\r\n]+/g, " ").trim().slice(0, 200) ||
     undefined;

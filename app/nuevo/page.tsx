@@ -718,7 +718,7 @@ export default function NuevoReporte() {
                   <p className="text-xs text-muted">
                     Si tienes a la gente guardada distinto (&laquo;Mami ❤️&raquo;,
                     &laquo;El bro&raquo;), pon aquí el nombre con el que TODO el
-                    grupo los conoce — así en el reporte se entiende quién es
+                    grupo los conoce, así en el reporte se entiende quién es
                     quién.
                   </p>
                   {participantes.slice(0, 15).map((p) => (

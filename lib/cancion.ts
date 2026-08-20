@@ -80,7 +80,7 @@ export async function generarLetra(
   const md = guardado.reporteMd;
   if (!r && !r2 && !md) throw new Error("El reporte todavía no está listo.");
   if (md && !r && !r2) {
-    // v3: el reporte es markdown libre — va directo como material.
+    // v3: el reporte es markdown libre: va directo como material.
     const materialMd =
       `Nombre del grupo: ${guardado.grupo || "el grupo"}\n\n` +
       `REPORTE DE BETO SOBRE EL GRUPO (usa los nombres, apodos y momentos TAL CUAL):\n${md.slice(0, 6000)}` +
@@ -136,11 +136,12 @@ async function generarLetraDesdeMaterial(
     system: `Eres Beto, el pana panameño que leyó todo el chat de ESTE grupo específico. Escribe la LETRA de una canción 100% ORIGINAL y ESPECÍFICA sobre ellos, estilo ${genero}, español con sabor panameño.
 
 REGLAS CLAVE:
-- La canción tiene que ser SOBRE ESTE GRUPO EN PARTICULAR — nada genérico. Menciona nombres reales, apodos reales y momentos reales del material. Alguien del grupo tiene que escucharla y decir "esto es sobre NOSOTROS".
+- La canción tiene que ser SOBRE ESTE GRUPO EN PARTICULAR, nada genérico. Menciona nombres reales, apodos reales y momentos reales del material. Alguien del grupo tiene que escucharla y decir "esto es sobre NOSOTROS".
 - EL CORO ES LO MÁS IMPORTANTE (es lo que se va a escuchar primero): tiene que decir el NOMBRE DEL GRUPO literal y nombrar a 2-3 integrantes, con el gancho más pegajoso. Que en los primeros segundos ya se entienda que la canción es de ELLOS. El coro corto, repetible, imposible de no cantar.
 - Nombra al menos 4 integrantes por su nombre/apodo dentro de la letra, cada uno con el detalle que lo hace único.
-- Escribe frases CORTAS y cantables (no párrafos largos): líneas de 6-10 palabras que rimen y fluyan. Nada de oraciones enredadas — esto se canta, no se lee.
+- Escribe frases CORTAS y cantables (no párrafos largos): líneas de 6-10 palabras que rimen y fluyan. Nada de oraciones enredadas: esto se canta, no se lee.
 - Humor y cariño, con el toque roast de Beto. Nunca cruel.
+- Nunca uses la raya larga (—) ni el guion medio (–): separa con coma, dos puntos o punto y seguido.
 - Material 100% original: todo inventado por ti, sin parecerse a ninguna canción existente.
 - Estructura con etiquetas EXACTAS: [Coro] [Verso 1] [Coro] [Verso 2] [Coro]. Empieza por el coro. Máximo 1600 caracteres.
 - Devuelve SOLO la letra con sus etiquetas.`,

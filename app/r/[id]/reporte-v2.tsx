@@ -185,7 +185,7 @@ export function ReporteV2Completo({
             {r.premios.map((p) => (
               <li key={p.premio} className="border-b border-line pb-4 last:border-0">
                 <p className="font-medium">
-                  {p.premio} —{" "}
+                  {p.premio}:{" "}
                   <span className="font-display italic text-accent">{p.ganador}</span>
                 </p>
                 <p className="mt-1 leading-relaxed text-muted">{p.motivo}</p>

@@ -69,7 +69,7 @@ export function GenerandoReporte({
   // Ya NO hay tope duro que muestre errores: el servidor se auto-retoma en
   // cadena (cortes de etapa + reintentos con backoff) y este poller sigue
   // preguntando. Si tarda, la barra lo dice honesto; si el servidor agota sus
-  // reintentos, el estado llega como "error" terminal y ahí sí se informa —
+  // reintentos, el estado llega como "error" terminal y ahí sí se informa;
   // en calma y sin pedirle nada al usuario.
 
   // Progreso que avanza hacia ~95% y se queda ahí hasta que de verdad termina.
@@ -84,7 +84,7 @@ export function GenerandoReporte({
 
     // Un "error" del server significa que YA agotó sus reintentos automáticos
     // (con backoff y degradación de modelo). Como último cartucho, el cliente
-    // intenta un par de veces más en silencio; solo después informa — en
+    // intenta un par de veces más en silencio; solo después informa, en
     // calma, sin botones y sin pedirle nada al usuario. (Estar aquí = pagado,
     // el gate del server frena los no pagados, así que reintentar es seguro.)
     function manejarError() {
@@ -114,7 +114,7 @@ export function GenerandoReporte({
       } catch {}
       // Recarga a ?ready=<único>: el server, al ver ?ready, REINTENTA la lectura
       // (get de origen) hasta ~10s para pasar el lag de réplica de Blob, y
-      // renderiza el reporte directo — sin poller en la página recargada, así no
+      // renderiza el reporte directo, sin poller en la página recargada, así no
       // se dispara el artefacto de Safari. Valor único fuerza la recarga.
       const u = new URL(window.location.href);
       u.searchParams.set("ready", String(Date.now()));
@@ -210,7 +210,7 @@ export function GenerandoReporte({
   }, [id]);
 
   if (atascado) {
-    // Sin botones: el poller sigue vivo por detrás — si el servidor (o
+    // Sin botones: el poller sigue vivo por detrás; si el servidor (o
     // nosotros a mano) lo rescata, esta pantalla se convierte sola en el
     // reporte. El usuario no tiene que hacer NADA.
     return (
@@ -267,12 +267,12 @@ export function GenerandoReporte({
             ? `${progreso}% · le faltan como ${faltan}s`
             : seg < estimado + 30
               ? "Ya casi… dándole los últimos toques"
-              : "Se está tomando su tiempo con tanto material — sigue en eso, tranquilo"}
+              : "Se está tomando su tiempo con tanto material, sigue en eso, tranquilo"}
         </p>
       </div>
 
       <p className="mt-6 text-muted">
-        Beto se está leyendo TODO el chat — esto toma unos minutos. Vete
+        Beto se está leyendo TODO el chat: esto toma unos minutos. Vete
         tranquilo: cuando vuelvas, tu reporte va a estar aquí (y queda guardado
         en Mis reportes).
       </p>
@@ -323,7 +323,7 @@ export function GenerandoReporte({
           )}
           {linkCopiadoIg && (
             <p className="text-xs text-muted">
-              ✅ Link copiado — pégalo en el DM para que Beto sepa cuál es tu
+              ✅ Link copiado, pégalo en el DM para que Beto sepa cuál es tu
               reporte.
             </p>
           )}

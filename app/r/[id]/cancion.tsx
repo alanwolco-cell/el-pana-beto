@@ -68,7 +68,7 @@ export function CancionDelGrupo({
       if (navigator.canShare?.({ files: [file] })) {
         await navigator.share({
           files: [file],
-          title: "La Canción del Grupo — El Pana Beto",
+          title: "La Canción del Grupo · El Pana Beto",
         });
         return;
       }
@@ -217,7 +217,7 @@ export function CancionDelGrupo({
                 onClick={pagarCancion}
                 className="mt-3 w-full rounded-full bg-accent px-6 py-3 font-medium text-paper shadow-boton transition-all duration-200 ease-suave hover:-translate-y-0.5 active:translate-y-0"
               >
-                Quiero la completa — ${precio.toFixed(2)}
+                Quiero la completa · ${precio.toFixed(2)}
               </button>
             </div>
           )}

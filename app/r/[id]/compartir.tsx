@@ -14,7 +14,7 @@ export function BotonCompartir({ variante = "claro" }: Props) {
         await navigator.share({ title: document.title, url });
         return;
       } catch {
-        // el usuario canceló — cae al copiado
+        // el usuario canceló: cae al copiado
       }
     }
     await navigator.clipboard.writeText(url);

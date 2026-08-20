@@ -9,7 +9,7 @@ export const reporteSchema = z.object({
     .string()
     .max(320)
     .describe(
-      "UNA sola frase, la MÁS intrigante y jugosa de todo el reporte — la que daría más ganas de abrir el link si sale en el preview de WhatsApp. Un teaser irresistible, sin spoilear del todo. Ej: 'Alguien lleva 11 meses debiendo $40 y todavía pide fiado' o 'El ranking de aura tiene un ganador que nadie esperaba'. Que dé morbo de leer el resto.",
+      "UNA sola frase, la MÁS intrigante y jugosa de todo el reporte, la que daría más ganas de abrir el link si sale en el preview de WhatsApp. Un teaser irresistible, sin spoilear del todo. Ej: 'Alguien lleva 11 meses debiendo $40 y todavía pide fiado' o 'El ranking de aura tiene un ganador que nadie esperaba'. Que dé morbo de leer el resto.",
     ),
   veredicto: z
     .string()
@@ -104,7 +104,7 @@ export const reporteSchema = z.object({
     )
     .max(6)
     .describe(
-      "Cómo van a reaccionar al leer este reporte. SOLO si son buenísimas: una predicción es buenísima cuando imita la VOZ EXACTA de la persona — sus muletillas, su puntuación, su manía característica — tan bien que el grupo diga 'es literal él'. 3-6 letales o NINGUNA (array vacío). Una predicción tibia o genérica ('se va a reír') arruina el cierre.",
+      "Cómo van a reaccionar al leer este reporte. SOLO si son buenísimas: una predicción es buenísima cuando imita la VOZ EXACTA de la persona (sus muletillas, su puntuación, su manía característica) tan bien que el grupo diga 'es literal él'. 3-6 letales o NINGUNA (array vacío). Una predicción tibia o genérica ('se va a reír') arruina el cierre.",
     ),
 });
 
@@ -133,7 +133,7 @@ export const reporteSchemaV2 = z.object({
     .string()
     .max(3800)
     .describe(
-      "La entrada completa, multi-párrafo (separa párrafos con línea en blanco). Estructura: saludo directo al grupo con insulto cariñoso + 'Soy Beto. Me leí sus N mensajes enteros — sí, ENTEROS, incluyendo [el detalle más absurdo que encontraste]' + la SENTENCIA que define al grupo entre **negritas** + desmonta el nombre del grupo ('se hacen llamar X, pero seamos honestos: esto es [reframe]') + cierra con 'Vamos por partes.'",
+      "La entrada completa, multi-párrafo (separa párrafos con línea en blanco). Estructura: saludo directo al grupo con insulto cariñoso + 'Soy Beto. Me leí sus N mensajes enteros, sí, ENTEROS, incluyendo [el detalle más absurdo que encontraste]' + la SENTENCIA que define al grupo entre **negritas** + desmonta el nombre del grupo ('se hacen llamar X, pero seamos honestos: esto es [reframe]') + cierra con 'Vamos por partes.'",
     ),
   temaTitulo: z
     .string()
@@ -166,7 +166,7 @@ export const reporteSchemaV2 = z.object({
     .min(1)
     .max(7)
     .describe(
-      "2-4 secciones DISEÑADAS para este grupo según su material — no hay lista fija. SIEMPRE una es LA obsesión central con nombre propio. Otras posibles solo si el material lo pide: el que merece sección propia, los que nadie menciona pero todos toleran, quién manda de verdad, en qué se disfrazan, la guerra civil interna… Inventa el ángulo que ESTE chat pide.",
+      "2-4 secciones DISEÑADAS para este grupo según su material: no hay lista fija. SIEMPRE una es LA obsesión central con nombre propio. Otras posibles solo si el material lo pide: el que merece sección propia, los que nadie menciona pero todos toleran, quién manda de verdad, en qué se disfrazan, la guerra civil interna… Inventa el ángulo que ESTE chat pide.",
     ),
   perfiles: z
     .array(
@@ -177,7 +177,7 @@ export const reporteSchemaV2 = z.object({
           .string()
           .max(2400)
           .describe(
-            "El retrato completo en prosa: epítetos apilados ('El mártir. El pararrayos.') + 'el hombre/la mujer que [específico absurdo]' + su quote como evidencia + cierre hablándole DIRECTO con su nombre. Los principales LARGOS, los medianos más cortos — varía.",
+            "El retrato completo en prosa: epítetos apilados ('El mártir. El pararrayos.') + 'el hombre/la mujer que [específico absurdo]' + su quote como evidencia + cierre hablándole DIRECTO con su nombre. Los principales LARGOS, los medianos más cortos: varía.",
           ),
       }),
     )

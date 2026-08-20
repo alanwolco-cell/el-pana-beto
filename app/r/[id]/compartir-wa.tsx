@@ -1,7 +1,7 @@
 "use client";
 
 // Botón "mandar al grupo por WhatsApp" vía wa.me: abre WhatsApp con un mensaje
-// pre-escrito en voz de Beto + el link del reporte. No usa la API de Meta —
+// pre-escrito en voz de Beto + el link del reporte. No usa la API de Meta:
 // cero configuración, funciona en cualquier celular.
 export function BotonWhatsApp({
   mensaje,

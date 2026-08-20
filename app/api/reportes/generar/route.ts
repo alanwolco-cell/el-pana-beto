@@ -7,7 +7,7 @@ export const maxDuration = 300;
 // Dos modos:
 // - SÍNCRONO (cliente de respaldo): corre la generación y responde su estado.
 // - ENCADENADO (esperaMs en el body): responde al instante y corre en
-//   background tras la espera — es el eslabón que usa el servidor para
+//   background tras la espera: es el eslabón que usa el servidor para
 //   auto-retomarse (cortes de etapa y reintentos) sin depender de que el
 //   usuario tenga la página abierta. El presupuesto de reloj que se le pasa a
 //   la generación descuenta la espera, para que los cortes de etapa sigan

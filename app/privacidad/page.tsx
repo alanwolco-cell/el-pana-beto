@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Política de Privacidad — El Pana Beto",
+  title: "Política de Privacidad · El Pana Beto",
   description:
     "Cómo El Pana Beto trata tus datos: qué se guarda, qué no, con quién se comparte y cómo ejercer tus derechos bajo la Ley 81 de 2019 de Panamá.",
 };
@@ -81,7 +81,7 @@ export default function Privacidad() {
           Ahora, seamos honestos contigo: el{" "}
           <span className="font-medium text-ink">reporte</span> que la IA
           escribe a partir del chat sí se guarda, y ese reporte incluye
-          información que salió del chat — nombres, apodos, citas textuales de
+          información que salió del chat: nombres, apodos, citas textuales de
           mensajes y descripciones de los integrantes del grupo. Es la única
           forma de que puedas verlo y compartirlo con tu grupo.
         </p>
@@ -155,7 +155,7 @@ export default function Privacidad() {
 
       <section className="mt-12">
         <h2 className="font-display text-2xl font-semibold">
-          5. Quién puede ver tu reporte — hablemos claro
+          5. Quién puede ver tu reporte, hablemos claro
         </h2>
         <p className="mt-3 leading-relaxed text-muted">
           Cada reporte vive en un link con un código aleatorio prácticamente
@@ -225,8 +225,8 @@ export default function Privacidad() {
         </p>
         <div className="mt-4 rounded-lg border border-line bg-card p-5">
           <p className="leading-relaxed">
-            Para ejercerlos —incluido borrar un reporte completo, la foto o la
-            canción— escríbenos a{" "}
+            Para ejercerlos, incluido borrar un reporte completo, la foto o la
+            canción, escríbenos a{" "}
             <a
               href="mailto:elpanabeto.com@gmail.com"
               className="underline transition-colors hover:text-accent"
@@ -257,7 +257,7 @@ export default function Privacidad() {
           Un chat de grupo contiene mensajes de otras personas. Al subir un
           chat, declaras que cuentas con el conocimiento y consentimiento de los
           demás participantes, o que asumes la responsabilidad de informarles.
-          Nuestra recomendación de pana: comparte el reporte con el grupo — para
+          Nuestra recomendación de pana: comparte el reporte con el grupo, para
           eso existe. Y recuerda que cualquier miembro del grupo puede pedirnos
           eliminar el reporte en cualquier momento.
         </p>

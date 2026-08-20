@@ -14,7 +14,7 @@ import {
 
 // El pago registrado dispara la generación del reporte con waitUntil (flujo
 // v2: la IA escribe solo cuando entró la plata). waitUntil vive hasta
-// maxDuration — con menos de 300s la generación moriría a mitad.
+// maxDuration: con menos de 300s la generación moriría a mitad.
 export const maxDuration = 300;
 
 // RETURN_URL de PagueloFacil: llega por GET con los datos de la transacción.
@@ -61,7 +61,7 @@ export async function GET(req: Request) {
     return destino("fallo");
   }
 
-  // C2: el retorno GET NO es fuente de verdad — se confirma la transacción
+  // C2: el retorno GET NO es fuente de verdad; se confirma la transacción
   // server-side contra PagueloFacil antes de registrar nada.
   const verificado = await verificarTransaccion(oper, total);
   if (!verificado) {

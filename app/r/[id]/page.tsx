@@ -42,7 +42,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const guardado = await leerReporte(id);
-  if (!guardado) return { title: "Reporte no encontrado — El Pana Beto" };
+  if (!guardado) return { title: "Reporte no encontrado · El Pana Beto" };
   const md = guardado.reporteMd;
   const rep = md
     ? { titulo: tituloDeMd(md), gancho: ganchoDeMd(md) }
@@ -51,8 +51,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
       title:
         guardado.estado === "pendiente"
-          ? `El expediente de ${guardado.grupo || "tu grupo"} — El Pana Beto`
-          : "Beto está escribiendo tu reporte… — El Pana Beto",
+          ? `El expediente de ${guardado.grupo || "tu grupo"} · El Pana Beto`
+          : "Beto está escribiendo tu reporte… · El Pana Beto",
       description:
         guardado.estado === "pendiente"
           ? "El chat ya está sobre la mesa de Beto. Falta que alguien dé la orden."
@@ -68,7 +68,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     "";
   const preview = (rep.gancho || respaldo).slice(0, 180);
   return {
-    title: `${rep.titulo} — El Pana Beto`,
+    title: `${rep.titulo} · El Pana Beto`,
     description: preview,
     openGraph: {
       title: rep.titulo,
@@ -124,7 +124,7 @@ function Seccion({
   );
 }
 
-// Teaser pre-pago (flujo v2): el reporte AÚN no se escribe — aquí solo va lo
+// Teaser pre-pago (flujo v2): el reporte AÚN no se escribe; aquí solo va lo
 // que el código ya sabe del chat (estadísticas reales, cero IA, cero costo).
 // Beto se sienta a escribir apenas el pago entra.
 function TeaserPendiente({
@@ -237,7 +237,7 @@ function TeaserPendiente({
         />
         <p className="text-sm text-muted">
           <span className="font-medium text-ink">Beto</span> escribe el reporte
-          completo apenas se desbloquee — tarda unos minutos y esta página se
+          completo apenas se desbloquee: tarda unos minutos y esta página se
           actualiza sola.
         </p>
       </div>
@@ -340,7 +340,7 @@ export default async function PaginaReporte({ params, searchParams }: Props) {
   // Vercel Blob es eventualmente consistente: justo después de guardar "listo",
   // una lectura puede devolver "generando" varios segundos. Si el cliente ya
   // confirmó que terminó (?ready=…), reintentamos la lectura para pasar ese
-  // bache — así no mostramos la carga ni entramos en bucle de recarga en Safari.
+  // bache, así no mostramos la carga ni entramos en bucle de recarga en Safari.
   if (clienteConfirmoListo) {
     for (
       let i = 0;
@@ -743,7 +743,7 @@ export default async function PaginaReporte({ params, searchParams }: Props) {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <BotonWhatsApp mensaje="“El expediente del grupo quedó abierto. Nadie se salva.” — El Pana Beto 💀" />
+          <BotonWhatsApp mensaje="“El expediente del grupo quedó abierto. Nadie se salva.” El Pana Beto 💀" />
           <BotonCompartir />
           <BotonCompartirImagen reporteId={id} />
         </div>
@@ -800,7 +800,7 @@ export default async function PaginaReporte({ params, searchParams }: Props) {
           {r.premios.map((p) => (
             <li key={p.premio} className="border-b border-line pb-4 last:border-0">
               <p className="font-medium">
-                {p.premio} —{" "}
+                {p.premio}:{" "}
                 <span className="font-display italic text-accent">
                   {p.ganador}
                 </span>
@@ -823,7 +823,7 @@ export default async function PaginaReporte({ params, searchParams }: Props) {
               </p>
               <footer className="mt-3">
                 <span className="text-sm font-medium text-ink">
-                  — {f.autor}
+                  {f.autor}
                 </span>
                 <span className="mt-1 block text-sm leading-relaxed text-muted">
                   {f.contexto}
@@ -876,7 +876,7 @@ export default async function PaginaReporte({ params, searchParams }: Props) {
             const medio = r.peleas.slice(1, ultimo ? -1 : undefined);
             return (
               <div className="space-y-4">
-                {/* Campeón — el más peligroso, destacado */}
+                {/* Campeón: el más peligroso, destacado */}
                 <div className="rounded-2xl border-2 border-accent bg-accent/[0.06] p-5 shadow-card">
                   <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-accent">
                     <span className="text-lg">🏆</span> El más peligroso
@@ -889,7 +889,7 @@ export default async function PaginaReporte({ params, searchParams }: Props) {
                   </p>
                 </div>
 
-                {/* El montón — tarjetas compactas con su puesto */}
+                {/* El montón: tarjetas compactas con su puesto */}
                 {medio.length > 0 && (
                   <div className="grid gap-3 sm:grid-cols-2">
                     {medio.map((p, i) => (
@@ -911,7 +911,7 @@ export default async function PaginaReporte({ params, searchParams }: Props) {
                   </div>
                 )}
 
-                {/* El que cae de primero — el remate */}
+                {/* El que cae de primero: el remate */}
                 {ultimo && (
                   <div className="rounded-2xl border border-dashed border-line bg-paper p-5">
                     <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-muted">

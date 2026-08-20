@@ -22,7 +22,7 @@ export type ResultadoGeneracion =
   | "generando"
   | "error"
   | "no-existe"
-  // Flujo v2: el job existe pero el pago no está registrado — no se genera.
+  // Flujo v2: el job existe pero el pago no está registrado: no se genera.
   | "pendiente";
 
 // ── Pipeline de 2 pasadas para chats grandes ────────────────────────────────
@@ -74,13 +74,13 @@ async function consolidarNotas(notas: string, grupo: string): Promise<string> {
 
 // Recorte balanceado de las notas: antes se tomaban los PRIMEROS 90k chars y
 // el escritor nunca veía la mitad final del chat (lo más reciente). Ahora, si
-// no caben, van el arranque y —sobre todo— el final; el medio lo cubre la
+// no caben, van el arranque y, sobre todo, el final; el medio lo cubre la
 // síntesis global.
 function recortarNotas(notas: string, max: number): string {
   if (notas.length <= max) return notas;
   const inicio = Math.floor(max * 0.4);
   const fin = max - inicio;
-  return `${notas.slice(0, inicio)}\n\n[… tramos intermedios omitidos — la SÍNTESIS GLOBAL de arriba ya los cubre …]\n\n${notas.slice(-fin)}`;
+  return `${notas.slice(0, inicio)}\n\n[… tramos intermedios omitidos, la SÍNTESIS GLOBAL de arriba ya los cubre …]\n\n${notas.slice(-fin)}`;
 }
 
 export function totalTramos(chat: string): number {
@@ -89,7 +89,7 @@ export function totalTramos(chat: string): number {
 
 // Extrae notas por lotes A PARTIR del tramo `desde`, respetando el reloj: si
 // no queda presupuesto para otro lote completo, devuelve lo hecho y el caller
-// persiste y retoma en la siguiente invocación (extracción reanudable — antes
+// persiste y retoma en la siguiente invocación (extracción reanudable; antes
 // un chat de 16 tramos podía exceder los 300s y morir sin persistir NADA).
 async function extraerNotas(
   chat: string,
@@ -151,7 +151,7 @@ function encadenar(id: string, baseUrl: string | undefined, delayMs: number) {
       : "https://elpanabeto.com");
   // La ESPERA vive en el eslabón nuevo (esperaMs), no aquí: esta función
   // puede estar a segundos de su deadline y solo necesita DESPACHAR la
-  // petición — el route encadenado responde al instante y luego trabaja.
+  // petición: el route encadenado responde al instante y luego trabaja.
   waitUntil(
     fetch(`${base}/api/reportes/generar`, {
       method: "POST",
@@ -244,7 +244,7 @@ export async function ejecutarGeneracion(
   const cerrarEtapa = async (): Promise<ResultadoGeneracion> => {
     // g! : el closure pierde el narrowing del `let`, pero aquí g siempre existe.
     await guardarReporte({ ...g!, procesando: undefined });
-    // Encadenar la siguiente etapa YA — sin depender de que el cliente tenga
+    // Encadenar la siguiente etapa YA, sin depender de que el cliente tenga
     // la página abierta. 3s de respiro para que el blob asiente.
     encadenar(id, baseUrl, 3_000);
     return "generando";
@@ -270,7 +270,7 @@ export async function ejecutarGeneracion(
         entradas.notasTramos = tramosHechos + r.tramosHechos;
         // Si TODOS los tramos fallaron (outage del extractor), las "notas" son
         // puros marcadores de fallo: se descartan y el escritor usa el
-        // muestreo clásico — mejor un reporte con menos material que ninguno.
+        // muestreo clásico: mejor un reporte con menos material que ninguno.
         if (
           entradas.notasTramos >= tramosTotal &&
           !entradas.notas.includes("NOTAS DEL TRAMO")
@@ -290,7 +290,7 @@ export async function ejecutarGeneracion(
     }
     if (entradas.notas && !entradas.sintesis) {
       // La síntesis tarda hasta 110s: si el reloj no da para ella + margen,
-      // cerrar limpio — lo extraído ya quedó persistido.
+      // cerrar limpio: lo extraído ya quedó persistido.
       if (restanteMs() < 150_000) return cerrarEtapa();
       try {
         const sintesis = await consolidarNotas(entradas.notas, g.grupo);
@@ -299,7 +299,7 @@ export async function ejecutarGeneracion(
         errores.push(
           `sintesis: ${e instanceof Error ? `${e.name}: ${e.message}` : String(e)}`.slice(0, 300),
         );
-        // Marcador persistido: se intentó y falló — NO reintentar en cada
+        // Marcador persistido: se intentó y falló, NO reintentar en cada
         // corrida (un timeout aquí dejaba un bucle que quemaba una llamada
         // por invocación sin llegar jamás al escritor). El material tratará
         // un valor corto como "sin síntesis".
@@ -319,17 +319,17 @@ export async function ejecutarGeneracion(
         : undefined;
     material = entradas.notas
       ? (sintesisUtil
-          ? `SÍNTESIS GLOBAL del chat COMPLETO (${entradas.chat.length.toLocaleString("es-PA")} caracteres leídos al 100%). La sección OBSESIONES GLOBALES está ranqueada por recurrencia real: el top de esa lista ES la columna vertebral del reporte — si el top 3 no aparece con fuerza, el reporte está mal armado. No construyas el reporte sobre cosas mencionadas una sola vez:\n\n${sintesisUtil}\n\n`
+          ? `SÍNTESIS GLOBAL del chat COMPLETO (${entradas.chat.length.toLocaleString("es-PA")} caracteres leídos al 100%). La sección OBSESIONES GLOBALES está ranqueada por recurrencia real: el top de esa lista ES la columna vertebral del reporte: si el top 3 no aparece con fuerza, el reporte está mal armado. No construyas el reporte sobre cosas mencionadas una sola vez:\n\n${sintesisUtil}\n\n`
           : "") +
-        `NOTAS DE INVESTIGACIÓN por tramo (detalle, en orden cronológico — todo lo citado es textual del chat):\n\n${recortarNotas(entradas.notas, sintesisUtil ? 60_000 : 90_000)}\n\n` +
-        `MUESTRA CRUDA del chat (solo para calibrar voces, ortografía y tono — el material de arriba manda):\n\n${muestrearChat(entradas.chat, 20_000)}`
+        `NOTAS DE INVESTIGACIÓN por tramo (detalle, en orden cronológico; todo lo citado es textual del chat):\n\n${recortarNotas(entradas.notas, sintesisUtil ? 60_000 : 90_000)}\n\n` +
+        `MUESTRA CRUDA del chat (solo para calibrar voces, ortografía y tono; el material de arriba manda):\n\n${muestrearChat(entradas.chat, 20_000)}`
       : `Chat exportado (muestreado):\n\n${muestrearChat(entradas.chat)}`;
   } else {
     material = `Chat exportado COMPLETO. Antes de escribir, identifica qué temas, bits y rituales se REPITEN más a lo largo de todo el chat: esas obsesiones recurrentes son la columna vertebral del reporte, no lo que se mencionó una sola vez:\n\n${entradas.chat}`;
   }
 
   const opciones = {
-    // v3: SALIDA LIBRE en markdown (como Brandon) — sin molde JSON. El molde
+    // v3: SALIDA LIBRE en markdown (como Brandon), sin molde JSON. El molde
     // producía "modo cumplimiento" y botaba reportes buenos por validación.
     temperature: 1,
     maxRetries: entradas.notas ? 0 : 2,
@@ -384,7 +384,7 @@ export async function ejecutarGeneracion(
     const preferido = timeoutPrevio ? "anthropic/claude-opus-5-fast" : elegido;
     // Ventana deseada por modelo, SIEMPRE acotada al reloj que queda (una
     // generación que la plataforma mata a mitad se factura y no deja ni
-    // error registrado — el peor de los mundos).
+    // error registrado: el peor de los mundos).
     const ventana = (deseada: number) =>
       Math.max(60_000, Math.min(deseada, restanteMs() - 25_000));
     let texto: string;
@@ -476,7 +476,7 @@ export async function ejecutarGeneracion(
 
     // NADIE toca "reintentar": el servidor se levanta solo. Mientras queden
     // reintentos, el estado sigue en "generando" (el cliente nunca ve un
-    // error transitorio) y se encadena una corrida nueva con backoff — la
+    // error transitorio) y se encadena una corrida nueva con backoff; la
     // degradación a opus-fast del arranque hace que el reintento entre con
     // modelo de velocidad probada si el fallo fue timeout del escritor.
     const intentos = (actual ?? g).reintentos ?? 0;

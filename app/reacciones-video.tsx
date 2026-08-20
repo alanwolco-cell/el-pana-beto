@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 // Tira de clips verticales en el estilo ILUSTRADO de la marca (animación
-// pintada, generada con IA): arte del site, no testimonios — por eso no lleva
+// pintada, generada con IA): arte del site, no testimonios, por eso no lleva
 // disclaimer. Cada tarjeta arranca sola en mudo al entrar en pantalla; un
 // toque activa el sonido (solo una a la vez).
 function TarjetaVideo({

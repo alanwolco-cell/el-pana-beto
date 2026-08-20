@@ -15,8 +15,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const guardado = await leerReporte(id);
   return {
     title: guardado
-      ? `Las estadísticas de ${guardado.grupo || "el grupo"} — El Pana Beto`
-      : "Estadísticas — El Pana Beto",
+      ? `Las estadísticas de ${guardado.grupo || "el grupo"} · El Pana Beto`
+      : "Estadísticas · El Pana Beto",
     robots: { index: false, follow: false },
   };
 }

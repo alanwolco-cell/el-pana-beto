@@ -72,8 +72,8 @@ export async function POST(req: Request) {
       : Math.max(1, Math.round(base * 100) / 100);
 
   const descripcion = esCancion
-    ? `El Pana Beto — La Canción del Grupo · ${guardado.grupo || "chat sin nombre"}`
-    : `El Pana Beto — ${PLANES[plan].nombre} · ${guardado.grupo || "chat sin nombre"}`;
+    ? `El Pana Beto · La Canción del Grupo · ${guardado.grupo || "chat sin nombre"}`
+    : `El Pana Beto · ${PLANES[plan].nombre} · ${guardado.grupo || "chat sin nombre"}`;
 
   const returnUrl = `${baseUrl(req)}/api/pagos/retorno`;
   const params = new URLSearchParams({

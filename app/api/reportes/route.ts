@@ -124,7 +124,7 @@ export async function POST(req: Request) {
     );
   }
 
-  // Flujo v2: aquí NO se genera nada — el job queda pendiente y la página
+  // Flujo v2: aquí NO se genera nada; el job queda pendiente y la página
   // muestra el teaser con estadísticas reales ($0). La generación arranca
   // cuando el pago se registra (retorno/canjear la disparan con waitUntil, y
   // ejecutarGeneracion verifica el pago antes de gastar un centavo de IA).

@@ -78,7 +78,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true });
   }
 
-  // Códigos PANA-: descuento de referido, no desbloquean — abaratan.
+  // Códigos PANA-: descuento de referido, no desbloquean, abaratan.
   if (codigo.startsWith("PANA-")) {
     if (await validarDescuento(codigo)) {
       return NextResponse.json({ descuento: descuentoReferido(), codigo });

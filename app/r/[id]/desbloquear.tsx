@@ -13,7 +13,7 @@ type Props = {
   descuentoRef: number;
   pagado: number;
   pagos: { nombre: string; monto: number }[];
-  // Flujo v2: el reporte aún no se escribe — al desbloquear, Beto arranca.
+  // Flujo v2: el reporte aún no se escribe; al desbloquear, Beto arranca.
   // Cambia el copy de expectativa (no "ver el reporte" sino "que lo escriba").
   porGenerar?: boolean;
 };
@@ -165,7 +165,7 @@ export function PanelDesbloqueo({
         return;
       }
       // Redirigir con ?pago=ok (no reload pelado): el server, al ver ese
-      // param, reintenta la lectura de pagos unos segundos — sin esto, el lag
+      // param, reintenta la lectura de pagos unos segundos, porque sin esto el lag
       // del blob re-mostraba el paywall con el cupón ya quemado.
       const u = new URL(window.location.href);
       u.searchParams.set("pago", "ok");
@@ -347,8 +347,8 @@ export function PanelDesbloqueo({
         {cargando
           ? "Abriendo la caja registradora de Beto…"
           : plan === "basico" && partes > 1
-            ? `Poner mi parte — $${cuota.toFixed(2)}`
-            : `${botonBase} — $${cuota.toFixed(2)}`}
+            ? `Poner mi parte · $${cuota.toFixed(2)}`
+            : `${botonBase} · $${cuota.toFixed(2)}`}
       </button>
 
       {plan === "basico" && descuento === 0 && descuentoRef > 0 && (
@@ -375,7 +375,7 @@ export function PanelDesbloqueo({
           >
             ¿Tienes un código de Beto?
           </button>
-          <BotonWhatsApp mensaje="“Llegó el expediente del grupo. Recomiendo sentarse.” — El Pana Beto 💀" />
+          <BotonWhatsApp mensaje="“Llegó el expediente del grupo. Recomiendo sentarse.” El Pana Beto 💀" />
         </div>
       </div>
 

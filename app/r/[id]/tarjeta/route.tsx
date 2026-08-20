@@ -167,7 +167,7 @@ export async function GET(
             {fotoBeto ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
-                // @ts-expect-error — satori acepta ArrayBuffer como src
+                // @ts-expect-error: satori acepta ArrayBuffer como src
                 src={fotoBeto}
                 width={110}
                 height={110}

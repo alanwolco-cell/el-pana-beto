@@ -10,7 +10,7 @@ import { VideoBeto } from "./video-beto";
 export const revalidate = 300; // ISR: refresca el contador cada 5 min
 
 // Video-nota de Beto (generada con IA vía el Gateway). Si el archivo no está
-// en /public, el hero muestra la foto de siempre — cero cambios.
+// en /public, el hero muestra la foto de siempre: cero cambios.
 const hayVideoBeto = existsSync(
   path.join(process.cwd(), "public", "beto-video.mp4"),
 );

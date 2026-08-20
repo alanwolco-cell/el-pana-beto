@@ -45,7 +45,7 @@ export function ReporteMd({ md }: { md: string }) {
           li: ({ children }) => (
             <li className="flex gap-2.5 leading-relaxed text-ink-soft">
               <span aria-hidden className="mt-0.5 shrink-0 text-accent">
-                —
+                ·
               </span>
               <span>{children}</span>
             </li>

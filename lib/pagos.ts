@@ -92,7 +92,7 @@ export function hostPagueloFacil(): string {
 // - Sin él: confía en la confirmación que PagueloFacil manda al RETURN_URL
 //   (Estado=Aprobada + Oper + Total), ya validada en la ruta de retorno.
 //   Para forzar un desbloqueo habría que conocer un reporteId (UUID privado
-//   que solo tiene el grupo) — riesgo bajo. La verificación fuerte llega
+//   que solo tiene el grupo): riesgo bajo. La verificación fuerte llega
 //   cuando se active el webhook firmado de PagueloFacil (recomendado).
 export async function verificarTransaccion(
   oper: string,
@@ -196,7 +196,7 @@ async function leerJson<T>(prefijo: string, dir: string, clave: string): Promise
   if (usaBlob) {
     // CLAVE: get({useCache:false}) lee directo del ORIGEN. Antes se usaba
     // list()+fetch de la URL pública: list es eventualmente consistente para
-    // blobs nuevos y el fetch venía del CDN — el gate de generación podía ver
+    // blobs nuevos y el fetch venía del CDN, así que el gate de generación podía ver
     // "no pagado" un buen rato después de pagar, y un cupón marcado usado
     // seguía apareciendo como libre. Mismo bug (y mismo fix) que storage.ts.
     const { get } = await import("@vercel/blob");

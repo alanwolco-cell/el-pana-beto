@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { ImageResponse } from "next/og";
 
 export const alt =
-  "El Pana Beto — la IA que se lee tu chat de WhatsApp y te dice las cosas como son";
+  "El Pana Beto · la IA que se lee tu chat de WhatsApp y te dice las cosas como son";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
